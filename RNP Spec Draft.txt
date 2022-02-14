@@ -25,28 +25,49 @@ When the Server connects to the network, it sends a UDP broadcast message notify
 The Server has various commands it can receive from Clients, and various response/command codes it can send to Clients. The Server can both respond to requests from Clients, and send unprompted messages to Clients based on input from the Control Software. Control Software functionality and how the Bot Firmware controls the Client are outside the scope of this document.
 Client messages follow a command/data structure; Clients will send a command, wait for an acknowledgement from the server, then send data associated with that command. Client commands will be 24-bit 4-character text, and data will be TBD. Server messages will follow a status code structure; the Server will send a status code, and wait for an acknowledgement from the Client if required, and then send data if required. Server messages will be 9-bit command codes, followed by data when required.
 
-3. Robot Codes
-3.1 219 (Hello)
-Code 220 is used when a Robot first connects to the network, or when a Robot receives a 220 (Server Start) from the Server. The Client WILL send a 220 on startup after it connects to the network, or any time it receives a 220 (Server Start). The Client will then wait for a 250 (Server Acknowledge), then send a 2-bit message containing its Jersey Number, and wait for a 250 (Server Acknowledge). If the Client receives a 502 (Server Order Stop), the Client will stop all operations. The Robot will store the IP address of the Server for future communication. If a Server IP is already stored, it will replace the stored IP with the new IP.
-3.2 250
+2.1 Packet Structure
++-----------++--------------++--------------------------------------------------------------------------+
+|  Version  || Command Code ||                                   Data                                   |
++-----------++--------------++--------------------------------------------------------------------------+
+|---- 1B ---||----- 1B -----||---------------------------------- 506B ----------------------------------|
+
+2.2 Handshake
+
+2.2.1 Server sends Server Available (220) command to broadcast address after joining the network.
+2.2.2 Robots already on the network send Hello (219) to Server upon receiving 220 and store the Server address in its internal database.
+2.2.3 Robot sends Hello (219) command to broadcast address after joining the network.
+2.2.4 Upon receiving a 219, Server sends Jersey Request (222) to the new Robot and stores the Robots address in its internal database.
+2.2.5 Robot sends Jersey Send (219) with its jersey number in the data segment to the Server upon receiving the 222, and stores the Server address in its internal database.
+2.2.6 Server stores the jersey number in its internal database, and sends an OK (250).
+2.2.6 Robot waits to receive commands from the Server, and Server waits for keepalive pings and new Robots.
+
+
+3. Robot Command Codes
+3.1 219; Hello
+Code 219 is used when a Robot first connects to the network, or when a Robot receives a 220 (Server Start) from the Server. The Client WILL send a 219 on startup after it connects to the network, or any time it receives a 220 (Server Start). The Client will then wait for a 250 (Server Acknowledge), then send a 2-bit (padded to 1B) message containing its Jersey Number, and wait for a 250 (Server Acknowledge). If the Client receives a 255 (Server Order Stop), the Client will stop all operations. The Robot will store the IP address of the Server for future communication. If a Server IP is already stored, it will replace the stored IP with the new IP.
+3.2 221; Jersey Send
+Code 221 is used to send the Robot's jersey number to the Server. Upon receiving a 222 from the Server, the Robot will reply with a 221, with the jersey number in the Data segment.
+3.3 250; OK
 Code 250 command is used to acknowledge a command or data from the Server. Upon receiving a command code from the Server or data from the Server (as a 125 (Server Send)), Client will send a 250 indicating it understood and complied with the command, or received the data.
-3.3 251
-Code 290 command is used when a Robot is shutting down, based on input from the Bot Firmware. When ordered to shut down by the Bot Firmware, the Robot will send a 290 to the Server and shut down. Upon receiving a 290 from a Client, the Server will remove the Client from its internal database.
-3.4 100
+3.4 251; Shutting Down
+Code 251 command is used when a Robot is shutting down, based on input from the Bot Firmware. When ordered to shut down by the Bot Firmware, the Robot will send a 251 to the Server and shut down. Upon receiving a 251 from a Client, the Server will remove the Client from its internal database.
+3.5 100; Keepalive
 Code 100 command is used to send keepalive pings to the Server. See Section 5 for more information.
 
 
-4. Server Codes
+4. Server Command Codes
 4.1. 125; Server Send
-Code 125 is used to notify a Robot that the Server is about to send it Command Data. When ordered by the Control Software to send a Robot Command Data, the Server will send a 125 to the Robot, and wait for a 250 from the Client. The Server will then send the size of the Command Data in bytes (up to 5242904), and wait for a 250 from the Client. The Server will then send the Command Data in the exact number of bytes previously indicated to the Robot, then wait for a 250 from the Client.
+Code 125 is used to notify a Robot that the Server is sending it data. When ordered by the Control Software to send a Robot data, the Server will send a 125 to the Robot with up to 506 bytes in the data segment. Upon receipt, the Robot will send a 250.
 4.2 220; Server Available
 Code 220 is used to notify Robots that the Server is available. The Server will send a 220 to the broadcast address on startup, and wait for Robots to send 220s. When the Server receives a 220 from a Client, it will send a 250 to the Client, then wait for the Client to send its desired Jersey Number. The Server will check its internal database to ensure the Jersey Number is not taken, and send a 250. If the Jersey Number is taken, it will send a 502 to the requesting Client, and to the Client to which the Jersey Number is assigned.
-4.3 250; OK
+4.3 222; Jersey Request
+Code 222 is used to request a Robot's jersey number. The Server will send a 222 after receiving a 219 from a Robot, and populate its internal database with the jersey number and associate it with the sending Robot. If there is a conflict, the Server will send a 255 to the conflicting Robots.
+4.4 250; OK
 Code 250 is used to acknowledge a message from a Robot. When receiving a message from a Robot that warrants a response as otherwise described in this document, it will send a 250 to the Client.
-4.4 254; Invalid Command
-Code 501 is used to notify a Robot it sent an invalid command. When receiving an invalid command from a Robot, the Server will send a 501 to the Robot.
-4.5 255; Error Stop
-Code 502 is used to order a Robot to cease operations based on an error. When the Server detects an error (such as a Jersey Number conflict) it will send a 502 to the Robot, which will cease operating. Resolving errors is outside the scope of this document.
+4.5 254; Invalid Command
+Code 254 is used to notify a Robot it sent an invalid command. When receiving an invalid command from a Robot, the Server will send a 501 to the Robot.
+4.6 255; Error Stop
+Code 255 is used to order a Robot to cease operations based on an error. When the Server detects an error (such as a Jersey Number conflict) it will send a 255 to the Robot, which will cease operating. Resolving errors is outside the scope of this document.
 
 5. Keepalive
-A keepalive system is used to ensure Robots are active, and to prune inactive Robots from the Server's internal database. Robots will send a 100 to the Server based on a pre-determined timeout agreed upon by the Bot and the Control Software, which is outside the scope of this document. The Server will update the Robot's keepalive every time it receives a message from the Robot, and will remove the Robot from its database if the keepalive expires past the timeout without receiving a message from the Robot. If the Robot's keepalive expires, it will need to send a new 220 if it reconnects to the network.
+A keepalive system is used to ensure Robots are active, and to prune inactive Robots from the Server's internal database. Robots will send a 100 to the Server based on a pre-determined timeout agreed upon by the Bot and the Control Software, which is outside the scope of this document. The Server will update the Robot's keepalive every time it receives a message from the Robot, and will remove the Robot from its database if the keepalive expires past the timeout without receiving a message from the Robot. If the Robot's keepalive expires, it will need to send a new 219 if it reconnects to the network.
