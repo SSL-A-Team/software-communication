@@ -25,7 +25,15 @@
 
       in {
         devShell = pkgs.mkShell {
+          LIBCLANG_PATH = "${pkgs.llvmPackages.libclang}/lib/libclang.so";
+
+          shellHook = ''
+          export LIBCLANG_PATH="${pkgs.libclang.lib}/lib"
+          '';
+
           buildInputs = with pkgs; [
+            clang
+
             # Rust Embedded
             rust-bin.stable.latest.default
           ];
