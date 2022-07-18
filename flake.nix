@@ -32,6 +32,7 @@
           '';
 
           buildInputs = with pkgs; [
+            gnumake
             clang
 
             # Rust Embedded
