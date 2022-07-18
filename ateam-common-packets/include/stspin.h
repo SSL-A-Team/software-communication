@@ -13,6 +13,11 @@
 
 #include <stdint.h>
 
+// if C11 or newer is used, include assert_static macro for testing
+#if defined( __STDC_VERSION__ ) && __STDC_VERSION__ >= 201112L
+#include <assert.h>
+#endif
+
 typedef float PidValue_t;
 
 typedef enum MotorCommandPacketType {
@@ -89,6 +94,9 @@ typedef struct MotorResponse_Params_Packet {
     uint16_t cur_clamp;
     uint16_t reserved;
 } __attribute__((packed)) MotorResponse_Params_Packet_t;
+#if defined( __STDC_VERSION__ ) && __STDC_VERSION__ >= 201112L
+static_assert(sizeof(MotorResponse_Params_Packet_t) == 36, "Expected MotorResponse_Params_Packet to have a size of 36");
+#endif
 
 typedef struct MotorResponse_Motion_Packet {
     uint32_t master_error : 1;
@@ -116,6 +124,9 @@ typedef struct MotorResponse_Motion_Packet {
     float current_computed_error;
     float current_computed_setpoint;
 } __attribute__((packed)) MotorResponse_Motion_Packet_t;
+#if defined( __STDC_VERSION__ ) && __STDC_VERSION__ >= 201112L
+static_assert(sizeof(MotorResponse_Motion_Packet_t) == 40, "Expected MotorResponse_Motion_Packet to have a size of 40");
+#endif
 
 typedef struct MotorResponsePacket {
     MotorResponsePacketType_t type;
@@ -125,3 +136,6 @@ typedef struct MotorResponsePacket {
         MotorResponse_Motion_Packet_t motion;
     };
 } __attribute__((packed)) MotorResponsePacket_t;
+#if defined( __STDC_VERSION__ ) && __STDC_VERSION__ >= 201112L
+static_assert(sizeof(MotorResponsePacket_t) == 48, "Expected MotorResponse_Motion_Packet to have a size of 48");
+#endif

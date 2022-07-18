@@ -2,5 +2,7 @@
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
-include!("stspin-bindings.rs");
+pub mod stspin_packets {
+	include!("stspin_bindings.rs");
+}
 

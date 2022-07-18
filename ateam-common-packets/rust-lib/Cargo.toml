@@ -6,7 +6,7 @@ repository = "https://github.com/SSL-A-Team/common"
 
 [lib]
 bench = false
-path = "rust-lib/lib.rs"
+path = "src/lib.rs"
 
 [build-dependencies]
 bindgen = "0.60.1"
