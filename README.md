@@ -1,4 +1,4 @@
-# Software Common Respository
+# Software Common Respository ![example workflow](https://github.com/SSL-A-Team/common/actions/workflows/CI.yml/badge.svg)
 
 Contains software artifacts shared across the firmware/software boundary.
 
