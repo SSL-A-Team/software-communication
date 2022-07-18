@@ -17,7 +17,7 @@ jobs:
         run: |
           nix flake check
           nix develop -c cargo --version
-      - name: Build Firmware
+      - name: Build Common Items
         shell: bash
         run: |
           nix develop -c make bindgen-packets-test
