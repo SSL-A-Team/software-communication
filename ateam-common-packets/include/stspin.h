@@ -87,7 +87,8 @@ typedef struct MotorResponse_Params_Packet {
     PidValue_t cur_i;
     PidValue_t cur_d;
     uint16_t cur_clamp;
-} MotorResponse_Params_Packet_t;
+    uint16_t reserved;
+} __attribute__((packed)) MotorResponse_Params_Packet_t;
 
 typedef struct MotorResponse_Motion_Packet {
     uint32_t master_error : 1;
@@ -114,7 +115,7 @@ typedef struct MotorResponse_Motion_Packet {
     float current_estimate;
     float current_computed_error;
     float current_computed_setpoint;
-} MotorResponse_Motion_Packet_t;
+} __attribute__((packed)) MotorResponse_Motion_Packet_t;
 
 typedef struct MotorResponsePacket {
     MotorResponsePacketType_t type;
@@ -123,4 +124,4 @@ typedef struct MotorResponsePacket {
         MotorResponse_Params_Packet_t params;
         MotorResponse_Motion_Packet_t motion;
     };
-} MotorResponsePacket_t;
+} __attribute__((packed)) MotorResponsePacket_t;

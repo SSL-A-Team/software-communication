@@ -12,6 +12,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "ateam-common-packets"
+version = "1.0.0"
+dependencies = [
+ "bindgen",
+]
+
+[[package]]
 name = "atty"
 version = "0.2.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -250,13 +257,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3bcdf212e9776fbcb2d23ab029360416bb1706b1aea2d1a5ba002727cbcab804"
 dependencies = [
  "proc-macro2",
-]
-
-[[package]]
-name = "radio"
-version = "1.0.0"
-dependencies = [
- "bindgen",
 ]
 
 [[package]]
