@@ -1,9 +1,10 @@
-# Software Common Respository ![example workflow](https://github.com/SSL-A-Team/common/actions/workflows/CI.yml/badge.svg)
+# Software Common Respository ![Build Status Badge](https://github.com/SSL-A-Team/common/actions/workflows/CI.yml/badge.svg)
 
 Contains software artifacts shared across the firmware/software boundary.
 
 Sub folders contain relevant sub README files.
- - radio/ - all common headers used in Robot\<-\>AI communications.
+ - `ateam-common-packets/` - all packet definitions used in Robot\<-\>AI communications.
+ - `radio-protocol/` - the top level radio communication spec (bot discovery, coms, etc)
 
 # Development Setup
 

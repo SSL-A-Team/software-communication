@@ -1,12 +1,16 @@
 /**
- * @file motor.h
+ * @file stspin.h
  * @author Will Stuckey
- * @brief 
+ * @brief communication packet definitions for the stspin firmware
  * @version 0.1
- * @date 2022-06-27
  * 
  * @copyright Copyright (c) 2022
  * 
+ * Struct sizes should pass static checks on the following 3 platforms:
+ *  - Embedded -> C11, 4 byte ptr
+ *  - Bindgen -> C11, 8 byte ptr
+ *  - ROS -> C++, 8 byte ptr
+ *
  */
 
 #pragma once
@@ -14,7 +18,7 @@
 #include <stdint.h>
 
 // if C11 or newer is used, include assert_static macro for testing
-#if defined( __STDC_VERSION__ ) && __STDC_VERSION__ >= 201112L
+#if defined(__cplusplus) || (defined( __STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
 #include <assert.h>
 #endif
 
@@ -93,8 +97,15 @@ typedef struct MotorResponse_Params_Packet {
     PidValue_t cur_d;
     uint16_t cur_clamp;
     uint16_t reserved;
+
+    #if INTPTR_MAX == INT32_MAX
+    // this isn't 8 byte aligned, so reserve 4 trailing bytes on 32bit systems
+    // to manually bring padding into equality
+    // check with asserts
+    uint32_t reserved_8byte_alignment;
+    #endif
 } __attribute__((packed)) MotorResponse_Params_Packet_t;
-#if defined( __STDC_VERSION__ ) && __STDC_VERSION__ >= 201112L
+#if defined(__cplusplus) || (defined( __STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
 static_assert(sizeof(MotorResponse_Params_Packet_t) == 36, "Expected MotorResponse_Params_Packet to have a size of 36");
 #endif
 
@@ -124,7 +135,7 @@ typedef struct MotorResponse_Motion_Packet {
     float current_computed_error;
     float current_computed_setpoint;
 } __attribute__((packed)) MotorResponse_Motion_Packet_t;
-#if defined( __STDC_VERSION__ ) && __STDC_VERSION__ >= 201112L
+#if defined(__cplusplus) || (defined( __STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
 static_assert(sizeof(MotorResponse_Motion_Packet_t) == 40, "Expected MotorResponse_Motion_Packet to have a size of 40");
 #endif
 
@@ -136,6 +147,6 @@ typedef struct MotorResponsePacket {
         MotorResponse_Motion_Packet_t motion;
     };
 } __attribute__((packed)) MotorResponsePacket_t;
-#if defined( __STDC_VERSION__ ) && __STDC_VERSION__ >= 201112L
-static_assert(sizeof(MotorResponsePacket_t) == 48, "Expected MotorResponse_Motion_Packet to have a size of 48");
+#if defined(__cplusplus) || (defined( __STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
+static_assert(sizeof(MotorResponsePacket_t) == 48, "Expected MotorResponsePacket to have a size of 48");
 #endif
