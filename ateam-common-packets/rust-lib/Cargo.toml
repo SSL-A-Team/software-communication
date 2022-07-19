@@ -1,0 +1,12 @@
+[package]
+name = "ateam-common-packets"
+version = "1.0.0"
+description = "Containes the radio packet definitions used by multiple targets"
+repository = "https://github.com/SSL-A-Team/common"
+
+[lib]
+bench = false
+path = "src/lib.rs"
+
+[build-dependencies]
+bindgen = "0.60.1"
