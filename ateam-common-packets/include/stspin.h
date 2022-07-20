@@ -81,8 +81,12 @@ typedef struct MotorCommandPacket {
 
 typedef enum MotorResponsePacketType {
     MRP_PARAMS,
-    MRP_MOTION
+    MRP_MOTION,
+    _MRP_FORCE_ENUM_TO_BE_4BYTES = 0xAA55CC33,
 } MotorResponsePacketType_t;
+#if defined(__cplusplus) || (defined( __STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
+static_assert(sizeof(MotorResponsePacketType_t) == 4, "Expected MotorResponsePacketType_t to have a size of 4");
+#endif
 
 typedef struct MotorResponse_Params_Packet {
     uint8_t version_major;
@@ -97,13 +101,6 @@ typedef struct MotorResponse_Params_Packet {
     PidValue_t cur_d;
     uint16_t cur_clamp;
     uint16_t reserved;
-
-    #if INTPTR_MAX == INT32_MAX
-    // this isn't 8 byte aligned, so reserve 4 trailing bytes on 32bit systems
-    // to manually bring padding into equality
-    // check with asserts
-    uint32_t reserved_8byte_alignment;
-    #endif
 } __attribute__((packed)) MotorResponse_Params_Packet_t;
 #if defined(__cplusplus) || (defined( __STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
 static_assert(sizeof(MotorResponse_Params_Packet_t) == 36, "Expected MotorResponse_Params_Packet to have a size of 36");
