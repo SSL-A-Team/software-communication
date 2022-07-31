@@ -23,13 +23,13 @@ Command Data - Arbitrary data used by the Control Software to control Bots.
 When a Client connects to the network it sends a broadcast 'hello' message to notify the Server that it is alive, and waits for a reply from the Server.
 When the Server connects to the network, it sends a UDP broadcast message notifying any clients on the network that it is alive, and waits for 'hello's from Clients.
 The Server has various commands it can receive from Clients, and various response/command codes it can send to Clients. The Server can both respond to requests from Clients, and send unprompted messages to Clients based on input from the Control Software. Control Software functionality and how the Bot Firmware controls the Client are outside the scope of this document.
-Client messages follow a command/data structure; Clients will send a command, wait for an acknowledgement from the server, then send data associated with that command. Client commands will be 24-bit 4-character text, and data will be TBD. Server messages will follow a status code structure; the Server will send a status code, and wait for an acknowledgement from the Client if required, and then send data if required. Server messages will be 9-bit command codes, followed by data when required.
+Client messages follow a command/data structure; Clients will send a command, wait for an acknowledgement from the server, then send data associated with that command. Client commands will be 1-byte numbers, and data will be TBD. Server messages will follow a status code structure; the Server will send a status code, and wait for an acknowledgement from the Client if required, and then send data if required. Server messages will be 1-byte command codes, followed by data when required.
 
 2.1 Packet Structure
 +-----------++--------------++--------------------------------------------------------------------------+
-|  Version  || Command Code ||                                   Data                                   |
+|  Major Version  || Minor Version || Patch || Command Code || Data Type || Data Length ||     Data     |
 +-----------++--------------++--------------------------------------------------------------------------+
-|---- 1B ---||----- 1B -----||---------------------------------- 506B ----------------------------------|
+|------- 1B ------||----- 1B ------||-- 2B -||----- 1B -----||----1B-----||----- 2B ----||---- 500B ----|
 
 2.2 Handshake
 
@@ -53,6 +53,8 @@ Code 250 command is used to acknowledge a command or data from the Server. Upon 
 Code 251 command is used when a Robot is shutting down, based on input from the Bot Firmware. When ordered to shut down by the Bot Firmware, the Robot will send a 251 to the Server and shut down. Upon receiving a 251 from a Client, the Server will remove the Client from its internal database.
 3.5 100; Keepalive
 Code 100 command is used to send keepalive pings to the Server. See Section 5 for more information.
+3.6 126; Robot Send
+Code 126 is used to notify the Server that the Robot is sending it data. Upon receipt, the Server will send a 250.
 
 
 4. Server Command Codes
