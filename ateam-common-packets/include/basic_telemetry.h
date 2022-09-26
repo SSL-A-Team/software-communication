@@ -49,7 +49,7 @@ typedef struct BasicTelemetry {
     float motor_2_temperature; // deg C
     float motor_3_temperature; // deg C
     float motor_4_temperature; // deg C
-    float kicker_charge_level;
+    float kicker_charge_level; // volts
 } BasicTelemetry_t;
 #if defined(__cplusplus) || (defined( __STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
 static_assert(sizeof(BasicTelemetry_t) == 40, "Expected BasicTelemetry_t to have a size of 40");

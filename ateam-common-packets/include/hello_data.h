@@ -27,7 +27,7 @@ static_assert(sizeof(TeamColor_t) == 1, "Expected TeamColor_t to have a size of 
 
 typedef struct HelloData {
     uint8_t robot_id;
-    TeamColor color;
+    TeamColor_t color;
 } HelloData_t;
 #if defined(__cplusplus) || (defined( __STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
 static_assert(sizeof(HelloData_t) == 2, "Expected HelloData_t to have a size of 2");

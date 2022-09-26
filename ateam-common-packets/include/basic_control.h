@@ -19,6 +19,7 @@
 #endif
 
 typedef enum KickRequest {
+    KR_ARM,
     KR_DISABLE,
     KR_KICK_NOW,
     KR_KICK_TOUCH,
@@ -34,7 +35,7 @@ typedef struct BasicControl {
     float vel_z_angular; // m/s
     float kick_vel; // m/s (also applies to chips)
     float dribbler_speed; // rpm
-    uint8_t kick_request;
+    KickRequest_t kick_request;
 } BasicControl_t;
 #if defined(__cplusplus) || (defined( __STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
 static_assert(sizeof(BasicControl_t) == 24, "Expected BasicControl_t to have a size of 24");
