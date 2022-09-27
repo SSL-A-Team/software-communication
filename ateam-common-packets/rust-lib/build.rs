@@ -13,6 +13,10 @@ fn main() {
     let bindings = bindgen::Builder::default()
         // The input header we would like to generate
         // bindings for.
+        .header("../include/basic_control.h")
+        .header("../include/basic_telemetry.h")
+        .header("../include/hello_data.h")
+        .header("../include/radio.h")
         .header("../include/stspin.h")
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
