@@ -1,4 +1,6 @@
-Robot Networking Protocol Specification
+# Robot Networking Protocol Specification
+
+<span style="color:red">**NOTE:**</span> This specification is being collaboratively updated [here](https://docs.google.com/document/d/1O09lvcoexoYhVQzl3QtoxvIDNEamm63JrjVRY-vIe3Q). The content below may not reflect latest spec or implementation.
 
 This is a specification of a basic protocol for communication between RoboCup robots and a control server. 
 Robot-robot communication is not supported. Multiple control servers are not supported. This specification assumes only friendly devices will be present on the network.
