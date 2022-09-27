@@ -24,6 +24,7 @@ typedef enum CommandCode : unsigned char {
     CC_ACK = 1,
     CC_NACK = 2,
     CC_GOODBYE = 3,
+    CC_KEEPALIVE = 4,
     CC_HELLO = 101,
     CC_TELEMETRY = 102,
     CC_CONTROL = 201
