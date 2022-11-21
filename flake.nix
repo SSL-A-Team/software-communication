@@ -36,7 +36,7 @@
             clang
 
             # Rust Embedded
-            rust-bin.stable.latest.default
+            rust-bin.nightly.latest.default.override
           ];
         };
       }

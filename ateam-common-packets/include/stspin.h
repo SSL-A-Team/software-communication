@@ -25,8 +25,8 @@
 typedef float PidValue_t;
 
 typedef enum MotorCommandPacketType {
-    MCP_PARAMS,
-    MCP_MOTION
+    MCP_PARAMS = 0,
+    MCP_MOTION = 1
 } MotorCommandPacketType_t;
 
 typedef struct MotorCommand_Params_Packet {
