@@ -11,6 +11,8 @@ fn main() {
     // to bindgen, and lets you build up options for
     // the resulting bindings.
     let bindings = bindgen::Builder::default()
+        .use_core()
+        .ctypes_prefix("::core::ffi")
         // The input header we would like to generate
         // bindings for.
         .header("../include/stspin.h")
