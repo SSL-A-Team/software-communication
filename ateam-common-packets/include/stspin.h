@@ -145,7 +145,7 @@ typedef struct MotorResponse_Motion_Packet {
     uint32_t timestamp;
 
     float vel_setpoint;
-    uint32_t encoder_delta;
+    int32_t encoder_delta;
     float vel_enc_estimate;
     float vel_hall_estimate;
     float vel_computed_error;
