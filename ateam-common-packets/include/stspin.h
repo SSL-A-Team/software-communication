@@ -18,8 +18,14 @@
 #include <stdint.h>
 
 // if C11 or newer is used, include assert_static macro for testing
-#if defined(__cplusplus) || (defined( __STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
-#include <assert.h>
+#if defined(__cplusplus) || (defined( __STDC_VERSION__) && __STDC_VERSION__ >= 201112L) && !defined(__ARM_ARCH_7EM__)
+    #if defined(__ARM_ARCH_7EM__)
+        #define static_assert(args...) _Static_assert(args...)
+    #else
+        #include <assert.h>
+    #endif
+#else
+    #define static_assert(args...)
 #endif
 
 typedef float PidValue_t;
@@ -68,7 +74,8 @@ typedef enum MotorCommand_MotionType {
 
 typedef struct MotorCommand_Motion_Packet {
     uint32_t reset : 1;
-    uint32_t reserved : 31;
+    uint32_t enable_telemetry: 1;
+    uint32_t reserved : 30;
     MotorCommand_MotionType_t motion_control_type;
 
     float setpoint;
@@ -117,7 +124,9 @@ typedef struct MotorResponse_Params_Packet {
     PidValue_t cur_d;
     PidValue_t torque_i_max;
     uint16_t cur_clamp;
-    uint16_t reserved;
+
+    uint16_t git_dirty: 1;
+    uint16_t reserved: 15;
 } __attribute__((packed)) MotorResponse_Params_Packet_t;
 #if defined(__cplusplus) || (defined( __STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
 static_assert(sizeof(MotorResponse_Params_Packet_t) == 44, "Expected MotorResponse_Params_Packet to have a size of 44");
@@ -142,7 +151,7 @@ typedef struct MotorResponse_Motion_Packet {
     uint32_t timestamp;
 
     float vel_setpoint;
-    uint32_t encoder_delta;
+    int32_t encoder_delta;
     float vel_enc_estimate;
     float vel_hall_estimate;
     float vel_computed_error;
