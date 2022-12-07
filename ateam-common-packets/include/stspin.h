@@ -18,8 +18,14 @@
 #include <stdint.h>
 
 // if C11 or newer is used, include assert_static macro for testing
-#if defined(__cplusplus) || (defined( __STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
-#include <assert.h>
+#if defined(__cplusplus) || (defined( __STDC_VERSION__) && __STDC_VERSION__ >= 201112L) && !defined(__ARM_ARCH_7EM__)
+    #if defined(__ARM_ARCH_7EM__)
+        #define static_assert(args...) _Static_assert(args...)
+    #else
+        #include <assert.h>
+    #endif
+#else
+    #define static_assert(args...)
 #endif
 
 typedef float PidValue_t;
