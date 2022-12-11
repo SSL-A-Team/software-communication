@@ -8,15 +8,9 @@
  *
  */
 
-
 #pragma once
 
-#include <stdint.h>
-
-// if C11 or newer is used, include assert_static macro for testing
-#if defined(__cplusplus) || (defined( __STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
-#include <assert.h>
-#endif
+#include "common.h"
 
 typedef enum KickRequest {
     KR_ARM,
@@ -27,7 +21,7 @@ typedef enum KickRequest {
     KR_CHIP_NOW,
     KR_CHIP_TOUCH,
     KR_CHIP_CAPTURED
-} KickRequest_t;
+} KickRequest;
 
 typedef struct BasicControl {
     float vel_x_linear; // m/s
@@ -35,8 +29,6 @@ typedef struct BasicControl {
     float vel_z_angular; // m/s
     float kick_vel; // m/s (also applies to chips)
     float dribbler_speed; // rpm
-    KickRequest_t kick_request;
-} BasicControl_t;
-#if defined(__cplusplus) || (defined( __STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
-static_assert(sizeof(BasicControl_t) == 24, "Expected BasicControl_t to have a size of 24");
-#endif
+    KickRequest kick_request;
+} BasicControl;
+assert_size(BasicControl, 24);

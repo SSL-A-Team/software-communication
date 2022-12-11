@@ -10,25 +10,16 @@
 
 #pragma once
 
-#include <stdint.h>
+#include "common.h"
 
-// if C11 or newer is used, include assert_static macro for testing
-#if defined(__cplusplus) || (defined( __STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
-#include <assert.h>
-#endif
-
-typedef enum TeamColor : unsigned char {
+typedef enum TeamColor : uint8_t {
     TC_YELLOW = 0,
     TC_BLUE = 1
-} TeamColor_t;
-#if defined(__cplusplus) || (defined( __STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
-static_assert(sizeof(TeamColor_t) == 1, "Expected TeamColor_t to have a size of 1");
-#endif
+} TeamColor;
+assert_size(TeamColor, 1);
 
 typedef struct HelloData {
     uint8_t robot_id;
-    TeamColor_t color;
-} HelloData_t;
-#if defined(__cplusplus) || (defined( __STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
-static_assert(sizeof(HelloData_t) == 2, "Expected HelloData_t to have a size of 2");
-#endif
+    TeamColor color;
+} HelloData;
+assert_size(HelloData, 2);
