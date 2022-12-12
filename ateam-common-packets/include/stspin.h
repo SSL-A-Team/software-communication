@@ -20,7 +20,8 @@
 typedef enum MotorCommandPacketType {
     MCP_PARAMS = 0,
     MCP_MOTION = 1
-} MotorCommandPacketType;
+} __attribute__((packed)) MotorCommandPacketType;
+assert_size(MotorCommandPacketType, 1);
 
 typedef struct MotorCommand_Params_Packet {
     uint32_t update_timestamp : 1;
@@ -80,10 +81,11 @@ assert_size(MotorCommandPacket, 52);
 //  responses  //
 /////////////////
 
-typedef enum MotorResponsePacketType : uint8_t {
+typedef enum MotorResponsePacketType {
     MRP_PARAMS,
     MRP_MOTION,
-} MotorResponsePacketType;
+} __attribute__((packed)) MotorResponsePacketType;
+assert_size(MotorResponsePacketType, 1);
 
 typedef struct MotorResponse_Params_Packet {
     uint8_t version_major;
