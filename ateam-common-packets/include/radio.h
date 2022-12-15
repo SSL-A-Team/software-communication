@@ -23,9 +23,10 @@ typedef enum CommandCode : uint8_t {
     CC_NACK = 2,
     CC_GOODBYE = 3,
     CC_KEEPALIVE = 4,
-    CC_HELLO = 101,
+    CC_HELLO_REQ = 101,
     CC_TELEMETRY = 102,
-    CC_CONTROL = 201
+    CC_CONTROL = 201,
+    CC_HELLO_RESP = 202,
 } CommandCode;
 assert_size(CommandCode, 1);
 
@@ -34,10 +35,11 @@ typedef struct RadioPacket {
     uint16_t major_version;
     uint16_t minor_version;
     CommandCode command_code;
-    union ResponseData {
-        HelloData hello;
+    union Data {
+        HelloRequest hello_request;
+        HelloResponse hello_response;
         BasicControl control;
         BasicTelemetry telemetry;
-    } data;
+    } data __attribute__((aligned (4)));
 } RadioPacket;
 assert_size(RadioPacket, 52);

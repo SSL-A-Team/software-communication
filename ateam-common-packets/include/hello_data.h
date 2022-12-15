@@ -18,8 +18,14 @@ typedef enum TeamColor : uint8_t {
 } TeamColor;
 assert_size(TeamColor, 1);
 
-typedef struct HelloData {
+typedef struct HelloRequest {
     uint8_t robot_id;
     TeamColor color;
-} HelloData;
-assert_size(HelloData, 2);
+} HelloRequest;
+assert_size(HelloRequest, 2);
+
+typedef struct HelloResponse {
+    uint8_t ipv4[4];
+    uint16_t port;
+} HelloResponse;
+assert_size(HelloResponse, 6);
