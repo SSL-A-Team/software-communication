@@ -35,6 +35,7 @@ typedef struct RadioPacket {
     uint16_t major_version;
     uint16_t minor_version;
     CommandCode command_code;
+    uint16_t data_length;
     union Data {
         HelloRequest hello_request;
         HelloResponse hello_response;
