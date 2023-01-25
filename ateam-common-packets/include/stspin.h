@@ -109,20 +109,25 @@ typedef struct MotorResponse_Params_Packet {
 assert_size(MotorResponse_Params_Packet, 44);
 
 typedef struct MotorResponse_Motion_Packet {
-    uint32_t master_error : 1;
-    uint32_t hall_power_error : 1;
-    uint32_t hall_disconnected_error : 1;
-    uint32_t bldc_transition_error : 1;
-    uint32_t bldc_commutation_watchdog_error : 1;
-    uint32_t enc_disconnected_error: 1;
-    uint32_t enc_decoding_error : 1;
-    uint32_t hall_enc_vel_disagreement_error: 1;
-    uint32_t overcurrent_error : 1;
-    uint32_t undervoltage_error : 1;
-    uint32_t overvoltage_error : 1;
-    uint32_t torque_limited : 1;
-    uint32_t control_loop_time_error: 1;
-    uint32_t reserved : 19;
+    uint8_t master_error : 1;
+    uint8_t hall_power_error : 1;
+    uint8_t hall_disconnected_error : 1;
+    uint8_t bldc_transition_error : 1;
+    uint8_t bldc_commutation_watchdog_error : 1;
+    uint8_t enc_disconnected_error: 1;
+    uint8_t enc_decoding_error : 1;
+    uint8_t hall_enc_vel_disagreement_error: 1;
+    uint8_t overcurrent_error : 1;
+    uint8_t undervoltage_error : 1;
+    uint8_t overvoltage_error : 1;
+    uint8_t torque_limited : 1;
+    uint8_t control_loop_time_error: 1;
+    uint8_t reset_watchdog_independent: 1;
+    uint8_t reset_watchdog_window: 1;
+    uint8_t reset_low_power: 1;
+    uint8_t reset_software: 1;
+    uint8_t reset_pin: 1;
+    uint32_t reserved : 14;
 
     uint32_t timestamp;
 
