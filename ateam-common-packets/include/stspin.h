@@ -146,8 +146,8 @@ typedef struct MotorResponse_Motion_Packet {
 assert_size(MotorResponse_Motion_Packet, 48);
 
 typedef struct MotorResponsePacket {
-    MotorResponsePacketType type;
-    uint32_t crc32;
+    MotorResponsePacketType type __attribute__((aligned (4)));
+    uint32_t crc32 __attribute__((aligned (4)));
     union ResponseData {
         MotorResponse_Params_Packet params;
         MotorResponse_Motion_Packet motion;
