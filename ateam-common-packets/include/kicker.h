@@ -15,14 +15,13 @@ typedef enum KickRequest {
 
 typedef struct KickerControl {
     uint32_t enable_charging: 1;
-    uint32_t flag_kick: 1;
-    uint32_t flag_chip: 1;
     uint32_t flag_power_down: 1;
-    // 28 bits reserved
-    
+    // 30 bits reserved
+
+    KickRequest kick_request;
     float kick_speed;
 } KickerControl;
-assert_size(KickerControl, 8);
+assert_size(KickerControl, 12);
 
 typedef struct KickerTelemetry {
     uint32_t powered_down: 1;
