@@ -3,5 +3,6 @@
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
+pub mod bindings_kicker;
 pub mod bindings_radio;
 pub mod bindings_stspin;

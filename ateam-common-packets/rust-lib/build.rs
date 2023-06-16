@@ -24,6 +24,24 @@ fn main() {
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate STSPIN bindings");
 
+    let bindings_kicker = bindgen::Builder::default()
+        // The input header we would like to generate
+        // bindings for.
+        .header("../include/kicker.h")
+        .allowlist_file(".*/kicker.h")
+        // Tell bindgen to use core instead of std
+        .use_core()
+        .ctypes_prefix("::core::ffi")
+        // Tell cargo to invalidate the built crate whenever any of the
+        // included header files changed.
+        .parse_callbacks(Box::new(bindgen::CargoCallbacks))
+        // Put enum consts in module
+        .default_enum_style(EnumVariation::ModuleConsts)
+        // Finish the builder and generate the bindings.
+        .generate()
+        // Unwrap the Result and panic on failure.
+        .expect("Unable to generate Kicker bindings");
+
     let bindings_radio = bindgen::Builder::default()
         // The input header we would like to generate
         // bindings for.
@@ -55,6 +73,9 @@ fn main() {
     bindings_stspin
         .write_to_file(Path::new(&out_dir).join("bindings_stspin.rs"))
         .expect("Couldn't write STSPIN packet bindings!");
+    bindings_kicker
+        .write_to_file(Path::new(&out_dir).join("bindings_kicker.rs"))
+        .expect("Couldn't write Kicker packet bindings!");
     bindings_radio
         .write_to_file(Path::new(&out_dir).join("bindings_radio.rs"))
         .expect("Couldn't write Radio packet bindings!");
