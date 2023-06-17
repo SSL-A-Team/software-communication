@@ -11,17 +11,7 @@
 #pragma once
 
 #include "common.h"
-
-typedef enum KickRequest {
-    KR_ARM,
-    KR_DISABLE,
-    KR_KICK_NOW,
-    KR_KICK_TOUCH,
-    KR_KICK_CAPTURED,
-    KR_CHIP_NOW,
-    KR_CHIP_TOUCH,
-    KR_CHIP_CAPTURED
-} KickRequest;
+#include "kicker.h"
 
 typedef struct BasicControl {
     float vel_x_linear; // m/s
