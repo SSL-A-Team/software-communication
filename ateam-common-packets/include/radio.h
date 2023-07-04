@@ -30,6 +30,24 @@ typedef enum CommandCode : uint8_t {
 } CommandCode;
 assert_size(CommandCode, 1);
 
+typedef struct RadioHeader {
+    uint32_t crc32;
+    uint16_t major_version;
+    uint16_t minor_version;
+    CommandCode command_code;
+    uint16_t data_length;
+} RadioHeader;
+assert_size(RadioHeader, 12);
+
+typedef union RadioData {
+    HelloRequest hello_request;
+    HelloResponse hello_response;
+    BasicControl control;
+    BasicTelemetry telemetry;
+} RadioData;
+assert_size(RadioData, 40);
+
+// TODO: remove me
 typedef struct RadioPacket {
     uint32_t crc32;
     uint16_t major_version;

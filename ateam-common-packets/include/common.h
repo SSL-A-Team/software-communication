@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 #if defined(__cplusplus) || (defined( __STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
-    #if defined(__ARM_ARCH_7EM__)
+    #if defined(__ARM_ARCH_7EM__) || defined(__ARM_ARCH_6M__)
         #define static_assert _Static_assert
     #else
         #include <assert.h>
