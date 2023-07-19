@@ -7,7 +7,9 @@ use bindgen::EnumVariation;
 extern crate which;
 use which::which;
 
-fn is_arm_none_eabi_sysroot_valid(sysroot: impl AsRef<Path> + std::convert::AsRef<std::ffi::OsStr>) -> bool {
+fn is_arm_none_eabi_sysroot_valid(
+    sysroot: impl AsRef<Path> + std::convert::AsRef<std::ffi::OsStr>,
+) -> bool {
     let sysroot_include = Path::new(&sysroot).join("arm-none-eabi/include");
     if !sysroot_include.exists() {
         eprintln!("the sysroot does not exist, or is malformed because it does not contain the header include folder");
@@ -22,7 +24,9 @@ fn is_arm_none_eabi_sysroot_valid(sysroot: impl AsRef<Path> + std::convert::AsRe
 
     let types_header = Path::new(&sysroot_include).join("machine/_types.h");
     if !types_header.exists() {
-        eprintln!("the include root appears malformed because it does not contain machine/_types.h");
+        eprintln!(
+            "the include root appears malformed because it does not contain machine/_types.h"
+        );
         return false;
     }
 
@@ -31,7 +35,10 @@ fn is_arm_none_eabi_sysroot_valid(sysroot: impl AsRef<Path> + std::convert::AsRe
 
 fn find_gcc_arm_embedded_sysroot() -> PathBuf {
     if let Some(user_specified_root) = env::var_os("ARM_NONE_EABI_ROOT") {
-        println!("user specified a embedded sysroot via $ARM_NONE_EABI_ROOT={:?}", user_specified_root);
+        println!(
+            "user specified a embedded sysroot via $ARM_NONE_EABI_ROOT={:?}",
+            user_specified_root
+        );
         if is_arm_none_eabi_sysroot_valid(user_specified_root.clone()) {
             println!("OK. the specified root appears valid.");
             return PathBuf::from(user_specified_root);
@@ -54,15 +61,17 @@ fn find_gcc_arm_embedded_sysroot() -> PathBuf {
         println!("arm-none-eabi-gcc not on the path.");
     }
 
-    panic!("exhausted all options to find arm-none-eabi sysroot for bindgen. 
+    panic!(
+        "exhausted all options to find arm-none-eabi sysroot for bindgen. 
         Ensure arm-none-eabi-gcc is on the path and fully installed, 
-        or manually set $ARM_NONE_EABI_ROOT in the environment.");
+        or manually set $ARM_NONE_EABI_ROOT in the environment."
+    );
 }
 
 fn create_configured_builder() -> bindgen::Builder {
     let mut sysroot = find_gcc_arm_embedded_sysroot();
     sysroot.push("arm-none-eabi/include/");
-    
+
     let bindings = bindgen::Builder::default()
         // Tell bindgen to use core instead of std
         // this will target embedded, so we don't have std
