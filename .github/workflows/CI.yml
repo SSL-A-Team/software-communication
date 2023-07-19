@@ -5,7 +5,7 @@ on:
   pull_request:
 jobs:
   test-firmware-build:
-    runs-on: [ubuntu-20.04, ubuntu-22.04, macos-latest]
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2.4.0
       - uses: cachix/install-nix-action@v16
