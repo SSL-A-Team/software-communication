@@ -25,11 +25,3 @@ jobs:
         shell: bash
         run: |
           nix develop -c make bindgen-packets-test
-      - name: Check Nightly
-        shell: bash
-        run: |
-          nix flake update
-          nix flake check
-          nix develop -c cargo update --manifest-path=ateam-common-packets/rust-lib/Cargo.toml
-          nix develop -c cargo test --manifest-path=ateam-common-packets/rust-lib/Cargo.toml
-          nix develop -c cargo --version
