@@ -28,7 +28,6 @@
           # needed by bindgen to invoke clang
           shellHook = ''
           export LIBCLANG_PATH="${pkgs.libclang.lib}/lib"
-          export ARM_NONE_EABI_ROOT="$(realpath $(dirname $(which arm-none-eabi-gcc))/..)"
           '';
 
           buildInputs = with pkgs; [

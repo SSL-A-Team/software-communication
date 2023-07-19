@@ -1,36 +1,68 @@
-extern crate bindgen;
-use bindgen::EnumVariation;
 use std::env;
 use std::path::{Path, PathBuf};
 
-fn find_gcc_arm_embedded_incroot() -> PathBuf {
-    let arm_none_eabi_root = env::var_os("ARM_NONE_EABI_ROOT").expect(
-        "the ABI definition root was not set.
-        Are you in the Nix environment?
-        Set \"$ARM_NONE_EABI_ROOT=<root of arm-none-eabi-gcc>\"",
-    );
+extern crate bindgen;
+use bindgen::EnumVariation;
 
-    let sysroot_include = Path::new(&arm_none_eabi_root).join("arm-none-eabi/include");
+extern crate which;
+use which::which;
+
+fn is_arm_none_eabi_sysroot_valid(sysroot: impl AsRef<Path> + std::convert::AsRef<std::ffi::OsStr>) -> bool {
+    let sysroot_include = Path::new(&sysroot).join("arm-none-eabi/include");
     if !sysroot_include.exists() {
-        panic!("the sysroot does not exist, or is malformed because it does not contain the header include folder");
+        eprintln!("the sysroot does not exist, or is malformed because it does not contain the header include folder");
+        return false;
     }
 
     let cdefs_header = Path::new(&sysroot_include).join("sys/cdefs.h");
     if !cdefs_header.exists() {
-        panic!("the include root appears malformed because it does not contain sys/cdefs.h");
+        eprintln!("the include root appears malformed because it does not contain sys/cdefs.h");
+        return false;
     }
 
     let types_header = Path::new(&sysroot_include).join("machine/_types.h");
     if !types_header.exists() {
-        panic!("the include root appears malformed because it does not contain machine/_types.h");
+        eprintln!("the include root appears malformed because it does not contain machine/_types.h");
+        return false;
     }
 
-    sysroot_include.to_path_buf()
+    true
+}
+
+fn find_gcc_arm_embedded_sysroot() -> PathBuf {
+    if let Some(user_specified_root) = env::var_os("ARM_NONE_EABI_ROOT") {
+        println!("user specified a embedded sysroot via $ARM_NONE_EABI_ROOT={:?}", user_specified_root);
+        if is_arm_none_eabi_sysroot_valid(user_specified_root.clone()) {
+            println!("OK. the specified root appears valid.");
+            return PathBuf::from(user_specified_root);
+        } else {
+            eprintln!("ERR. User specified root appears invalid.");
+        }
+    }
+
+    if let Ok(located_arm_gcc_bin) = which("arm-none-eabi-gcc") {
+        println!("located arm-none-eabi-gcc on the path, attempting to find the sysroot");
+        // gcc-arm-none-eabi is in gcc-arm-embedded/bin/gcc-arm-none-eabi. Two parents up is the sysroot.
+        let recovered_sysroot = located_arm_gcc_bin.parent().unwrap().parent().unwrap();
+        if is_arm_none_eabi_sysroot_valid(recovered_sysroot) {
+            println!("OK. the recovered root appears valid.");
+            return recovered_sysroot.to_path_buf();
+        } else {
+            eprintln!("ERR. Found root appears invalid.");
+        }
+    } else {
+        println!("arm-none-eabi-gcc not on the path.");
+    }
+
+    panic!("exhausted all options to find arm-none-eabi sysroot for bindgen. 
+        Ensure arm-none-eabi-gcc is on the path and fully installed, 
+        or manually set $ARM_NONE_EABI_ROOT in the environment.");
 }
 
 fn create_configured_builder() -> bindgen::Builder {
-    let incroot = find_gcc_arm_embedded_incroot();
-
+    let mut sysroot = find_gcc_arm_embedded_sysroot();
+    sysroot.push("arm-none-eabi/include/");
+    
     let bindings = bindgen::Builder::default()
         // Tell bindgen to use core instead of std
         // this will target embedded, so we don't have std
@@ -39,7 +71,7 @@ fn create_configured_builder() -> bindgen::Builder {
         // tell clang where to include system definitions
         .clang_arg("-target")
         .clang_arg(std::env::var("TARGET").unwrap())
-        .clang_arg(format!("-I{}", incroot.to_str().unwrap()))
+        .clang_arg(format!("-I{}", sysroot.to_str().unwrap()))
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
