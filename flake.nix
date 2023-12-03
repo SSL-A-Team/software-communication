@@ -25,19 +25,29 @@
 
       in {
         devShell = pkgs.mkShell {
-          LIBCLANG_PATH = "${pkgs.llvmPackages.libclang}/lib/libclang.so";
-
+          # needed by bindgen to invoke clang
           shellHook = ''
           export LIBCLANG_PATH="${pkgs.libclang.lib}/lib"
           '';
 
           buildInputs = with pkgs; [
             gnumake
+
+            # GCC ARM Embedded 12 provides the sysroot/ABI defining types and type sizes
+            # for bindgen
+            gcc-arm-embedded-12
+
+            # needed by bindgen
             clang
 
             # Rust Embedded
-            rust-bin.nightly.latest.default
+            (rust-bin.selectLatestNightlyWith (toolchain: toolchain.default.override {
+              extensions = [ "rust-src" ];
+              targets = [ "thumbv7em-none-eabihf" "thumbv6m-none-eabi" ];
+            }))
+            rust-analyzer
           ];
+
         };
       }
     );

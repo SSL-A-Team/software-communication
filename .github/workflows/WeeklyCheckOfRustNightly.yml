@@ -1,0 +1,21 @@
+name: A-Team Common Upstream Check
+on:
+  schedule:
+    - cron: "0 0 * * FRI"
+jobs:
+  test-firmware-against-latest-nightly:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2.4.0
+      - uses: cachix/install-nix-action@v16
+        with:
+          extra_nix_config:
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - name: Run Tests
+        shell: bash
+        run: |
+          nix flake update
+          nix flake check
+          nix develop -c cargo update --manifest-path=ateam-common-packets/rust-lib/Cargo.toml
+          nix develop -c cargo test --manifest-path=ateam-common-packets/rust-lib/Cargo.toml
+          nix develop -c cargo --version

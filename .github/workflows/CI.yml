@@ -20,5 +20,8 @@ jobs:
       - name: Build Common Items
         shell: bash
         run: |
+          nix develop -c make bindgen-packets
+      - name: Test Common Items
+        shell: bash
+        run: |
           nix develop -c make bindgen-packets-test
-
