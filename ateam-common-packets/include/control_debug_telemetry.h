@@ -26,6 +26,10 @@ typedef struct ControlDebugTelemetry {
     MotorDebugTelemetry motor_bl;
     /// 48 bytes
 
+    float imu_gyro[3];  // rad/s
+    float imu_accel[3];  // m/s^2
+    // 24 bytes
+
     float commanded_body_velocity[3];  // commanded body velocity from the AI
     float clamped_commanded_body_velocity[3];  // commanded body velocity from the AI after the local (firmware) velocity and acceleration limits are imposed
     float cgkf_body_velocity_state_estimate[3];  // CG Kalman Filter estiamted body velocity
@@ -36,4 +40,4 @@ typedef struct ControlDebugTelemetry {
     float wheel_velocity_clamped_u[4];  // wheel velocities after control policy clamped for local acceleration limits
     /// 32 bytes
 } ControlDebugTelemetry;
-assert_size(ControlDebugTelemetry, 48 + 48 + 32);
+assert_size(ControlDebugTelemetry, 48 + 24 + 48 + 32);

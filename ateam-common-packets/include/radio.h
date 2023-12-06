@@ -48,7 +48,7 @@ typedef union RadioData {
     BasicTelemetry telemetry;
     ControlDebugTelemetry control_debug_telemetry;
 } RadioData;
-assert_size(RadioData, 128);
+assert_size(RadioData, 152);
 
 // TODO: remove me
 typedef struct RadioPacket {
@@ -57,6 +57,9 @@ typedef struct RadioPacket {
     uint16_t minor_version;
     CommandCode command_code;
     uint16_t data_length;
+
+    // 12 bytes
+
     union Data {
         HelloRequest hello_request;
         HelloResponse hello_response;
@@ -65,4 +68,4 @@ typedef struct RadioPacket {
         ControlDebugTelemetry control_debug_telemetry;
     } data __attribute__((aligned (4)));
 } RadioPacket;
-assert_size(RadioPacket, 140);
+assert_size(RadioPacket, 164);
