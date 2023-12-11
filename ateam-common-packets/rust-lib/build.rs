@@ -118,10 +118,12 @@ fn main() {
         // bindings for.
         .header("../include/basic_control.h")
         .header("../include/basic_telemetry.h")
+        .header("../include/control_debug_telemetry.h")
         .header("../include/hello_data.h")
         .header("../include/radio.h")
         .allowlist_file(".*/basic_control.h")
         .allowlist_file(".*/basic_telemetry.h")
+        .allowlist_file(".*/control_debug_telemetry.h")
         .allowlist_file(".*/hello_data.h")
         .allowlist_file(".*/radio.h")
         .generate()
