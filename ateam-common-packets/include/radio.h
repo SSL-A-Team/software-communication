@@ -15,9 +15,10 @@
 #include "basic_control.h"
 #include "basic_telemetry.h"
 #include "control_debug_telemetry.h"
+#include "robot_parameters.h"
 
 const uint16_t kProtocolVersionMajor = 0;
-const uint16_t kProtocolVersionMinor = 0;
+const uint16_t kProtocolVersionMinor = 1;
 
 typedef enum CommandCode : uint8_t {
     CC_ACK = 1,
@@ -27,6 +28,7 @@ typedef enum CommandCode : uint8_t {
     CC_HELLO_REQ = 101,
     CC_TELEMETRY = 102,
     CC_CONTROL_DEBUG_TELEMETRY = 103,
+    CC_ROBOT_PARAMETER_COMMAND = 104,
     CC_CONTROL = 201,
     CC_HELLO_RESP = 202,
 } CommandCode;
@@ -47,10 +49,10 @@ typedef union RadioData {
     BasicControl control;
     BasicTelemetry telemetry;
     ControlDebugTelemetry control_debug_telemetry;
+    ParameterCommand robot_parameter_command;
 } RadioData;
 assert_size(RadioData, 152);
 
-// TODO: remove me
 typedef struct RadioPacket {
     uint32_t crc32;
     uint16_t major_version;
@@ -66,6 +68,11 @@ typedef struct RadioPacket {
         BasicControl control;
         BasicTelemetry telemetry;
         ControlDebugTelemetry control_debug_telemetry;
+        ParameterCommand robot_parameter_command;
     } data __attribute__((aligned (4)));
+
+    // I think this should be a valid swap when we clean packet definitions in the future
+    // RadioData data __attribute__((aligned (4)));
 } RadioPacket;
 assert_size(RadioPacket, 164);
+static_assert(sizeof(RadioPacket) <= 256);  // 256 is the current size limit of an entry in the packet buffer
