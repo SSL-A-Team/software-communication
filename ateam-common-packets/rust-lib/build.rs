@@ -116,15 +116,12 @@ fn main() {
     let bindings_radio = create_configured_builder()
         // The input header we would like to generate
         // bindings for.
-        .header("../include/basic_control.h")
-        .header("../include/basic_telemetry.h")
-        .header("../include/control_debug_telemetry.h")
-        .header("../include/hello_data.h")
         .header("../include/radio.h")
         .allowlist_file(".*/basic_control.h")
         .allowlist_file(".*/basic_telemetry.h")
         .allowlist_file(".*/control_debug_telemetry.h")
         .allowlist_file(".*/hello_data.h")
+        .allowlist_file(".*/robot_parameters.h")
         .allowlist_file(".*/radio.h")
         .generate()
         // Unwrap the Result and panic on failure.
