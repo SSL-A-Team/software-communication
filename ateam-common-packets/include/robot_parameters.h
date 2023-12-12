@@ -40,7 +40,6 @@ typedef enum ParameterName : uint8_t {
 assert_size(ParameterName, 1);
 
 typedef struct ParameterCommand {
-    uint8_t test;
     ParameterCommandCode command_code;
     ParameterDataFormat data_format;
     ParameterName parameter_name;
