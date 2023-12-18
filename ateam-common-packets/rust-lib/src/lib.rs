@@ -6,3 +6,5 @@
 pub mod bindings_kicker;
 pub mod bindings_radio;
 pub mod bindings_stspin;
+
+pub mod radio;
