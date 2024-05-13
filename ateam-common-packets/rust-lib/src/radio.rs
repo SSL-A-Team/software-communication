@@ -10,4 +10,5 @@ pub enum DataPacket {
 pub enum TelemetryPacket {
     Basic(crate::bindings_radio::BasicTelemetry),
     Control(crate::bindings_radio::ControlDebugTelemetry),
+    ParameterCommandResponse(crate::bindings_radio::ParameterCommand),
 }
