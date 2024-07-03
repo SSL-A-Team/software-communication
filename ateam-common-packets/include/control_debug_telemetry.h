@@ -21,9 +21,9 @@ assert_size(MotorDebugTelemetry, 12);
 
 typedef struct ControlDebugTelemetry {
     MotorDebugTelemetry motor_fl;
-    MotorDebugTelemetry motor_fr;
-    MotorDebugTelemetry motor_br;
     MotorDebugTelemetry motor_bl;
+    MotorDebugTelemetry motor_br;
+    MotorDebugTelemetry motor_fr;
     /// 48 bytes
 
     float imu_gyro[3];  // rad/s
