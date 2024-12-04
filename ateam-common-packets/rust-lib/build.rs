@@ -95,28 +95,12 @@ fn main() {
     // Tell cargo to invalidate the built crate whenever the sources change
     println!("cargo:rerun-if-changed=../include/");
 
-    let bindings_stspin = create_configured_builder()
-        // The input header we would like to generate
-        // bindings for.
-        .header("../include/stspin.h")
-        .allowlist_file(".*/stspin.h")
-        .generate()
-        // Unwrap the Result and panic on failure.
-        .expect("Unable to generate STSPIN bindings");
-
-    let bindings_kicker = create_configured_builder()
-        // The input header we would like to generate
-        // bindings for.
-        .header("../include/kicker.h")
-        .allowlist_file(".*/kicker.h")
-        .generate()
-        // Unwrap the Result and panic on failure.
-        .expect("Unable to generate Kicker bindings");
-
-    let bindings_radio = create_configured_builder()
+    let bindings = create_configured_builder()
         // The input header we would like to generate
         // bindings for.
         .header("../include/radio.h")
+        .allowlist_file(".*/stspin.h")
+        .allowlist_file(".*/kicker.h")
         .allowlist_file(".*/basic_control.h")
         .allowlist_file(".*/basic_telemetry.h")
         .allowlist_file(".*/control_debug_telemetry.h")
@@ -125,17 +109,12 @@ fn main() {
         .allowlist_file(".*/radio.h")
         .generate()
         // Unwrap the Result and panic on failure.
-        .expect("Unable to generate Radio bindings");
+        .expect("Unable to generate bindings");
 
     // Write the bindings to the lib source dir
     let out_dir = "src";
-    bindings_stspin
-        .write_to_file(Path::new(&out_dir).join("bindings_stspin.rs"))
-        .expect("Couldn't write STSPIN packet bindings!");
-    bindings_kicker
-        .write_to_file(Path::new(&out_dir).join("bindings_kicker.rs"))
-        .expect("Couldn't write Kicker packet bindings!");
-    bindings_radio
-        .write_to_file(Path::new(&out_dir).join("bindings_radio.rs"))
+
+    bindings
+        .write_to_file(Path::new(&out_dir).join("bindings.rs"))
         .expect("Couldn't write Radio packet bindings!");
 }

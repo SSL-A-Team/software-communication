@@ -129,25 +129,24 @@ typedef struct MotorResponse_Motion_Packet {
     uint8_t reset_pin: 1;
     uint32_t reserved : 14;
 
-    uint32_t timestamp;
-
     float vel_setpoint;
+    float vel_setpoint_clamped;
     int32_t encoder_delta;
     float vel_enc_estimate;
-    float vel_hall_estimate;
     float vel_computed_error;
     float vel_computed_setpoint;
 
-    float current_setpoint;
+    float torque_setpoint;
     float current_estimate;
-    float current_computed_error;
-    float current_computed_setpoint;
+    float torque_estimate;
+    float torque_computed_error;
+    float torque_computed_setpoint;
 } __attribute__((packed)) MotorResponse_Motion_Packet;
 assert_size(MotorResponse_Motion_Packet, 48);
 
 typedef struct MotorResponsePacket {
     MotorResponsePacketType type __attribute__((aligned (4)));
-    uint32_t crc32 __attribute__((aligned (4)));
+    uint32_t crc __attribute__((aligned (4)));
     union ResponseData {
         MotorResponse_Params_Packet params;
         MotorResponse_Motion_Packet motion;
