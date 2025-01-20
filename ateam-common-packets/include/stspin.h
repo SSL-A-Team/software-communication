@@ -96,6 +96,7 @@ typedef enum MotorResponsePacketType {
 assert_size(MotorResponsePacketType, 1);
 
 typedef struct MotorResponse_Params_Packet {
+    uint32_t git_hash;
     uint8_t version_major;
     uint8_t version_minor;
     uint16_t version_patch;
@@ -111,9 +112,9 @@ typedef struct MotorResponse_Params_Packet {
     float torque_i_max;
 
     uint16_t cur_clamp;
-    uint16_t git_dirty: 1;
-    uint16_t reserved: 15;
-    uint32_t reserved2;
+
+    uint8_t git_dirty;
+    uint8_t reserved2;
 } __attribute__((packed)) MotorResponse_Params_Packet;
 assert_size(MotorResponse_Params_Packet, 48); // Note: Same length as MotorResponse_Params_Packet
 
