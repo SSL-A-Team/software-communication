@@ -111,9 +111,9 @@ typedef struct MotorResponse_Params_Packet {
     float torque_i_max;
 
     uint16_t cur_clamp;
-    uint16_t git_dirty: 1;
-    uint16_t reserved: 15;
-    uint32_t reserved2;
+    uint16_t reserved2;
+
+    unsigned char wheel_img_hash[4];
 } __attribute__((packed)) MotorResponse_Params_Packet;
 assert_size(MotorResponse_Params_Packet, 48); // Note: Same length as MotorResponse_Params_Packet
 
