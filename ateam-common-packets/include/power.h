@@ -9,12 +9,15 @@ typedef struct PowerStatusPacket {
     uint16_t power_rail_12v0_ok : 1;
     uint16_t battery_ok : 1;
     uint16_t battery_balance_connected : 1;
-    uint16_t battery_low_warn : 1;
-    uint16_t battery_cell_low_warn : 1;
+    uint16_t battery_low : 1;
+    uint16_t battery_critical : 1;
+    uint16_t battery_cell_low : 1;
+    uint16_t battery_cell_critical : 1;
     uint16_t battery_cell_imbalance_warn : 1;
+    uint16_t high_current_operations_allowed : 1;
     uint16_t shutdown_requested : 1;
     // add future flags here, decrement reserved
-    uint16_t reserved : 6;
+    uint16_t reserved : 3;
 
     uint16_t battery_mv;
     uint16_t cell1_mv;
