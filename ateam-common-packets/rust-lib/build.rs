@@ -105,6 +105,7 @@ fn main() {
         .allowlist_file(".*/basic_telemetry.h")
         .allowlist_file(".*/control_debug_telemetry.h")
         .allowlist_file(".*/hello_data.h")
+        .allowlist_file(".*/power.h")
         .allowlist_file(".*/robot_parameters.h")
         .allowlist_file(".*/radio.h")
         .generate()

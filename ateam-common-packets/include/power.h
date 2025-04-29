@@ -52,5 +52,5 @@ typedef struct PowerCommandPacket {
     uint32_t ready_shutdown : 1;
     uint32_t force_shutdown : 1;
     uint32_t reserved : 28;
-} PowerCommnandPacket;
-assert_size(PowerCommnandPacket, 4);
+} PowerCommandPacket;
+assert_size(PowerCommandPacket, 4);

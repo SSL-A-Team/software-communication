@@ -15,6 +15,7 @@
 #include "basic_control.h"
 #include "basic_telemetry.h"
 #include "control_debug_telemetry.h"
+#include "power.h"
 #include "robot_parameters.h"
 
 const uint16_t kProtocolVersionMajor = 0;
