@@ -28,5 +28,6 @@ pub fn get_motor_response_motion_packet() -> MotorResponse_Motion_Packet {
         torque_estimate: 0.0,
         torque_computed_error: 0.0,
         torque_computed_setpoint: 0.0,
+        vbus_voltage: 0.0,
     }
 }

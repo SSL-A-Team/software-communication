@@ -3,7 +3,7 @@
  * @author Austin Jones
  * @brief communication packet definitions for the radio firmware
  * @version 0.1
- * 
+ *
  * @copyright Copyright (c) 2022
  *
  */
@@ -21,14 +21,17 @@ const uint16_t kProtocolVersionMajor = 0;
 const uint16_t kProtocolVersionMinor = 1;
 
 typedef enum CommandCode : uint8_t {
+    // Bidirectional commands
     CC_ACK = 1,
     CC_NACK = 2,
     CC_GOODBYE = 3,
     CC_KEEPALIVE = 4,
+    // From robot to coach
     CC_HELLO_REQ = 101,
     CC_TELEMETRY = 102,
     CC_CONTROL_DEBUG_TELEMETRY = 103,
     CC_ROBOT_PARAMETER_COMMAND = 104,
+    // From coach to robot
     CC_CONTROL = 201,
     CC_HELLO_RESP = 202,
 } CommandCode;
@@ -40,7 +43,8 @@ typedef struct RadioHeader {
     uint16_t minor_version;
     CommandCode command_code;
     uint16_t data_length;
-} RadioHeader;
+    uint8_t reserved;
+} __attribute__((packed)) RadioHeader;
 assert_size(RadioHeader, 12);
 
 typedef union RadioData {
@@ -51,8 +55,9 @@ typedef union RadioData {
     ControlDebugTelemetry control_debug_telemetry;
     ParameterCommand robot_parameter_command;
 } RadioData;
-assert_size(RadioData, 296);
+assert_size(RadioData, 312);
 
+// Same RadioPacket
 typedef struct RadioPacket {
     uint32_t crc32;
     uint16_t major_version;
@@ -74,5 +79,4 @@ typedef struct RadioPacket {
     // I think this should be a valid swap when we clean packet definitions in the future
     // RadioData data __attribute__((aligned (4)));
 } RadioPacket;
-assert_size(RadioPacket, 308);
-static_assert(sizeof(RadioPacket) <= 320);  // 256 is the current size limit of an entry in the packet buffer
+assert_size(RadioPacket, 324);

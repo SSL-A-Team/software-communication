@@ -3,7 +3,7 @@
  * @author Will Stuckey
  * @brief definition for controls debug telemetry data type
  * @version 0.1
- * 
+ *
  * @copyright Copyright (c) 2023
  *
  */
@@ -19,7 +19,7 @@ typedef struct ControlDebugTelemetry {
     MotorResponse_Motion_Packet motor_bl;
     MotorResponse_Motion_Packet motor_br;
     MotorResponse_Motion_Packet motor_fr;
-    /// 48 bytes
+    /// 52*4 = 208 bytes
 
     float imu_gyro[3];  // rad/s
     float imu_accel[3];  // m/s^2
@@ -35,4 +35,4 @@ typedef struct ControlDebugTelemetry {
     float wheel_velocity_clamped_u[4];  // wheel velocities after control policy clamped for local acceleration limits
     /// 32 bytes
 } ControlDebugTelemetry;
-assert_size(ControlDebugTelemetry, 192 + 24 + 48 + 32);
+assert_size(ControlDebugTelemetry, (52*4) + 24 + 48 + 32);
