@@ -21,8 +21,9 @@ typedef struct KickerControl {
 
     KickRequest kick_request;
     float kick_speed;
+    float drib_speed;
 } KickerControl;
-assert_size(KickerControl, 12);
+assert_size(KickerControl, 16);
 
 typedef struct KickerTelemetry {
     uint32_t power_down_requested: 1;
