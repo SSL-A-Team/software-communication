@@ -55,7 +55,7 @@ typedef union RadioData {
     ControlDebugTelemetry control_debug_telemetry;
     ParameterCommand robot_parameter_command;
 } RadioData;
-assert_size(RadioData, 312);
+assert_size(RadioData, 328);
 
 // Same RadioPacket
 typedef struct RadioPacket {
@@ -79,4 +79,4 @@ typedef struct RadioPacket {
     // I think this should be a valid swap when we clean packet definitions in the future
     // RadioData data __attribute__((aligned (4)));
 } RadioPacket;
-assert_size(RadioPacket, 324);
+assert_size(RadioPacket, 340);

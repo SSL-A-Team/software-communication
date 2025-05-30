@@ -113,9 +113,9 @@ typedef struct MotorResponse_Params_Packet {
     uint16_t cur_clamp;
     uint16_t git_dirty: 1;
     uint16_t reserved: 15;
-    uint32_t reserved2[2];
+    uint32_t reserved2[3];
 } __attribute__((packed)) MotorResponse_Params_Packet;
-assert_size(MotorResponse_Params_Packet, 52); // Note: Same length as MotorResponse_Params_Packet
+assert_size(MotorResponse_Params_Packet, 56); // Note: Same length as MotorResponse_Params_Packet
 
 typedef struct MotorResponse_Motion_Packet {
     uint32_t master_error : 1;
@@ -139,20 +139,21 @@ typedef struct MotorResponse_Motion_Packet {
     uint32_t reserved : 14;
 
     float vel_setpoint;
-    float vel_setpoint_clamped;
+    float vel_computed_rads;
     int32_t encoder_delta;
     float vel_enc_estimate;
     float vel_computed_error;
-    float vel_computed_setpoint;
+    float vel_computed_duty;
 
     float torque_setpoint;
     float current_estimate;
     float torque_estimate;
     float torque_computed_error;
-    float torque_computed_setpoint;
+    float torque_computed_nm;
+    float torque_computed_duty;
     float vbus_voltage;
 } __attribute__((packed)) MotorResponse_Motion_Packet;
-assert_size(MotorResponse_Motion_Packet, 52);
+assert_size(MotorResponse_Motion_Packet, 56);
 
 typedef struct MotorResponsePacket {
     MotorResponsePacketType type;
@@ -163,4 +164,4 @@ typedef struct MotorResponsePacket {
         MotorResponse_Motion_Packet motion;
     } data;
 } __attribute__((packed)) MotorResponsePacket;
-assert_size(MotorResponsePacket, 60);
+assert_size(MotorResponsePacket, 64);
