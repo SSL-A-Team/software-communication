@@ -57,7 +57,7 @@ typedef enum MotorCommand_MotionType {
     OPEN_LOOP = 0,
     VELOCITY = 1,
     TORQUE = 2,
-    BOTH = 3
+    VELOCITY_W_TORQUE = 3
 } __attribute__((packed)) MotorCommand_MotionType;
 assert_size(MotorCommandPacketType, 1);
 
