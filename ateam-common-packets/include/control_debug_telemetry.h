@@ -11,15 +11,21 @@
 #pragma once
 
 #include "common.h"
+#include "kicker.h"
+#include "power.h"
 #include "stspin.h"
 
 
 typedef struct ControlDebugTelemetry {
+    PowerStatusPacket power_status;
+
     MotorResponse_Motion_Packet motor_fl;
     MotorResponse_Motion_Packet motor_bl;
     MotorResponse_Motion_Packet motor_br;
     MotorResponse_Motion_Packet motor_fr;
     /// 48 bytes
+
+    KickerTelemetry kicker_status;
 
     float imu_gyro[3];  // rad/s
     float imu_accel[3];  // m/s^2
@@ -35,4 +41,4 @@ typedef struct ControlDebugTelemetry {
     float wheel_velocity_clamped_u[4];  // wheel velocities after control policy clamped for local acceleration limits
     /// 32 bytes
 } ControlDebugTelemetry;
-assert_size(ControlDebugTelemetry, 192 + 24 + 48 + 32);
+assert_size(ControlDebugTelemetry, 28 + 192 + 60 + 24 + 48 + 32);

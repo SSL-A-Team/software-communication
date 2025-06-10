@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "stspin.h"
 
 typedef enum KickRequest {
     KR_ARM,
@@ -26,13 +27,17 @@ typedef struct KickerControl {
 assert_size(KickerControl, 16);
 
 typedef struct KickerTelemetry {
-    uint32_t power_down_requested: 1;
-    uint32_t power_down_complete: 1;
-    uint32_t ball_detected: 1;
-    uint32_t error_detected: 1;
-    // 28 bits reserved
+    uint16_t power_down_requested: 1;
+    uint16_t power_down_complete: 1;
+    uint16_t ball_detected: 1;
+    uint16_t error_detected: 1;
+    uint16_t dribbler_error: 1;
+    // 11 bits reserved
 
+    uint16_t charge_pct;
     float rail_voltage;
     float battery_voltage;
+
+    MotorResponse_Motion_Packet dribbler;
 } KickerTelemetry;
-assert_size(KickerTelemetry, 12);
+assert_size(KickerTelemetry, 60);
