@@ -103,7 +103,7 @@ fn main() {
         .allowlist_file(".*/kicker.h")
         .allowlist_file(".*/basic_control.h")
         .allowlist_file(".*/basic_telemetry.h")
-        .allowlist_file(".*/control_debug_telemetry.h")
+        .allowlist_file(".*/extended_telemetry.h")
         .allowlist_file(".*/hello_data.h")
         .allowlist_file(".*/power.h")
         .allowlist_file(".*/robot_parameters.h")

@@ -16,7 +16,7 @@
 #include "stspin.h"
 
 
-typedef struct ControlDebugTelemetry {
+typedef struct ExtendedTelemetry {
     PowerStatusPacket power_status;
 
     MotorResponse_Motion_Packet motor_fl;
@@ -40,5 +40,5 @@ typedef struct ControlDebugTelemetry {
     float wheel_velocity_u[4];  // wheel velocities calculated from transform of body velocities after control policy
     float wheel_velocity_clamped_u[4];  // wheel velocities after control policy clamped for local acceleration limits
     /// 32 bytes
-} ControlDebugTelemetry;
-assert_size(ControlDebugTelemetry, 28 + 192 + 60 + 24 + 48 + 32);
+} ExtendedTelemetry;
+assert_size(ExtendedTelemetry, 28 + 192 + 60 + 24 + 48 + 32);

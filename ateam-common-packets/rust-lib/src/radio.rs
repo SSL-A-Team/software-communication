@@ -9,7 +9,7 @@ pub enum DataPacket {
 #[derive(Copy, Clone)]
 pub enum TelemetryPacket {
     Basic(crate::bindings::BasicTelemetry),
-    Control(crate::bindings::ControlDebugTelemetry),
+    Extended(crate::bindings::ExtendedTelemetry),
     ParameterCommandResponse(crate::bindings::ParameterCommand),
 }
 
