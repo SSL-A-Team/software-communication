@@ -22,6 +22,7 @@ typedef struct BasicTelemetry {
     uint32_t battery_error : 1;
     uint32_t battery_low : 1;
     uint32_t battery_crit : 1;
+    uint32_t shutdown_pending : 1;
     uint32_t tipped_error : 1;
     uint32_t breakbeam_error : 1;
     uint32_t breakbeam_ball_detected : 1;
@@ -42,7 +43,10 @@ typedef struct BasicTelemetry {
     uint32_t kicker_board_error : 1;
     uint32_t chipper_available : 1;
     uint32_t kicker_available : 1;
-    uint32_t reserved : 7;
+    uint32_t body_vel_control_enabled : 1;
+    uint32_t wheel_vel_control_enabled : 1;
+    uint32_t wheel_torque_control_enabled : 1;
+    uint32_t reserved : 3;
     
     uint16_t battery_percent;
     uint16_t kicker_charge_percent;

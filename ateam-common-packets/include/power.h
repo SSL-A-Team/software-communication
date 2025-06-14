@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-typedef struct BatteryInfoPacket {
+typedef struct BatteryInfo {
     uint16_t battery_ok : 1;
     uint16_t battery_balance_connected : 1;
     uint16_t battery_low : 1;
@@ -28,11 +28,11 @@ typedef struct BatteryInfoPacket {
     uint8_t cell5_pct;
     uint8_t cell6_pct;
     uint8_t reserved_3;
-} BatteryInfoPacket;
-assert_size(BatteryInfoPacket, 24);
+} BatteryInfo;
+assert_size(BatteryInfo, 24);
 
 
-typedef struct PowerStatusPacket {
+typedef struct PowerTelemetry {
     uint32_t power_ok : 1;
     uint32_t power_rail_3v3_ok : 1;
     uint32_t power_rail_5v0_ok : 1;
@@ -42,15 +42,15 @@ typedef struct PowerStatusPacket {
     // add future flags here, decrement reserved
     uint32_t reserved : 26;
 
-    BatteryInfoPacket battery_info;
-} PowerStatusPacket;
-assert_size(PowerStatusPacket, 28);
+    BatteryInfo battery_info;
+} PowerTelemetry;
+assert_size(PowerTelemetry, 28);
 
-typedef struct PowerCommandPacket {
+typedef struct PowerCommand {
     uint32_t request_shutdown : 1;
     uint32_t cancel_shutdown : 1;
     uint32_t ready_shutdown : 1;
     uint32_t force_shutdown : 1;
     uint32_t reserved : 28;
-} PowerCommandPacket;
-assert_size(PowerCommandPacket, 4);
+} PowerCommand;
+assert_size(PowerCommand, 4);

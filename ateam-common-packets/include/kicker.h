@@ -27,17 +27,18 @@ typedef struct KickerControl {
 assert_size(KickerControl, 16);
 
 typedef struct KickerTelemetry {
-    uint16_t power_down_requested: 1;
-    uint16_t power_down_complete: 1;
-    uint16_t ball_detected: 1;
-    uint16_t error_detected: 1;
-    uint16_t dribbler_error: 1;
-    // 11 bits reserved
+    uint16_t error_detected : 1;
+    uint16_t dribbler_error : 1;
+    uint16_t power_down_requested : 1;
+    uint16_t power_down_complete : 1;
+    uint16_t ball_detected : 1;
+    uint16_t charge_full : 1;
+    uint16_t _reserved : 10;
 
     uint16_t charge_pct;
     float rail_voltage;
     float battery_voltage;
 
-    MotorResponse_Motion_Packet dribbler;
+    MotorTelemetry dribbler_motor;
 } KickerTelemetry;
 assert_size(KickerTelemetry, 60);

@@ -1,5 +1,5 @@
 /**
- * @file control_debug_telemetry.h
+ * @file extended_telemetry.h
  * @author Will Stuckey
  * @brief definition for controls debug telemetry data type
  * @version 0.1
@@ -17,12 +17,12 @@
 
 
 typedef struct ExtendedTelemetry {
-    PowerStatusPacket power_status;
+    PowerTelemetry power_status;
 
-    MotorResponse_Motion_Packet motor_fl;
-    MotorResponse_Motion_Packet motor_bl;
-    MotorResponse_Motion_Packet motor_br;
-    MotorResponse_Motion_Packet motor_fr;
+    MotorTelemetry front_left_motor;
+    MotorTelemetry back_left_motor;
+    MotorTelemetry back_right_motor;
+    MotorTelemetry front_right_motor;
     /// 48 bytes
 
     KickerTelemetry kicker_status;

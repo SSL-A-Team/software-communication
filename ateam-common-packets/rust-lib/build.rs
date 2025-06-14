@@ -108,6 +108,7 @@ fn main() {
         .allowlist_file(".*/power.h")
         .allowlist_file(".*/robot_parameters.h")
         .allowlist_file(".*/radio.h")
+        .derive_default(true)
         .generate()
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings");

@@ -17,13 +17,13 @@
 
 #include "common.h"
 
-typedef enum MotorCommandPacketType {
+typedef enum MotorCommandType {
     MCP_PARAMS = 0x20,
     MCP_MOTION = 0x21
-} __attribute__((packed)) MotorCommandPacketType;
-assert_size(MotorCommandPacketType, 1);
+} __attribute__((packed)) MotorCommandType;
+assert_size(MotorCommandType, 1);
 
-typedef struct MotorCommand_Params_Packet {
+typedef struct ParameterMotorCommand {
     uint32_t update_timestamp : 1;
     uint32_t update_vel_p : 1;
     uint32_t update_vel_i : 1;
@@ -50,37 +50,37 @@ typedef struct MotorCommand_Params_Packet {
     uint16_t cur_clamp;
     uint16_t reserved2;
     // add future params here
-} MotorCommand_Params_Packet;
-assert_size(MotorCommand_Params_Packet, 44);
+} ParameterMotorCommand;
+assert_size(ParameterMotorCommand, 44);
 
-typedef enum MotorCommand_MotionType {
+typedef enum MotionCommandType {
     OPEN_LOOP = 0,
     VELOCITY = 1,
     TORQUE = 2,
     BOTH = 3
-} __attribute__((packed)) MotorCommand_MotionType;
-assert_size(MotorCommandPacketType, 1);
+} __attribute__((packed)) MotionCommandType;
+assert_size(MotionCommandType, 1);
 
-typedef struct MotorCommand_Motion_Packet {
+typedef struct MotionMotorCommand {
     uint32_t reset : 1;
     uint32_t enable_telemetry: 1;
     uint32_t reserved : 30;
 
-    MotorCommand_MotionType motion_control_type;
+    MotionCommandType motion_control_type;
     uint8_t reserved2[3];
 
     float setpoint;
     uint32_t reserved3[8];
-} __attribute__((__packed__)) MotorCommand_Motion_Packet;
-assert_size(MotorCommand_Motion_Packet, 44); // Note: Same length as MotorCommand_Params_Packet
+} __attribute__((__packed__)) MotionMotorCommand;
+assert_size(MotionMotorCommand, 44); // Note: Same length as MotorCommand_Params_Packet
 
 typedef struct MotorCommandPacket {
-    MotorCommandPacketType type;
+    MotorCommandType type;
     uint8_t reserved[3];
     uint32_t crc32;
     union CommandData {
-        MotorCommand_Params_Packet params;
-        MotorCommand_Motion_Packet motion;
+        ParameterMotorCommand params;
+        MotionMotorCommand motion;
     } data;
 } MotorCommandPacket;
 assert_size(MotorCommandPacket, 52);
@@ -89,13 +89,13 @@ assert_size(MotorCommandPacket, 52);
 //  responses  //
 /////////////////
 
-typedef enum MotorResponsePacketType {
+typedef enum MotorResponseType {
     MRP_PARAMS = 0x80,
     MRP_MOTION = 0x81,
-} __attribute__((packed)) MotorResponsePacketType;
-assert_size(MotorResponsePacketType, 1);
+} __attribute__((packed)) MotorResponseType;
+assert_size(MotorResponseType, 1);
 
-typedef struct MotorResponse_Params_Packet {
+typedef struct ParameterMotorResponse {
     uint8_t version_major;
     uint8_t version_minor;
     uint16_t version_patch;
@@ -114,10 +114,10 @@ typedef struct MotorResponse_Params_Packet {
     uint16_t reserved2;
 
     unsigned char wheel_img_hash[4];
-} __attribute__((packed)) MotorResponse_Params_Packet;
-assert_size(MotorResponse_Params_Packet, 48); // Note: Same length as MotorResponse_Params_Packet
+} __attribute__((packed)) ParameterMotorResponse;
+assert_size(ParameterMotorResponse, 48); // Note: Same length as MotorResponse_Params_Packet
 
-typedef struct MotorResponse_Motion_Packet {
+typedef struct MotorTelemetry {
     uint32_t master_error : 1;
     uint32_t hall_power_error : 1;
     uint32_t hall_disconnected_error : 1;
@@ -150,16 +150,16 @@ typedef struct MotorResponse_Motion_Packet {
     float torque_estimate;
     float torque_computed_error;
     float torque_computed_setpoint;
-} __attribute__((packed)) MotorResponse_Motion_Packet;
-assert_size(MotorResponse_Motion_Packet, 48);
+} __attribute__((packed)) MotorTelemetry;
+assert_size(MotorTelemetry, 48);
 
-typedef struct MotorResponsePacket {
-    MotorResponsePacketType type;
+typedef struct MotorResponse {
+    MotorResponseType type;
     uint8_t reserved[3];
     uint32_t crc;
     union ResponseData {
-        MotorResponse_Params_Packet params;
-        MotorResponse_Motion_Packet motion;
+        ParameterMotorResponse params;
+        MotorTelemetry motion;
     } data;
-} __attribute__((packed)) MotorResponsePacket;
-assert_size(MotorResponsePacket, 56);
+} __attribute__((packed)) MotorResponse;
+assert_size(MotorResponse, 56);
