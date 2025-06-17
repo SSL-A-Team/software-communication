@@ -136,7 +136,8 @@ typedef struct MotorResponse_Motion_Packet {
     uint32_t reset_low_power: 1;
     uint32_t reset_software: 1;
     uint32_t reset_pin: 1;
-    uint32_t reserved : 14;
+    uint32_t reserved : 6;
+    uint32_t gain_stage_index: 8;
 
     float vel_setpoint;
     float vel_setpoint_clamped;
