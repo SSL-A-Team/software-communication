@@ -46,7 +46,7 @@ typedef struct BasicTelemetry {
     uint32_t body_vel_control_enabled : 1;
     uint32_t wheel_vel_control_enabled : 1;
     uint32_t wheel_torque_control_enabled : 1;
-    uint32_t reserved : 3;
+    uint32_t _reserved : 3;
     
     uint16_t battery_percent;
     uint16_t kicker_charge_percent;

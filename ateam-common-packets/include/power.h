@@ -10,7 +10,7 @@ typedef struct BatteryInfo {
     uint16_t battery_cell_low : 1;
     uint16_t battery_cell_critical : 1;
     uint16_t battery_cell_imbalance_warn : 1;
-    uint16_t reserved : 9;
+    uint16_t _reserved : 9;
     
     uint16_t battery_mv;
     uint16_t cell1_mv;
@@ -27,7 +27,7 @@ typedef struct BatteryInfo {
     uint8_t cell4_pct;
     uint8_t cell5_pct;
     uint8_t cell6_pct;
-    uint8_t reserved_3;
+    uint8_t _reserved_2;
 } BatteryInfo;
 assert_size(BatteryInfo, 24);
 
@@ -40,7 +40,7 @@ typedef struct PowerTelemetry {
     uint32_t high_current_operations_allowed : 1;
     uint32_t shutdown_requested : 1;
     // add future flags here, decrement reserved
-    uint32_t reserved : 26;
+    uint32_t _reserved : 26;
 
     BatteryInfo battery_info;
 } PowerTelemetry;
@@ -51,6 +51,6 @@ typedef struct PowerCommand {
     uint32_t cancel_shutdown : 1;
     uint32_t ready_shutdown : 1;
     uint32_t force_shutdown : 1;
-    uint32_t reserved : 28;
+    uint32_t _reserved : 28;
 } PowerCommand;
 assert_size(PowerCommand, 4);

@@ -18,14 +18,16 @@
 
 typedef struct ExtendedTelemetry {
     PowerTelemetry power_status;
+    // 28 bytes
 
     MotorTelemetry front_left_motor;
     MotorTelemetry back_left_motor;
     MotorTelemetry back_right_motor;
     MotorTelemetry front_right_motor;
-    /// 48 bytes
+    // 48 bytes each
 
     KickerTelemetry kicker_status;
+    // 60 bytes
 
     float imu_gyro[3];  // rad/s
     float imu_accel[3];  // m/s^2

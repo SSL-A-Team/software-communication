@@ -35,7 +35,7 @@ typedef struct ParameterMotorCommand {
     uint32_t update_cur_i_max: 1;
     uint32_t update_cur_clamp : 1;
     // add future flags here, decrement reserved
-    uint32_t reserved : 22;
+    uint32_t _reserved : 22;
 
     uint32_t timestamp;
     float vel_p;
@@ -48,7 +48,7 @@ typedef struct ParameterMotorCommand {
     float cur_i_max;
 
     uint16_t cur_clamp;
-    uint16_t reserved2;
+    uint16_t _reserved_2;
     // add future params here
 } ParameterMotorCommand;
 assert_size(ParameterMotorCommand, 44);
@@ -64,19 +64,19 @@ assert_size(MotionCommandType, 1);
 typedef struct MotionMotorCommand {
     uint32_t reset : 1;
     uint32_t enable_telemetry: 1;
-    uint32_t reserved : 30;
+    uint32_t _reserved : 30;
 
     MotionCommandType motion_control_type;
-    uint8_t reserved2[3];
+    uint8_t _reserved_2[3];
 
     float setpoint;
-    uint32_t reserved3[8];
+    uint32_t _reserved_3[8];
 } __attribute__((__packed__)) MotionMotorCommand;
 assert_size(MotionMotorCommand, 44); // Note: Same length as MotorCommand_Params_Packet
 
 typedef struct MotorCommandPacket {
     MotorCommandType type;
-    uint8_t reserved[3];
+    uint8_t _reserved[3];
     uint32_t crc32;
     union CommandData {
         ParameterMotorCommand params;
@@ -111,7 +111,7 @@ typedef struct ParameterMotorResponse {
     float torque_i_max;
 
     uint16_t cur_clamp;
-    uint16_t reserved2;
+    uint16_t _reserved;
 
     unsigned char wheel_img_hash[4];
 } __attribute__((packed)) ParameterMotorResponse;
@@ -136,7 +136,8 @@ typedef struct MotorTelemetry {
     uint32_t reset_low_power: 1;
     uint32_t reset_software: 1;
     uint32_t reset_pin: 1;
-    uint32_t reserved : 14;
+    uint32_t _reserved : 6;
+    uint32_t gain_stage_index : 8;
 
     float vel_setpoint;
     float vel_setpoint_clamped;
@@ -155,7 +156,7 @@ assert_size(MotorTelemetry, 48);
 
 typedef struct MotorResponse {
     MotorResponseType type;
-    uint8_t reserved[3];
+    uint8_t _reserved[3];
     uint32_t crc;
     union ResponseData {
         ParameterMotorResponse params;
