@@ -49,7 +49,7 @@ typedef union RadioData {
     HelloResponse hello_response;
     BasicControl control;
     BasicTelemetry telemetry;
-    ExtendedTelemetry control_debug_telemetry;
+    ExtendedTelemetry extended_telemetry;
     ParameterCommand robot_parameter_command;
 } RadioData;
 assert_size(RadioData, 384);
