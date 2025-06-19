@@ -64,7 +64,8 @@ assert_size(MotorCommandPacketType, 1);
 typedef struct MotorCommand_Motion_Packet {
     uint32_t reset : 1;
     uint32_t enable_telemetry: 1;
-    uint32_t reserved : 30;
+    uint32_t enable_motion: 1;
+    uint32_t reserved : 29;
 
     MotorCommand_MotionType motion_control_type;
     uint8_t reserved2[3];
@@ -99,7 +100,6 @@ typedef struct MotorResponse_Params_Packet {
     uint8_t version_major;
     uint8_t version_minor;
     uint16_t version_patch;
-    uint32_t timestamp;
 
     float vel_p;
     float vel_i;
@@ -113,7 +113,7 @@ typedef struct MotorResponse_Params_Packet {
     uint16_t cur_clamp;
     uint16_t git_dirty: 1;
     uint16_t reserved: 15;
-    uint32_t reserved2[3];
+    uint32_t reserved2[4];
 } __attribute__((packed)) MotorResponse_Params_Packet;
 assert_size(MotorResponse_Params_Packet, 56); // Note: Same length as MotorResponse_Params_Packet
 
@@ -158,7 +158,7 @@ assert_size(MotorResponse_Motion_Packet, 56);
 typedef struct MotorResponsePacket {
     MotorResponsePacketType type;
     uint8_t reserved[3];
-    uint32_t crc;
+    uint32_t timestamp;
     union ResponseData {
         MotorResponse_Params_Packet params;
         MotorResponse_Motion_Packet motion;
