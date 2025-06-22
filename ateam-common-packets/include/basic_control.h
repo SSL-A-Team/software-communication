@@ -15,12 +15,13 @@
 
 typedef struct BasicControl {
     uint32_t request_shutdown : 1;
+    uint32_t reboot_robot : 1;
     uint32_t game_state_in_stop : 1;
     uint32_t emergency_stop : 1;
     uint32_t body_vel_controls_enabled : 1;
     uint32_t wheel_vel_control_enabled : 1;
     uint32_t wheel_torque_control_enabled : 1;
-    uint32_t _reserved : 18;
+    uint32_t _reserved : 17;
     uint32_t play_song : 8;
 
     float vel_x_linear; // m/s
