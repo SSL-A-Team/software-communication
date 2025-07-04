@@ -14,7 +14,8 @@
 #include "hello_data.h"
 #include "basic_control.h"
 #include "basic_telemetry.h"
-#include "control_debug_telemetry.h"
+#include "extended_telemetry.h"
+#include "power.h"
 #include "robot_parameters.h"
 
 const uint16_t kProtocolVersionMajor = 0;
@@ -52,10 +53,10 @@ typedef union RadioData {
     HelloResponse hello_response;
     BasicControl control;
     BasicTelemetry telemetry;
-    ControlDebugTelemetry control_debug_telemetry;
+    ExtendedTelemetry extended_telemetry;
     ParameterCommand robot_parameter_command;
 } RadioData;
-assert_size(RadioData, 328);
+assert_size(RadioData, 424);
 
 // Same RadioPacket
 typedef struct RadioPacket {
@@ -72,11 +73,12 @@ typedef struct RadioPacket {
         HelloResponse hello_response;
         BasicControl control;
         BasicTelemetry telemetry;
-        ControlDebugTelemetry control_debug_telemetry;
+        ExtendedTelemetry control_debug_telemetry;
         ParameterCommand robot_parameter_command;
     } data __attribute__((aligned (4)));
 
     // I think this should be a valid swap when we clean packet definitions in the future
     // RadioData data __attribute__((aligned (4)));
 } RadioPacket;
-assert_size(RadioPacket, 340);
+assert_size(RadioPacket, 436);
+static_assert(sizeof(RadioPacket) <= 448);  // 512 is the current size limit of an entry in the packet buffer
