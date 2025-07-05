@@ -27,7 +27,7 @@ typedef struct ExtendedTelemetry {
     // 48 bytes each
 
     KickerTelemetry kicker_status;
-    // 60 bytes
+    // 64 bytes
 
     float imu_gyro[3];  // rad/s
     float imu_accel[3];  // m/s^2
@@ -43,4 +43,4 @@ typedef struct ExtendedTelemetry {
     float wheel_velocity_clamped_u[4];  // wheel velocities after control policy clamped for local acceleration limits
     /// 32 bytes
 } ExtendedTelemetry;
-assert_size(ExtendedTelemetry, 28 + 192 + 60 + 24 + 48 + 32);
+assert_size(ExtendedTelemetry, 28 + 192 + 64 + 24 + 48 + 32);

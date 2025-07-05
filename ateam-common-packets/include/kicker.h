@@ -39,6 +39,8 @@ typedef struct KickerTelemetry {
     float rail_voltage;
     float battery_voltage;
 
+    unsigned char kicker_image_hash[4];
+
     MotorTelemetry dribbler_motor;
 } KickerTelemetry;
-assert_size(KickerTelemetry, 60);
+assert_size(KickerTelemetry, 64);
