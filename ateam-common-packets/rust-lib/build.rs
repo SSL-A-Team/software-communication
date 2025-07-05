@@ -113,10 +113,22 @@ fn main() {
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings");
 
+    let robot_metadata_bindings = create_configured_builder()
+        // The input header we would like to generate
+        // bindings for.
+        .header("../include/robot_metadata.h")
+        .generate()
+        // Unwrap the Result and panic on failure.
+        .expect("Unable to generate robot metadata bindings");
+
     // Write the bindings to the lib source dir
     let out_dir = "src";
 
     bindings
         .write_to_file(Path::new(&out_dir).join("bindings.rs"))
         .expect("Couldn't write Radio packet bindings!");
+
+    robot_metadata_bindings
+        .write_to_file(Path::new(&out_dir).join("metadata_bindings.rs"))
+        .expect("Couldn't write robot metadata bindings!");
 }
