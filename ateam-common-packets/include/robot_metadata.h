@@ -1,4 +1,4 @@
-const char* names[] = {
+const char *const ROBOT_NAMES[] = {
     "Kaladin",
     "Shallan",
     "Dalinar",
