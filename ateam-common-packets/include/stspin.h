@@ -65,7 +65,8 @@ typedef struct MotionMotorCommand {
     uint32_t reset : 1;
     uint32_t enable_telemetry: 1;
     uint32_t enable_motion: 1;
-    uint32_t _reserved : 29;
+    uint32_t calibrate_current: 1;
+    uint32_t _reserved : 28;
 
     MotionCommandType motion_control_type;
     uint8_t _reserved_2[3];
