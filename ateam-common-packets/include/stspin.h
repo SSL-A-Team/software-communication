@@ -113,7 +113,7 @@ typedef struct ParameterMotorResponse {
     uint16_t cur_clamp;
     uint16_t _reserved;
 
-    unsigned char wheel_img_hash[4];
+    unsigned char firmware_img_hash[4];
 } __attribute__((packed)) ParameterMotorResponse;
 assert_size(ParameterMotorResponse, 48); // Note: Same length as MotorResponse_Params_Packet
 
