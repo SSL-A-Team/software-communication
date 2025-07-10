@@ -5,7 +5,7 @@ const char *const ROBOT_NAMES[] = {
     "Navani",
     "Szeth",
     "Teft",
-    "Lift"
+    "Lift",
     "Venli",
     "Sylphrena",
     "Pattern",
