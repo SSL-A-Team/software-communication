@@ -52,7 +52,7 @@ typedef union RadioData {
     ExtendedTelemetry extended_telemetry;
     ParameterCommand robot_parameter_command;
 } RadioData;
-assert_size(RadioData, 384);
+assert_size(RadioData, 388);
 
 typedef struct RadioPacket {
     uint32_t crc32;
@@ -75,5 +75,5 @@ typedef struct RadioPacket {
     // I think this should be a valid swap when we clean packet definitions in the future
     // RadioData data __attribute__((aligned (4)));
 } RadioPacket;
-assert_size(RadioPacket, 396);
+assert_size(RadioPacket, 400);
 static_assert(sizeof(RadioPacket) <= 448);  // 512 is the current size limit of an entry in the packet buffer
