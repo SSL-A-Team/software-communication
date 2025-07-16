@@ -14,6 +14,7 @@
 #include "hello_data.h"
 #include "basic_control.h"
 #include "basic_telemetry.h"
+#include "error_telemetry.h"
 #include "extended_telemetry.h"
 #include "power.h"
 #include "robot_parameters.h"
@@ -30,6 +31,7 @@ typedef enum CommandCode : uint8_t {
     CC_TELEMETRY = 102,
     CC_CONTROL_DEBUG_TELEMETRY = 103,
     CC_ROBOT_PARAMETER_COMMAND = 104,
+    CC_ERROR_TELEMETRY = 105,
     CC_CONTROL = 201,
     CC_HELLO_RESP = 202,
 } CommandCode;
@@ -69,6 +71,7 @@ typedef struct RadioPacket {
         BasicControl control;
         BasicTelemetry telemetry;
         ExtendedTelemetry control_debug_telemetry;
+        ErrorTelemetry error_telemetry;
         ParameterCommand robot_parameter_command;
     } data __attribute__((aligned (4)));
 
