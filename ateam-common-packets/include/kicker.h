@@ -18,7 +18,8 @@ typedef struct KickerControl {
     uint32_t telemetry_enabled: 1;
     uint32_t enable_charging: 1;
     uint32_t request_power_down: 1;
-    // 29 bits reserved
+    uint32_t dribbler_mult: 8;
+    // 21 bits reserved
 
     KickRequest kick_request;
     float kick_speed;
