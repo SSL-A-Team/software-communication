@@ -14,6 +14,7 @@
 #include "hello_data.h"
 #include "basic_control.h"
 #include "basic_telemetry.h"
+#include "error_telemetry.h"
 #include "extended_telemetry.h"
 #include "power.h"
 #include "robot_parameters.h"
@@ -32,6 +33,7 @@ typedef enum CommandCode : uint8_t {
     CC_TELEMETRY = 102,
     CC_CONTROL_DEBUG_TELEMETRY = 103,
     CC_ROBOT_PARAMETER_COMMAND = 104,
+    CC_ERROR_TELEMETRY = 105,
     // From coach to robot
     CC_CONTROL = 201,
     CC_HELLO_RESP = 202,
@@ -56,7 +58,7 @@ typedef union RadioData {
     ExtendedTelemetry extended_telemetry;
     ParameterCommand robot_parameter_command;
 } RadioData;
-assert_size(RadioData, 424);
+assert_size(RadioData, 388);
 
 // Same RadioPacket
 typedef struct RadioPacket {
@@ -74,11 +76,12 @@ typedef struct RadioPacket {
         BasicControl control;
         BasicTelemetry telemetry;
         ExtendedTelemetry control_debug_telemetry;
+        ErrorTelemetry error_telemetry;
         ParameterCommand robot_parameter_command;
     } data __attribute__((aligned (4)));
 
     // I think this should be a valid swap when we clean packet definitions in the future
     // RadioData data __attribute__((aligned (4)));
 } RadioPacket;
-assert_size(RadioPacket, 436);
+assert_size(RadioPacket, 400);
 static_assert(sizeof(RadioPacket) <= 448);  // 512 is the current size limit of an entry in the packet buffer
