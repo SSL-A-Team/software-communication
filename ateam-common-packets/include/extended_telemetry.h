@@ -15,7 +15,6 @@
 #include "power.h"
 #include "stspin.h"
 
-
 typedef struct ExtendedTelemetry {
     PowerTelemetry power_status;
     // 28 bytes
@@ -27,7 +26,7 @@ typedef struct ExtendedTelemetry {
     // 56 bytes each
 
     KickerTelemetry kicker_status;
-    // 64 bytes
+    // 72 bytes
 
     float imu_gyro[3];  // rad/s
     float imu_accel[3];  // m/s^2
@@ -43,4 +42,4 @@ typedef struct ExtendedTelemetry {
     float wheel_velocity_clamped_u[4];  // wheel velocities after control policy clamped for local acceleration limits
     /// 32 bytes
 } ExtendedTelemetry;
-assert_size(ExtendedTelemetry, 28 + 192 + 64 + 24 + 48 + 32);
+assert_size(ExtendedTelemetry, 28 + (56*4) + 72 + 24 + 48 + 32);

@@ -44,4 +44,4 @@ typedef struct KickerTelemetry {
 
     MotorTelemetry dribbler_motor;
 } KickerTelemetry;
-assert_size(KickerTelemetry, 64);
+assert_size(KickerTelemetry, 72);
