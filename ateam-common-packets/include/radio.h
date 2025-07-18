@@ -46,7 +46,7 @@ typedef struct RadioHeader {
     uint16_t minor_version;
     CommandCode command_code;
     uint16_t data_length;
-    uint8_t reserved;
+    uint8_t _reserved;
 } __attribute__((packed)) RadioHeader;
 assert_size(RadioHeader, 12);
 
