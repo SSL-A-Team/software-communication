@@ -4,7 +4,7 @@ on:
     - cron: "0 0 * * FRI"
 jobs:
   test-firmware-against-latest-nightly:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v2.4.0
       - uses: cachix/install-nix-action@v16
