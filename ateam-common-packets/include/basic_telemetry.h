@@ -13,7 +13,8 @@
 #include "common.h"
 
 typedef struct BasicTelemetry {
-    uint16_t sequence_number;
+    uint8_t transmission_sequence_number;
+    uint8_t control_data_sequence_number;
     uint8_t robot_revision_major;
     uint8_t robot_revision_minor;
 
