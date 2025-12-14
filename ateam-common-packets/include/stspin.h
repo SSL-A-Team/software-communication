@@ -53,13 +53,15 @@ typedef struct ParameterMotorCommand {
 } ParameterMotorCommand;
 assert_size(ParameterMotorCommand, 44);
 
-typedef enum MotionCommandType {
-    OPEN_LOOP = 0,
-    VELOCITY = 1,
-    TORQUE = 2,
-    VELOCITY_W_TORQUE = 3
-} __attribute__((packed)) MotionCommandType;
-assert_size(MotionCommandType, 1);
+typedef enum MotionControlType {
+    MOTOR_OFF = 0,
+    DUTY_OPENLOOP = 1,
+    VOLTAGE_OPENLOOP = 2,
+    CURRENT = 3,
+    VELOCITY = 4,
+    VELOCITY_CURRENT = 5
+} __attribute__((packed)) MotionControlType;
+assert_size(MotionControlType, 1);
 
 typedef struct MotionMotorCommand {
     uint32_t reset : 1;
@@ -68,10 +70,15 @@ typedef struct MotionMotorCommand {
     uint32_t calibrate_current: 1;
     uint32_t _reserved : 28;
 
-    MotionCommandType motion_control_type;
-    uint8_t _reserved_2[3];
+    MotionControlType motion_control_type;
+    uint8_t _reserved_2[1];
+    uint16_t current_setpoint_ma;
 
-    float setpoint;
+    union {
+        float duty_setpoint_f;
+        float voltage_setpoint_mv;
+        float velocity_setpoint_rads;
+    };
     uint32_t _reserved_3[8];
 } __attribute__((__packed__)) MotionMotorCommand;
 assert_size(MotionMotorCommand, 44); // Note: Same length as MotorCommand_Params_Packet
