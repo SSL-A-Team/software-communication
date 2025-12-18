@@ -53,32 +53,23 @@ typedef struct ParameterMotorCommand {
 } ParameterMotorCommand;
 assert_size(ParameterMotorCommand, 44);
 
-typedef enum MotionControlType {
-    MOTOR_OFF = 0,
-    DUTY_OPENLOOP = 1,
-    VOLTAGE_OPENLOOP = 2,
-    CURRENT = 3,
-    VELOCITY = 4,
-    VELOCITY_CURRENT = 5
-} __attribute__((packed)) MotionControlType;
-assert_size(MotionControlType, 1);
+typedef enum MotionCommandType {
+    OPEN_LOOP = 0,
+    VELOCITY = 1,
+    TORQUE = 2,
+    BOTH = 3
+} __attribute__((packed)) MotionCommandType;
+assert_size(MotionCommandType, 1);
 
 typedef struct MotionMotorCommand {
     uint32_t reset : 1;
     uint32_t enable_telemetry: 1;
-    uint32_t enable_motion: 1;
-    uint32_t calibrate_current: 1;
-    uint32_t _reserved : 28;
+    uint32_t _reserved : 30;
 
-    MotionControlType motion_control_type;
-    uint8_t _reserved_2[1];
-    uint16_t current_setpoint_ma;
+    MotionCommandType motion_control_type;
+    uint8_t _reserved_2[3];
 
-    union {
-        float duty_setpoint_f;
-        float voltage_setpoint_mv;
-        float velocity_setpoint_rads;
-    };
+    float setpoint;
     uint32_t _reserved_3[8];
 } __attribute__((__packed__)) MotionMotorCommand;
 assert_size(MotionMotorCommand, 44); // Note: Same length as MotorCommand_Params_Packet
@@ -108,6 +99,7 @@ typedef struct ParameterMotorResponse {
     uint8_t version_major;
     uint8_t version_minor;
     uint16_t version_patch;
+    uint32_t timestamp;
 
     float vel_p;
     float vel_i;
@@ -122,9 +114,8 @@ typedef struct ParameterMotorResponse {
     uint16_t _reserved;
 
     unsigned char firmware_img_hash[4];
-    uint32_t _reserved_2[3];
 } __attribute__((packed)) ParameterMotorResponse;
-assert_size(ParameterMotorResponse, 56); // Note: Same length as MotorResponse_Params_Packet
+assert_size(ParameterMotorResponse, 48); // Note: Same length as MotorResponse_Params_Packet
 
 typedef struct MotorTelemetry {
     uint32_t master_error : 1;
@@ -149,29 +140,27 @@ typedef struct MotorTelemetry {
     uint32_t gain_stage_index : 8;
 
     float vel_setpoint;
-    float vel_computed_rads;
+    float vel_setpoint_clamped;
     int32_t encoder_delta;
     float vel_enc_estimate;
     float vel_computed_error;
-    float vel_computed_duty;
+    float vel_computed_setpoint;
 
     float torque_setpoint;
     float current_estimate;
     float torque_estimate;
     float torque_computed_error;
-    float torque_computed_nm;
-    float torque_computed_duty;
-    float vbus_voltage;
+    float torque_computed_setpoint;
 } __attribute__((packed)) MotorTelemetry;
-assert_size(MotorTelemetry, 56);
+assert_size(MotorTelemetry, 48);
 
 typedef struct MotorResponse {
     MotorResponseType type;
     uint8_t _reserved[3];
-    uint32_t timestamp;
+    uint32_t crc;
     union ResponseData {
         ParameterMotorResponse params;
         MotorTelemetry motion;
     } data;
 } __attribute__((packed)) MotorResponse;
-assert_size(MotorResponse, 64);
+assert_size(MotorResponse, 56);
