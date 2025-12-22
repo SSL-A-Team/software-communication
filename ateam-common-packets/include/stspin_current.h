@@ -18,28 +18,29 @@
 #include "common.h"
 
 typedef enum _CurrentControlledMotor_CommandType {
-    MCP_PARAMS = 0x20,
-    MCP_MOTION = 0x21
+    CCM_CMD_PARAMS = 0x20,
+    CCM_CMD_MOTION = 0x21
 } __attribute__((packed)) CurrentControlledMotor_CommandType;
 assert_size(CurrentControlledMotor_CommandType, 1);
 
 typedef enum _CurrentControlledMotor_Parameter {
-    CURRENT_PI_CONTROLLER_GAIN_P = 0,
-    CURRENT_PI_CONTROLLER_GAIN_I = 1,
-    CURRENT_PI_CONTROLLER_ERR_ILIM = 2,
-    CURRENT_PI_CONTROLLER_ANTIJITTER = 3,
+    CCM_PARAM_CURRENT_PI_CONTROLLER_GAIN_P = 0,
+    CCM_PARAM_CURRENT_PI_CONTROLLER_GAIN_I = 1,
+    CCM_PARAM_CURRENT_PI_CONTROLLER_ERR_ILIM = 2,
+    CCM_PARAM_CURRENT_PI_CONTROLLER_ANTIJITTER = 3,
+    CCM_PARAM_FIRMWARE_IMAGE_HASH = 100,
 } __attribute__((packed)) CurrentControlledMotor_Parameter;
 assert_size(CurrentControlledMotor_Parameter, 1);
 
 typedef enum _CurrentControlledMotor_ParameterOperation {
-    READ = 0,
-    WRITE = 1,
+    CCM_PARAMOP_READ = 0,
+    CCM_PARAMOP_WRITE = 1,
 } __attribute__((packed)) CurrentControlledMotor_ParameterOperation;
 assert_size(CurrentControlledMotor_ParameterOperation, 1);
 
 typedef enum _CurrentControlledMotor_ParameterDirection {
-    COMMAND = 0,
-    REPLY = 1,
+    CCM_PARAMDIR_COMMAND = 0,
+    CCM_PARAMDIR_REPLY = 1,
 } __attribute__((packed)) CurrentControlledMotor_ParameterDirection;
 assert_size(CurrentControlledMotor_ParameterDirection, 1);
 
@@ -47,6 +48,7 @@ typedef union _CurrentControlledMotor_ParameterValue {
     uint32_t val_u32;
     int32_t val_i32;
     float val_f32;
+    uint8_t val_u8x4[4];
 } CurrentControlledMotor_ParameterValue;
 
 typedef struct _CurrentControlledMotor_ParameterPacket {
@@ -103,8 +105,8 @@ assert_size(CurrentControlledMotor_Command, 20);
 /////////////////
 
 typedef enum _CurrentControlledMotor_ResponseType {
-    MRP_PARAMS = 0x80,
-    MRP_MOTION = 0x81,
+    CCM_RESP_PARAMS = 0x80,
+    CCM_RESP_TELEM = 0x81,
 } __attribute__((packed)) CurrentControlledMotor_ResponseType;
 assert_size(CurrentControlledMotor_ResponseType, 1);
 
@@ -119,10 +121,10 @@ typedef struct _CurrentControlledMotor_CurrentTelemetry {
 assert_size(CurrentControlledMotor_CurrentTelemetry, 48);
 
 typedef struct _CurrentControlledMotor_VelocityTelemetry {
-    uint16_t vel_setpoint_mrads;
-    uint16_t wheel_vel_mrads;
+    float vel_setpoint_rads;
+    float wheel_vel_rads;
 } __attribute__((packed)) CurrentControlledMotor_VelocityTelemetry;
-assert_size(CurrentControlledMotor_VelocityTelemetry, 4);
+assert_size(CurrentControlledMotor_VelocityTelemetry, 8);
 
 typedef struct _CurrentControlledMotor_Telemetry {
     uint16_t master_error : 1;
@@ -149,7 +151,7 @@ typedef struct _CurrentControlledMotor_Telemetry {
     CurrentControlledMotor_VelocityTelemetry velocity_telemetry;
 
 } __attribute__((packed)) CurrentControlledMotor_Telemetry;
-assert_size(CurrentControlledMotor_Telemetry, 56);
+assert_size(CurrentControlledMotor_Telemetry, 60);
 
 typedef struct _CurrentControlledMotor_Response {
     CurrentControlledMotor_ResponseType type;
@@ -160,4 +162,4 @@ typedef struct _CurrentControlledMotor_Response {
         CurrentControlledMotor_Telemetry motion;
     } data;
 } __attribute__((packed)) CurrentControlledMotor_Response;
-assert_size(CurrentControlledMotor_Response, 64);
+assert_size(CurrentControlledMotor_Response, 68);
