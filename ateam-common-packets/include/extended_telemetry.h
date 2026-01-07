@@ -42,4 +42,4 @@ typedef struct ExtendedTelemetry {
     float wheel_velocity_clamped_u[4];  // wheel velocities after control policy clamped for local acceleration limits
     /// 32 bytes
 } ExtendedTelemetry;
-assert_size(ExtendedTelemetry, 28 + (56*4) + 72 + 24 + 48 + 32);
+assert_size(ExtendedTelemetry, 28 + (48*4) + 64 + 24 + 48 + 32);

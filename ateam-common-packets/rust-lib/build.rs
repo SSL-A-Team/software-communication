@@ -100,6 +100,7 @@ fn main() {
         // bindings for.
         .header("../include/radio.h")
         .allowlist_file(".*/stspin.h")
+        .allowlist_file(".*/stspin_current.h")
         .allowlist_file(".*/kicker.h")
         .allowlist_file(".*/basic_control.h")
         .allowlist_file(".*/basic_telemetry.h")

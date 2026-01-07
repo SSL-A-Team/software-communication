@@ -18,6 +18,7 @@
 #include "extended_telemetry.h"
 #include "power.h"
 #include "robot_parameters.h"
+#include "stspin_current.h"
 
 const uint16_t kProtocolVersionMajor = 0;
 const uint16_t kProtocolVersionMinor = 1;
@@ -58,7 +59,7 @@ typedef union RadioData {
     ExtendedTelemetry extended_telemetry;
     ParameterCommand robot_parameter_command;
 } RadioData;
-assert_size(RadioData, 428);
+assert_size(RadioData, 388);
 
 // Same RadioPacket
 typedef struct RadioPacket {
@@ -83,5 +84,5 @@ typedef struct RadioPacket {
     // I think this should be a valid swap when we clean packet definitions in the future
     // RadioData data __attribute__((aligned (4)));
 } RadioPacket;
-assert_size(RadioPacket, 440);
+assert_size(RadioPacket, 400);
 static_assert(sizeof(RadioPacket) <= 448);  // 512 is the current size limit of an entry in the packet buffer
