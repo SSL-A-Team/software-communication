@@ -113,13 +113,13 @@ typedef struct CurrentControlledMotor_CurrentTelemetry {
     uint16_t current_setpoint_ma;
     uint8_t reserved[2];
     uint16_t current_samples_ma[20];
-} __attribute__((packed)) CurrentControlledMotor_CurrentTelemetry;
+} CurrentControlledMotor_CurrentTelemetry;
 assert_size(CurrentControlledMotor_CurrentTelemetry, 48);
 
 typedef struct CurrentControlledMotor_VelocityTelemetry {
     float vel_setpoint_rads;
     float wheel_vel_rads;
-} __attribute__((packed)) CurrentControlledMotor_VelocityTelemetry;
+} CurrentControlledMotor_VelocityTelemetry;
 assert_size(CurrentControlledMotor_VelocityTelemetry, 8);
 
 typedef struct CurrentControlledMotor_Telemetry {
@@ -146,16 +146,18 @@ typedef struct CurrentControlledMotor_Telemetry {
     CurrentControlledMotor_CurrentTelemetry current_telemetry;
     CurrentControlledMotor_VelocityTelemetry velocity_telemetry;
 
-} __attribute__((packed)) CurrentControlledMotor_Telemetry;
+} CurrentControlledMotor_Telemetry;
 assert_size(CurrentControlledMotor_Telemetry, 60);
 
 typedef struct CurrentControlledMotor_Response {
     CurrentControlledMotor_ResponseType type;
-    uint8_t _reserved[3];
+    uint8_t seq_num;
+    uint8_t _reserved[2];
+    
     uint32_t timestamp;
     union CurrentControlledMotor_ResponseData {
         CurrentControlledMotor_ParameterPacket params;
         CurrentControlledMotor_Telemetry motion;
     } data;
-} __attribute__((packed)) CurrentControlledMotor_Response;
+} CurrentControlledMotor_Response;
 assert_size(CurrentControlledMotor_Response, 68);
