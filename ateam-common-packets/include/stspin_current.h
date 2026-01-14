@@ -93,7 +93,7 @@ typedef struct CurrentControlledMotor_Command {
         CurrentControlledMotor_ParameterPacket param;
         CurrentControlledMotor_MotionCommand motion;
     } data;
-} CurrentControlledMotor_Command;
+} __attribute__((__packed__)) CurrentControlledMotor_Command;
 assert_size(CurrentControlledMotor_Command, 20);
 
 /////////////////
