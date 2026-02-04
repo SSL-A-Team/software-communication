@@ -110,7 +110,7 @@ typedef struct CcmCurrentTelemetry {
     uint16_t bus_voltage_mv;
     uint16_t motor_voltage_cmd_mv;
 
-    uint16_t current_setpoint_ma;
+    int16_t current_setpoint_ma;
     uint8_t reserved[2];
     uint16_t current_samples_ma[20];
 } CcmCurrentTelemetry;
