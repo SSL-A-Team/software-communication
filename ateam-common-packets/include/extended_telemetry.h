@@ -47,13 +47,15 @@ typedef struct ExtendedTelemetry {
     // 12 bytes
 
     float body_cmd[3];  // commanded body pose, twist, or accel
-    float kf_body_pose_prediction[3];  // Kalman Filter body pose estimate
-    float kf_body_twist_prediction[3];  // Kalman Filter body twist estimate
+    float body_traj_pose[3];  // computed trajectory pose setpoint
+    float body_traj_twist[3];  // computed trajectory twist setpoint
+    float kf_body_pose_prediction[3];  // Kalman Filter body pose prediction
+    float kf_body_twist_prediction[3];  // Kalman Filter body twist prediction
     float kf_body_pose_estimate[3];  // Kalman Filter body pose estimate
     float kf_body_twist_estimate[3];  // Kalman Filter body twist estimate
     float body_twist_u[3];  // body twist control outputs after control policy
     float body_accel_u[3];  // body accel control outputs after control policy
-    /// 84 bytes
+    /// 108 bytes
 } ExtendedTelemetry;
 // assert_size(ExtendedTelemetry, 8 + 4 + 28 + 4*60 + 64 + 24 + 12 + 84);
-assert_size(ExtendedTelemetry, 8 + 4 + 4*60 + 24 + 12 + 84);
+assert_size(ExtendedTelemetry, 8 + 4 + 4*60 + 24 + 12 + 108);

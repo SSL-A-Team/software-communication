@@ -60,7 +60,7 @@ typedef union RadioData {
     ParameterCommand robot_parameter_command;
 } RadioData;
 // assert_size(RadioData, 464);
-assert_size(RadioData, 372);
+assert_size(RadioData, 396);
 
 // Same RadioPacket
 typedef struct RadioPacket {
@@ -86,5 +86,5 @@ typedef struct RadioPacket {
     // RadioData data __attribute__((aligned (4)));
 } RadioPacket;
 // assert_size(RadioPacket, 476);
-assert_size(RadioPacket, 384);
+assert_size(RadioPacket, 408);
 static_assert(sizeof(RadioPacket) <= 512);  // 512 is the current size limit of an entry in the packet buffer
