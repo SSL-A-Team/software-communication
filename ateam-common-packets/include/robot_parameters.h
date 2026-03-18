@@ -82,6 +82,8 @@ typedef enum ParameterName : uint8_t {
     TRAJ_RECOMPUTE_ERROR_VEL_LINEAR = 47,
     TRAJ_RECOMPUTE_ERROR_POS_ANGULAR = 48,
     TRAJ_RECOMPUTE_ERROR_VEL_ANGULAR = 49,
+    FEEDFORWARD_GAIN = 50,
+    FEEDBACK_GAIN = 51,
 } ParameterName;
 assert_size(ParameterName, 1);
 
