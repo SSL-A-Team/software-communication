@@ -44,12 +44,7 @@ typedef struct BasicTelemetry {
     uint32_t kicker_board_error : 1;
     uint32_t chipper_available : 1;
     uint32_t kicker_available : 1;
-    uint32_t body_pose_control_enabled : 1;
-    uint32_t body_twist_control_enabled : 1;
-    uint32_t body_accel_control_enabled : 1;
-    uint32_t wheel_vel_control_enabled : 1;
-    uint32_t wheel_torque_control_enabled : 1;
-    uint32_t _reserved : 1;
+    uint32_t _reserved : 6;
     
     uint16_t battery_percent;
     uint16_t kicker_charge_percent;
