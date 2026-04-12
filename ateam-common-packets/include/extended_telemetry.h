@@ -55,7 +55,8 @@ typedef struct ExtendedTelemetry {
     float kf_body_twist_estimate[3];  // Kalman Filter body twist estimate
     float body_twist_u[3];  // body twist control outputs after control policy
     float body_accel_u[3];  // body accel control outputs after control policy
+    float body_accel_u_fric_comp[3];  // body accel control outputs after control policy with friction compensation added in
     /// 108 bytes
 } ExtendedTelemetry;
 // assert_size(ExtendedTelemetry, 8 + 4 + 28 + 4*60 + 64 + 24 + 12 + 84);
-assert_size(ExtendedTelemetry, 8 + 4 + 4*60 + 24 + 12 + 108);
+assert_size(ExtendedTelemetry, 8 + 4 + 4*60 + 24 + 12 + 120);
