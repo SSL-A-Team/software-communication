@@ -57,6 +57,12 @@ typedef enum ParameterName : uint8_t {
     POSE_FB_PIDII_Y = 11,
     /// [P, I, D, I_MIN, I_MAX]
     POSE_FB_PIDII_THETA = 12,
+    /// [P, I, D, I_MIN, I_MAX]
+    TWIST_FB_PIDII_X = 13,
+    /// [P, I, D, I_MIN, I_MAX]
+    TWIST_FB_PIDII_Y = 14,
+    /// [P, I, D, I_MIN, I_MAX]
+    TWIST_FB_PIDII_THETA = 15,
 } ParameterName;
 assert_size(ParameterName, 1);
 
