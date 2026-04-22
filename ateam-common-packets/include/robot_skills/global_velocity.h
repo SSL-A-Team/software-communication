@@ -15,3 +15,8 @@ typedef struct GlobalVelocityTelemetry {
     uint32_t reserved;
 } GlobalVelocityTelemetry;
 assert_size(GlobalVelocityTelemetry, 4);
+
+typedef struct ExtendedGlobalVelocityTelemetry {
+    GlobalVelocityCommand cmd_echo;
+} ExtendedGlobalVelocityTelemetry;
+assert_size(ExtendedGlobalVelocityTelemetry, 20);

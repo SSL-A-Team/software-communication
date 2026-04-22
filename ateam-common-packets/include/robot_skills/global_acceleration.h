@@ -13,3 +13,8 @@ typedef struct GlobalAccelerationTelemetry {
     uint32_t reserved;
 } GlobalAccelerationTelemetry;
 assert_size(GlobalAccelerationTelemetry, 4);
+
+typedef struct ExtendedGlobalAccelerationTelemetry {
+    GlobalAccelerationCommand cmd_echo;
+} ExtendedGlobalAccelerationTelemetry;
+assert_size(ExtendedGlobalAccelerationTelemetry, 12);

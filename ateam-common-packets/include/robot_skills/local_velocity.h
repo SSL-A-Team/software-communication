@@ -15,3 +15,8 @@ typedef struct LocalVelocityTelemetry {
     uint32_t reserved;
 } LocalVelocityTelemetry;
 assert_size(LocalVelocityTelemetry, 4);
+
+typedef struct ExtendedLocalVelocityTelemetry {
+    LocalVelocityCommand cmd_echo;
+} ExtendedLocalVelocityTelemetry;
+assert_size(ExtendedLocalVelocityTelemetry, 20);

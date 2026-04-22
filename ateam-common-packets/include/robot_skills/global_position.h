@@ -17,3 +17,8 @@ typedef struct GlobalPositionTelemetry {
     uint32_t reserved;
 } GlobalPositionTelemetry;
 assert_size(GlobalPositionTelemetry, 4);
+
+typedef struct ExtendedGlobalPositionTelemetry {
+    GlobalPositionCommand cmd_echo;
+} ExtendedGlobalPositionTelemetry;
+assert_size(ExtendedGlobalPositionTelemetry, 28);

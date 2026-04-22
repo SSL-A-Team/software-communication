@@ -3,6 +3,14 @@
 #include "common.h"
 #include "basic_control.h"
 
+typedef union BodyControlSkillExtendedTelemetry {
+    ExtendedGlobalPositionTelemetry global_pos;
+    ExtendedGlobalVelocityTelemetry global_vel;
+    ExtendedLocalVelocityTelemetry local_vel;
+    ExtendedGlobalAccelerationTelemetry global_acc;
+    ExtendedLocalAccelerationTelemetry local_acc;
+} BodyControlSkillExtendedTelemetry __attribute__((aligned (4)));
+
 typedef struct BodyControlExtendedTelemetry {
     BodyControlMode body_control_mode;
     uint8_t vision_update: 1;
@@ -10,8 +18,7 @@ typedef struct BodyControlExtendedTelemetry {
     uint8_t _reserved2[2];
     // 4 bytes
 
-    // TODO union thing
-    float body_cmd[3];  // commanded body pose, twist, or accel
+    BodyControlSkillExtendedTelemetry skill; 
 
     float imu_gyro[3];  // rad/s
     float imu_accel[3];  // m/s^2
@@ -26,4 +33,4 @@ typedef struct BodyControlExtendedTelemetry {
     float body_accel_u[3];  // body accel control outputs after control policy
     float body_accel_u_fric_comp[3];  // body accel control outputs after control policy with friction compensation added in
 } BodyControlExtendedTelemetry;
-assert_size(BodyControlExtendedTelemetry, 4 + 13*3*4);
+assert_size(BodyControlExtendedTelemetry, 4 + 28 + 12*3*4);
