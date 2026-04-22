@@ -9,6 +9,15 @@
 #include "robot_skills/global_acceleration.h"
 #include "robot_skills/local_acceleration.h"
 
+typedef union BodyControlTelemetry {
+        GlobalPositionTelemetry global_pos;
+        GlobalVelocityTelemetry global_vel;
+        LocalVelocityTelemetry local_vel;
+        GlobalAccelerationTelemetry global_acc;
+        LocalAccelerationTelemetry local_acc;
+} BodyControlTelemetry __attribute__((aligned (4)));
+assert_size(BodyControlTelemetry, 4);
+
 typedef struct BasicTelemetry {
     uint8_t transmission_sequence_number;
     uint8_t control_data_sequence_number;
@@ -46,14 +55,8 @@ typedef struct BasicTelemetry {
     uint16_t battery_percent;
     uint16_t kicker_charge_percent;
 
-        // Body control command
-    union BodyControlTelemetry {
-        GlobalPositionTelemetry global_pos;
-        GlobalVelocityTelemetry global_vel;
-        LocalVelocityTelemetry local_vel;
-        GlobalAccelerationTelemetry global_acc;
-        LocalAccelerationTelemetry local_acc;
-    } control_telem __attribute__((aligned (4)));
+    // Body control command
+    BodyControlTelemetry control_telem;
     // 4 bytes
 } BasicTelemetry;
 assert_size(BasicTelemetry, 16);
