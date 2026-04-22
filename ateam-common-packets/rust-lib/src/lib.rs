@@ -41,9 +41,9 @@ pub fn is_bcm_local_vel_safe(gpc: &LocalVelocityCommand) -> bool {
 }
 
 pub fn is_bcm_global_accel_safe(gpc: &GlobalAccelerationCommand) -> bool {
-    gpc.local_xdd.is_finite() 
-        && gpc.local_ydd.is_finite()
-        && gpc.local_alpha.is_finite()
+    gpc.global_xdd.is_finite() 
+        && gpc.global_ydd.is_finite()
+        && gpc.global_alpha.is_finite()
 }
 
 pub fn is_bcm_local_accel_safe(gpc: &LocalAccelerationCommand) -> bool {

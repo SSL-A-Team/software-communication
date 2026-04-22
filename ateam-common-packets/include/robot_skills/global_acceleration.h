@@ -3,9 +3,9 @@
 #include "../common.h"
 
 typedef struct GlobalAccelerationCommand {
-    float local_xdd;
-    float local_ydd;
-    float local_alpha;
+    float global_xdd;
+    float global_ydd;
+    float global_alpha;
 } GlobalAccelerationCommand;
 assert_size(GlobalAccelerationCommand, 12);
 
