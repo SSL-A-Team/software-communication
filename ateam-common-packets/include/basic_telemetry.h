@@ -53,7 +53,7 @@ typedef struct BasicTelemetry {
         LocalVelocityTelemetry local_vel;
         GlobalAccelerationTelemetry global_acc;
         LocalAccelerationTelemetry local_acc;
-    } cmd __attribute__((aligned (4)));
+    } control_telem __attribute__((aligned (4)));
     // 4 bytes
 } BasicTelemetry;
 assert_size(BasicTelemetry, 16);
