@@ -3,7 +3,7 @@
 #include "common.h"
 #include "stspin.h"
 
-typedef enum KickRequest {
+typedef enum KickRequest : uint8_t {
     KR_ARM,
     KR_DISABLE,
     KR_KICK_NOW,
@@ -15,17 +15,17 @@ typedef enum KickRequest {
 } KickRequest;
 
 typedef struct KickerControl {
-    uint32_t telemetry_enabled: 1;
-    uint32_t enable_charging: 1;
-    uint32_t request_power_down: 1;
-    uint32_t dribbler_mult: 8;
-    // 21 bits reserved
+    uint16_t telemetry_enabled: 1;
+    uint16_t enable_charging: 1;
+    uint16_t request_power_down: 1;
+    uint16_t bitfield_reserved1: 13;
+    uint8_t reserved1;
 
     KickRequest kick_request;
     float kick_speed;
     float drib_speed;
 } KickerControl;
-assert_size(KickerControl, 16);
+assert_size(KickerControl, 12);
 
 typedef struct KickerTelemetry {
     uint16_t error_detected : 1;

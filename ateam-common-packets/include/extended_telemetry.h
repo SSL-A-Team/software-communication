@@ -1,13 +1,3 @@
-/**
- * @file extended_telemetry.h
- * @author Will Stuckey
- * @brief definition for controls debug telemetry data type
- * @version 0.1
- *
- * @copyright Copyright (c) 2023
- *
- */
-
 #pragma once
 
 #include "common.h"
@@ -21,7 +11,7 @@ typedef struct ExtendedTelemetry {
     uint32_t timestamp_us_hi;
     // 8 bytes
 
-    // PowerTelemetry power_status;
+    PowerTelemetry power_status;
     // 28 bytes
 
     CcmTelemetry front_left_motor;
@@ -30,10 +20,10 @@ typedef struct ExtendedTelemetry {
     CcmTelemetry front_right_motor;
     // 60 bytes each
 
-    // KickerTelemetry kicker_status;
-    // 64 bytes
-
-    BodyControlTelemetry body_control_telemetry;
+    BodyControlExtendedTelemetry body_control_telemetry;
     // 160 bytes
+
+    KickerTelemetry kicker_status;
+    // 64 bytes
 } ExtendedTelemetry;
-assert_size(ExtendedTelemetry, 8 + 4*60 + 160);
+assert_size(ExtendedTelemetry, 8 + 28 + 4*60 + 160 + 64);

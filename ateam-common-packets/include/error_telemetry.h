@@ -1,13 +1,3 @@
-/**
- * @file error_telemetry.h
- * @author Nicholas Witten / Joseph Spall
- * @brief Simple error messages over radio
- * @version 0.1
- * 
- * @copyright Copyright (c) 2022
- *
- */
-
 #pragma once
 
 #include "common.h"

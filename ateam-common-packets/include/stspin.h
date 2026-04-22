@@ -1,18 +1,3 @@
-/**
- * @file stspin.h
- * @author Will Stuckey
- * @brief communication packet definitions for the stspin firmware
- * @version 0.1
- *
- * @copyright Copyright (c) 2022
- *
- * Struct sizes should pass static checks on the following 3 platforms:
- *  - Embedded -> C11, 4 byte ptr
- *  - Bindgen -> C11, 8 byte ptr
- *  - ROS -> C++, 8 byte ptr
- *
- */
-
 #pragma once
 
 #include "common.h"

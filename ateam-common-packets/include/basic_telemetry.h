@@ -1,22 +1,19 @@
-/**
- * @file basic_telemetry.h
- * @author Matthew Barulic
- * @brief definition for Basic Telemetry data type
- * @version 0.1
- * 
- * @copyright Copyright (c) 2022
- *
- */
-
 #pragma once
 
 #include "common.h"
+#include "body_control.h"
+
+#include "robot_skills/global_position.h"
+#include "robot_skills/global_velocity.h"
+#include "robot_skills/local_velocity.h"
+#include "robot_skills/global_acceleration.h"
+#include "robot_skills/local_acceleration.h"
 
 typedef struct BasicTelemetry {
     uint8_t transmission_sequence_number;
     uint8_t control_data_sequence_number;
-    uint8_t robot_revision_major;
-    uint8_t robot_revision_minor;
+    BodyControlMode body_control_mode;
+    uint8_t reserved1;
 
     uint32_t power_error : 1;
     uint32_t power_board_error : 1;
@@ -48,5 +45,15 @@ typedef struct BasicTelemetry {
     
     uint16_t battery_percent;
     uint16_t kicker_charge_percent;
+
+        // Body control command
+    union BodyControlTelemetry {
+        GlobalPositionTelemetry global_pos;
+        GlobalVelocityTelemetry global_vel;
+        LocalVelocityTelemetry local_vel;
+        GlobalAccelerationTelemetry global_acc;
+        LocalAccelerationTelemetry local_acc;
+    } cmd __attribute__((aligned (4)));
+    // 4 bytes
 } BasicTelemetry;
-assert_size(BasicTelemetry, 12);
+assert_size(BasicTelemetry, 16);

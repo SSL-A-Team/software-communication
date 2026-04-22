@@ -1,13 +1,3 @@
-/**
- * @file robot_parameters.h
- * @author Will Stuckey
- * @brief packet definitions for parameter reads and write
- * @version 0.1
- * 
- * @copyright Copyright (c) 2023
- *
- */
-
 #pragma once
 
 #include "common.h"
