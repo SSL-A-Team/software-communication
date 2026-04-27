@@ -47,6 +47,7 @@ typedef union RadioData {
     BasicTelemetry telemetry;
     ExtendedTelemetry extended_telemetry;
     ParameterCommand robot_parameter_command;
+    ErrorTelemetry error_telemetry;
 } RadioData;
 assert_size(RadioData, 516);
 
