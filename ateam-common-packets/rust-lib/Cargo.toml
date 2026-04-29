@@ -1,6 +1,7 @@
 [package]
 name = "ateam-common-packets"
 version = "1.0.0"
+edition = "2021"
 description = "Containes the radio packet definitions used by multiple targets"
 repository = "https://github.com/SSL-A-Team/common"
 
@@ -11,3 +12,6 @@ path = "src/lib.rs"
 [build-dependencies]
 bindgen = "0.60.1"
 which = "4.4.0"
+
+[dependencies]
+nalgebra = { version = "0.34.0", default-features = false, features = ["libm", "macros"] }
