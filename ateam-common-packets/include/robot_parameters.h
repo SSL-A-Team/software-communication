@@ -39,20 +39,14 @@ typedef enum ParameterName : uint8_t {
     POSE_CONTROL_GAIN = 7,
     /// [ERROR_POS_LINEAR, ERROR_POS_ANGULAR, ERROR_VEL_LINEAR, ERROR_VEL_ANGULAR] thresholds for when to recompute the trajectory
     TRAJ_RECOMPUTE_ERROR = 8,
-    /// [MAX_VEL_LINEAR, MAX_VEL_ANGULAR, MAX_ACCEL_LINEAR, MAX_ACCEL_ANGULAR]
-    TRAJ_MAX = 9,
     /// [P, I, D, I_MIN, I_MAX]
-    POSE_FB_PIDII_X = 10,
+    POSE_FB_PIDII_LINEAR = 9,
     /// [P, I, D, I_MIN, I_MAX]
-    POSE_FB_PIDII_Y = 11,
+    POSE_FB_PIDII_ANGULAR = 10,
     /// [P, I, D, I_MIN, I_MAX]
-    POSE_FB_PIDII_THETA = 12,
+    TWIST_FB_PIDII_LINEAR = 11,
     /// [P, I, D, I_MIN, I_MAX]
-    TWIST_FB_PIDII_X = 13,
-    /// [P, I, D, I_MIN, I_MAX]
-    TWIST_FB_PIDII_Y = 14,
-    /// [P, I, D, I_MIN, I_MAX]
-    TWIST_FB_PIDII_THETA = 15,
+    TWIST_FB_PIDII_ANGULAR = 12,
 } ParameterName;
 assert_size(ParameterName, 1);
 
