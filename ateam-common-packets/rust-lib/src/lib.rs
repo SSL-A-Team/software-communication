@@ -4,7 +4,7 @@
 #![allow(non_snake_case)]
 #![feature(const_cmp)]
 
-use crate::{bindings::{BasicControl, BodyControlMode, ExtendedTelemetry, GlobalAccelerationCommand, GlobalPositionCommand, GlobalVelocityCommand, LocalAccelerationCommand, LocalVelocityCommand, RadioHeader}, radio::SkillCommand};
+use crate::{bindings::{BasicControl, BodyControlMode, ExtendedTelemetry, GlobalAccelerationCommand, GlobalPositionCommand, GlobalVelocityCommand, LocalAccelerationCommand, LocalVelocityCommand, RadioHeader}};
 
 pub mod bindings;
 pub mod radio;
