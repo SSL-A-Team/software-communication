@@ -38,7 +38,8 @@ typedef struct BasicControl {
     uint32_t wheel_vel_control_enabled : 1;
     uint32_t wheel_torque_control_enabled : 1;
     uint32_t vision_update: 1;
-    uint32_t reserved1: 25;
+    uint32_t reset_controller : 1;
+    uint32_t reserved1: 24;
     // 4 bytes
 
     // Vision update
