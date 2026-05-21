@@ -35,18 +35,20 @@ typedef enum ParameterName : uint8_t {
     PHYS_MOTOR_MODEL = 5,
     /// [COULOMB_FRICTION_COEFFICIENT_LINEAR, COULOMB_FRICTION_COEFFICIENT_ANGULAR, VISCOUS_FRICTION_COEFFICIENT_LINEAR, VISCOUS_FRICTION_COEFFICIENT_ANGULAR]
     PHYS_FRICTION_MODEL = 6,
+    /// Accel magnitude threshold below which coulomb friction comp uses estimated (deadzoned) twist instead of target twist
+    COULOMB_COMP_ACCEL_DEADZONE = 7,
     /// [FEEDFORWARD_GAIN, FEEDBACK_GAIN]
-    POSE_CONTROL_GAIN = 7,
+    POSE_CONTROL_GAIN = 8,
     /// [ERROR_POS_LINEAR, ERROR_POS_ANGULAR, ERROR_VEL_LINEAR, ERROR_VEL_ANGULAR] thresholds for when to recompute the trajectory
-    TRAJ_RECOMPUTE_ERROR = 8,
+    TRAJ_RECOMPUTE_ERROR = 9,
     /// [P, I, D, I_MIN, I_MAX]
-    POSE_FB_PIDII_LINEAR = 9,
+    POSE_FB_PIDII_LINEAR = 10,
     /// [P, I, D, I_MIN, I_MAX]
-    POSE_FB_PIDII_ANGULAR = 10,
+    POSE_FB_PIDII_ANGULAR = 11,
     /// [P, I, D, I_MIN, I_MAX]
-    TWIST_FB_PIDII_LINEAR = 11,
+    TWIST_FB_PIDII_LINEAR = 12,
     /// [P, I, D, I_MIN, I_MAX]
-    TWIST_FB_PIDII_ANGULAR = 12,
+    TWIST_FB_PIDII_ANGULAR = 13,
 } ParameterName;
 assert_size(ParameterName, 1);
 
