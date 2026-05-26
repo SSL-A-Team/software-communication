@@ -33,9 +33,9 @@
           buildInputs = with pkgs; [
             gnumake
 
-            # GCC ARM Embedded 12 provides the sysroot/ABI defining types and type sizes
+            # GCC ARM Embedded 14 provides the sysroot/ABI defining types and type sizes
             # for bindgen
-            gcc-arm-embedded-12
+            gcc-arm-embedded-14
 
             # needed by bindgen
             clang
