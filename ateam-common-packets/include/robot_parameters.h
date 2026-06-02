@@ -17,6 +17,7 @@ typedef enum ParameterDataFormat : uint8_t {
     VEC3_F32 = 2,
     VEC4_F32 = 3,
     VEC5_F32 = 4,
+    VEC6_F32 = 5,
 } ParameterDataFormat;
 assert_size(ParameterDataFormat, 1);
 
@@ -33,10 +34,10 @@ typedef enum ParameterName : uint8_t {
     PHYS_INERTIA = 4,
     /// [MOTOR_TORQUE_CONSTANT, MOTOR_EFFICIENCY_FACTOR]
     PHYS_MOTOR_MODEL = 5,
-    /// [COULOMB_FRICTION_COEFFICIENT_LINEAR, COULOMB_FRICTION_COEFFICIENT_ANGULAR, VISCOUS_FRICTION_COEFFICIENT_LINEAR, VISCOUS_FRICTION_COEFFICIENT_ANGULAR]
+    /// [COULOMB_LINEAR_X, COULOMB_LINEAR_Y, COULOMB_ANGULAR, VISCOUS_LINEAR_X, VISCOUS_LINEAR_Y, VISCOUS_ANGULAR]
     PHYS_FRICTION_MODEL = 6,
-    /// Accel magnitude threshold below which coulomb friction comp uses estimated (deadzoned) twist instead of target twist
-    COULOMB_COMP_ACCEL_DEADZONE = 7,
+    /// [LINEAR_VEL_THRESHOLD, LINEAR_ACCEL_THRESHOLD, ANGULAR_VEL_THRESHOLD, ANGULAR_ACCEL_THRESHOLD]
+    FRICTION_COMP_GATING = 7,
     /// [FEEDFORWARD_GAIN, FEEDBACK_GAIN]
     POSE_CONTROL_GAIN = 8,
     /// [ERROR_POS_LINEAR, ERROR_POS_ANGULAR, ERROR_VEL_LINEAR, ERROR_VEL_ANGULAR] thresholds for when to recompute the trajectory
@@ -62,6 +63,7 @@ typedef struct ParameterCommand {
         float vec3_f32[3];
         float vec4_f32[4];
         float vec5_f32[5];
+        float vec6_f32[6];
     } data __attribute__((aligned (4)));
 } ParameterCommand;
-assert_size(ParameterCommand, 24);
+assert_size(ParameterCommand, 28);
