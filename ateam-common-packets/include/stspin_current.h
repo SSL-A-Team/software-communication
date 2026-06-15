@@ -96,7 +96,7 @@ typedef struct CcmCurrentTelemetry {
     uint16_t motor_voltage_cmd_mv;
 
     int16_t current_setpoint_ma;
-    uint8_t reserved[2];
+    int16_t hall_vel_est_crads;
     uint16_t current_samples_ma[20];
 } CcmCurrentTelemetry;
 assert_size(CcmCurrentTelemetry, 48);
