@@ -3,13 +3,13 @@
 #include "common.h"
 #include "basic_control.h"
 
-typedef union BodyControlSkillExtendedTelemetry {
+typedef union BodyControlManeuverExtendedTelemetry {
     ExtendedGlobalPositionTelemetry global_pos;
     ExtendedGlobalVelocityTelemetry global_vel;
     ExtendedLocalVelocityTelemetry local_vel;
     ExtendedGlobalAccelerationTelemetry global_acc;
     ExtendedLocalAccelerationTelemetry local_acc;
-} BodyControlSkillExtendedTelemetry __attribute__((aligned (4)));
+} BodyControlManeuverExtendedTelemetry __attribute__((aligned (4)));
 
 typedef struct BodyControlExtendedTelemetry {
     BodyControlMode body_control_mode;
@@ -18,7 +18,7 @@ typedef struct BodyControlExtendedTelemetry {
     uint8_t _reserved2[2];
     // 4 bytes
 
-    BodyControlSkillExtendedTelemetry skill; 
+    BodyControlManeuverExtendedTelemetry maneuver; 
 
     float imu_gyro[3];  // rad/s
     float imu_accel[3];  // m/s^2

@@ -1,5 +1,5 @@
 use nalgebra::Vector3;
-use crate::{bindings::{BasicControl, BasicTelemetry, BodyControlExtendedTelemetry, BodyControlMode, BodyControlSkillExtendedTelemetry, BodyControlTelemetry, ExtendedGlobalAccelerationTelemetry, ExtendedGlobalPositionTelemetry, ExtendedGlobalVelocityTelemetry, ExtendedLocalAccelerationTelemetry, ExtendedLocalVelocityTelemetry, GlobalAccelerationCommand, GlobalAccelerationTelemetry, GlobalPositionCommand, GlobalPositionTelemetry, GlobalVelocityCommand, GlobalVelocityTelemetry, LocalAccelerationCommand, LocalAccelerationTelemetry, LocalVelocityCommand, LocalVelocityTelemetry, ParameterCommand}, is_basic_control_packet_safe};
+use crate::{bindings::{BasicControl, BasicTelemetry, BodyControlExtendedTelemetry, BodyControlMode, BodyControlManeuverExtendedTelemetry, BodyControlTelemetry, ExtendedGlobalAccelerationTelemetry, ExtendedGlobalPositionTelemetry, ExtendedGlobalVelocityTelemetry, ExtendedLocalAccelerationTelemetry, ExtendedLocalVelocityTelemetry, GlobalAccelerationCommand, GlobalAccelerationTelemetry, GlobalPositionCommand, GlobalPositionTelemetry, GlobalVelocityCommand, GlobalVelocityTelemetry, LocalAccelerationCommand, LocalAccelerationTelemetry, LocalVelocityCommand, LocalVelocityTelemetry, ParameterCommand}, is_basic_control_packet_safe};
 
 #[derive(Copy, Clone)]
 pub enum DataPacket {
@@ -7,7 +7,7 @@ pub enum DataPacket {
     ParameterCommand(ParameterCommand),
 }
 
-pub enum SkillCommand {
+pub enum ManeuverCommand {
     Off,
     GlobalPosition(GlobalPositionCommand),
     GlobalVelocity(GlobalVelocityCommand),
@@ -17,7 +17,7 @@ pub enum SkillCommand {
 }
 
 #[derive(Copy, Clone)]
-pub enum SkillTelemetry {
+pub enum ManeuverTelemetry {
     Off,
     GlobalPosition(GlobalPositionTelemetry),
     GlobalVelocity(GlobalVelocityTelemetry),
@@ -27,7 +27,7 @@ pub enum SkillTelemetry {
 }
 
 #[derive(Copy, Clone)]
-pub enum SkillExtendedTelemetry {
+pub enum ManeuverExtendedTelemetry {
     Off,
     GlobalPosition(ExtendedGlobalPositionTelemetry),
     GlobalVelocity(ExtendedGlobalVelocityTelemetry),
@@ -97,45 +97,45 @@ impl LocalAccelerationCommand {
 }
 
 impl BasicControl {
-    pub fn get_skill_command(&self) -> SkillCommand {
+    pub fn get_maneuver_command(&self) -> ManeuverCommand {
         // union extraction is unsafe
         unsafe {
             match self.body_control_mode {
-                BodyControlMode::BCM_OFF => SkillCommand::Off,
-                BodyControlMode::BCM_GLOBAL_POSITION => SkillCommand::GlobalPosition(self.cmd.global_pos),
-                BodyControlMode::BCM_GLOBAL_VELOCITY => SkillCommand::GlobalVelocity(self.cmd.global_vel),
-                BodyControlMode::BCM_LOCAL_VELOCITY => SkillCommand::LocalVelocity(self.cmd.local_vel),
-                BodyControlMode::BCM_GLOBAL_ACCEL => SkillCommand::GlobalAcceleration(self.cmd.global_acc),
-                BodyControlMode::BCM_LOCAL_ACCEL => SkillCommand::LocalAcceleration(self.cmd.local_acc),
-                _ => SkillCommand::Off,
+                BodyControlMode::BCM_OFF => ManeuverCommand::Off,
+                BodyControlMode::BCM_GLOBAL_POSITION => ManeuverCommand::GlobalPosition(self.cmd.global_pos),
+                BodyControlMode::BCM_GLOBAL_VELOCITY => ManeuverCommand::GlobalVelocity(self.cmd.global_vel),
+                BodyControlMode::BCM_LOCAL_VELOCITY => ManeuverCommand::LocalVelocity(self.cmd.local_vel),
+                BodyControlMode::BCM_GLOBAL_ACCEL => ManeuverCommand::GlobalAcceleration(self.cmd.global_acc),
+                BodyControlMode::BCM_LOCAL_ACCEL => ManeuverCommand::LocalAcceleration(self.cmd.local_acc),
+                _ => ManeuverCommand::Off,
             }
         }   
     }
 }
 
 impl BasicTelemetry {
-    pub fn set_skill_telemetry(&mut self, telem: SkillTelemetry) {
+    pub fn set_maneuver_telemetry(&mut self, telem: ManeuverTelemetry) {
         match telem {
-            SkillTelemetry::Off => {
+            ManeuverTelemetry::Off => {
                 self.body_control_mode = BodyControlMode::BCM_OFF;
             }
-            SkillTelemetry::GlobalPosition(t) => {
+            ManeuverTelemetry::GlobalPosition(t) => {
                 self.body_control_mode = BodyControlMode::BCM_GLOBAL_POSITION;
                 self.control_telem = BodyControlTelemetry { global_pos: t };
             }
-            SkillTelemetry::GlobalVelocity(t) => {
+            ManeuverTelemetry::GlobalVelocity(t) => {
                 self.body_control_mode = BodyControlMode::BCM_GLOBAL_VELOCITY;
                 self.control_telem = BodyControlTelemetry { global_vel: t };
             }
-            SkillTelemetry::LocalVelocity(t) => {
+            ManeuverTelemetry::LocalVelocity(t) => {
                 self.body_control_mode = BodyControlMode::BCM_LOCAL_VELOCITY;
                 self.control_telem = BodyControlTelemetry { local_vel: t };
             }
-            SkillTelemetry::GlobalAcceleration(t) => {
+            ManeuverTelemetry::GlobalAcceleration(t) => {
                 self.body_control_mode = BodyControlMode::BCM_GLOBAL_ACCEL;
                 self.control_telem = BodyControlTelemetry { global_acc: t };
             }
-            SkillTelemetry::LocalAcceleration(t) => {
+            ManeuverTelemetry::LocalAcceleration(t) => {
                 self.body_control_mode = BodyControlMode::BCM_LOCAL_ACCEL;
                 self.control_telem = BodyControlTelemetry { local_acc: t };
             }
@@ -144,30 +144,30 @@ impl BasicTelemetry {
 }
 
 impl BodyControlExtendedTelemetry {
-    pub fn set_skill_telemetry(&mut self, telem: SkillExtendedTelemetry) {
+    pub fn set_maneuver_telemetry(&mut self, telem: ManeuverExtendedTelemetry) {
         match telem {
-            SkillExtendedTelemetry::Off => {
+            ManeuverExtendedTelemetry::Off => {
                 self.body_control_mode = BodyControlMode::BCM_OFF;
             }
-            SkillExtendedTelemetry::GlobalPosition(t) => {
+            ManeuverExtendedTelemetry::GlobalPosition(t) => {
                 self.body_control_mode = BodyControlMode::BCM_GLOBAL_POSITION;
-                self.skill = BodyControlSkillExtendedTelemetry { global_pos: t };
+                self.maneuver = BodyControlManeuverExtendedTelemetry { global_pos: t };
             }
-            SkillExtendedTelemetry::GlobalVelocity(t) => {
+            ManeuverExtendedTelemetry::GlobalVelocity(t) => {
                 self.body_control_mode = BodyControlMode::BCM_GLOBAL_VELOCITY;
-                self.skill = BodyControlSkillExtendedTelemetry { global_vel: t };
+                self.maneuver = BodyControlManeuverExtendedTelemetry { global_vel: t };
             }
-            SkillExtendedTelemetry::LocalVelocity(t) => {
+            ManeuverExtendedTelemetry::LocalVelocity(t) => {
                 self.body_control_mode = BodyControlMode::BCM_LOCAL_VELOCITY;
-                self.skill = BodyControlSkillExtendedTelemetry { local_vel: t };
+                self.maneuver = BodyControlManeuverExtendedTelemetry { local_vel: t };
             }
-            SkillExtendedTelemetry::GlobalAcceleration(t) => {
+            ManeuverExtendedTelemetry::GlobalAcceleration(t) => {
                 self.body_control_mode = BodyControlMode::BCM_GLOBAL_ACCEL;
-                self.skill = BodyControlSkillExtendedTelemetry { global_acc: t };
+                self.maneuver = BodyControlManeuverExtendedTelemetry { global_acc: t };
             }
-            SkillExtendedTelemetry::LocalAcceleration(t) => {
+            ManeuverExtendedTelemetry::LocalAcceleration(t) => {
                 self.body_control_mode = BodyControlMode::BCM_LOCAL_ACCEL;
-                self.skill = BodyControlSkillExtendedTelemetry { local_acc: t };
+                self.maneuver = BodyControlManeuverExtendedTelemetry { local_acc: t };
             }
         }
     }
