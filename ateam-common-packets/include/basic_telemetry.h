@@ -3,11 +3,11 @@
 #include "common.h"
 #include "body_control.h"
 
-#include "robot_skills/global_position.h"
-#include "robot_skills/global_velocity.h"
-#include "robot_skills/local_velocity.h"
-#include "robot_skills/global_acceleration.h"
-#include "robot_skills/local_acceleration.h"
+#include "robot_maneuvers/global_position.h"
+#include "robot_maneuvers/global_velocity.h"
+#include "robot_maneuvers/local_velocity.h"
+#include "robot_maneuvers/global_acceleration.h"
+#include "robot_maneuvers/local_acceleration.h"
 
 typedef union BodyControlTelemetry {
         GlobalPositionTelemetry global_pos;

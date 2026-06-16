@@ -3,11 +3,11 @@
 #include "common.h"
 #include "kicker.h"
 
-#include "robot_skills/global_position.h"
-#include "robot_skills/global_velocity.h"
-#include "robot_skills/local_velocity.h"
-#include "robot_skills/global_acceleration.h"
-#include "robot_skills/local_acceleration.h"
+#include "robot_maneuvers/global_position.h"
+#include "robot_maneuvers/global_velocity.h"
+#include "robot_maneuvers/local_velocity.h"
+#include "robot_maneuvers/global_acceleration.h"
+#include "robot_maneuvers/local_acceleration.h"
 
 typedef enum BodyControlMode : uint8_t {
     BCM_OFF = 0,
@@ -16,7 +16,7 @@ typedef enum BodyControlMode : uint8_t {
     BCM_LOCAL_VELOCITY = 3,
     BCM_GLOBAL_ACCEL = 4,
     BCM_LOCAL_ACCEL = 5
-    // add additional skills and modes here
+    // add additional maneuvers and modes here
 } BodyControlMode;
 assert_size(BodyControlMode, 1);
 
