@@ -1,5 +1,5 @@
 use nalgebra::Vector3;
-use crate::{bindings::{BasicControl, BasicTelemetry, BodyControlExtendedTelemetry, BodyControlMode, BodyControlManeuverExtendedTelemetry, BodyControlTelemetry, ExtendedGlobalAccelerationTelemetry, ExtendedGlobalPositionTelemetry, ExtendedGlobalVelocityTelemetry, ExtendedLocalAccelerationTelemetry, ExtendedLocalVelocityTelemetry, GlobalAccelerationCommand, GlobalAccelerationTelemetry, GlobalPositionCommand, GlobalPositionTelemetry, GlobalVelocityCommand, GlobalVelocityTelemetry, LocalAccelerationCommand, LocalAccelerationTelemetry, LocalVelocityCommand, LocalVelocityTelemetry, ParameterCommand}, is_basic_control_packet_safe};
+use crate::{bindings::{BasicControl, BasicTelemetry, BodyControlExtendedTelemetry, BodyControlManeuverExtendedTelemetry, BodyControlMode, BodyControlTelemetry, ExtendedGlobalAccelerationTelemetry, ExtendedGlobalPositionTelemetry, ExtendedGlobalVelocityTelemetry, ExtendedLocalAccelerationTelemetry, ExtendedLocalVelocityTelemetry, ExtendedPivotTelemetry, GlobalAccelerationCommand, GlobalAccelerationTelemetry, GlobalPositionCommand, GlobalPositionTelemetry, GlobalVelocityCommand, GlobalVelocityTelemetry, LocalAccelerationCommand, LocalAccelerationTelemetry, LocalVelocityCommand, LocalVelocityTelemetry, ParameterCommand}, is_basic_control_packet_safe};
 
 #[derive(Copy, Clone)]
 pub enum DataPacket {
@@ -34,6 +34,7 @@ pub enum ManeuverExtendedTelemetry {
     LocalVelocity(ExtendedLocalVelocityTelemetry),
     GlobalAcceleration(ExtendedGlobalAccelerationTelemetry),
     LocalAcceleration(ExtendedLocalAccelerationTelemetry),
+    Pivot(ExtendedPivotTelemetry),
 }
 
 impl GlobalPositionCommand {
@@ -168,6 +169,10 @@ impl BodyControlExtendedTelemetry {
             ManeuverExtendedTelemetry::LocalAcceleration(t) => {
                 self.body_control_mode = BodyControlMode::BCM_LOCAL_ACCEL;
                 self.maneuver = BodyControlManeuverExtendedTelemetry { local_acc: t };
+            }
+            ManeuverExtendedTelemetry::Pivot(t) => {
+                self.body_control_mode = BodyControlMode::BCM_PIVOT;
+                self.maneuver = BodyControlManeuverExtendedTelemetry { pivot: t };
             }
         }
     }

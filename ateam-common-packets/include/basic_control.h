@@ -8,6 +8,7 @@
 #include "robot_maneuvers/local_velocity.h"
 #include "robot_maneuvers/global_acceleration.h"
 #include "robot_maneuvers/local_acceleration.h"
+#include "robot_maneuvers/pivot.h"
 
 typedef enum BodyControlMode : uint8_t {
     BCM_OFF = 0,
@@ -15,7 +16,8 @@ typedef enum BodyControlMode : uint8_t {
     BCM_GLOBAL_VELOCITY = 2,
     BCM_LOCAL_VELOCITY = 3,
     BCM_GLOBAL_ACCEL = 4,
-    BCM_LOCAL_ACCEL = 5
+    BCM_LOCAL_ACCEL = 5,
+    BCM_PIVOT = 6
     // add additional maneuvers and modes here
 } BodyControlMode;
 assert_size(BodyControlMode, 1);
@@ -26,6 +28,7 @@ typedef union BodyControlCommand {
         LocalVelocityCommand local_vel;
         GlobalAccelerationCommand global_acc;
         LocalAccelerationCommand local_acc;
+        PivotCommand pivot;
 } BodyControlCommand __attribute__((aligned (4)));
 assert_size(BodyControlCommand, 28);
 

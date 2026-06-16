@@ -8,6 +8,7 @@
 #include "robot_maneuvers/local_velocity.h"
 #include "robot_maneuvers/global_acceleration.h"
 #include "robot_maneuvers/local_acceleration.h"
+#include "robot_maneuvers/pivot.h"
 
 typedef union BodyControlTelemetry {
         GlobalPositionTelemetry global_pos;
@@ -15,6 +16,7 @@ typedef union BodyControlTelemetry {
         LocalVelocityTelemetry local_vel;
         GlobalAccelerationTelemetry global_acc;
         LocalAccelerationTelemetry local_acc;
+        PivotTelemetry pivot;
 } BodyControlTelemetry __attribute__((aligned (4)));
 assert_size(BodyControlTelemetry, 4);
 
