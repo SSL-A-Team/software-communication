@@ -1,5 +1,5 @@
-use nalgebra::Vector3;
-use crate::{bindings::{BasicControl, BasicTelemetry, BodyControlExtendedTelemetry, BodyControlManeuverExtendedTelemetry, BodyControlMode, BodyControlTelemetry, ExtendedGlobalAccelerationTelemetry, ExtendedGlobalPositionTelemetry, ExtendedGlobalVelocityTelemetry, ExtendedLocalAccelerationTelemetry, ExtendedLocalVelocityTelemetry, ExtendedPivotTelemetry, GlobalAccelerationCommand, GlobalAccelerationTelemetry, GlobalPositionCommand, GlobalPositionTelemetry, GlobalVelocityCommand, GlobalVelocityTelemetry, LocalAccelerationCommand, LocalAccelerationTelemetry, LocalVelocityCommand, LocalVelocityTelemetry, ParameterCommand}, is_basic_control_packet_safe};
+use nalgebra::{Vector2, Vector3};
+use crate::{bindings::{BasicControl, BasicTelemetry, BodyControlExtendedTelemetry, BodyControlManeuverExtendedTelemetry, BodyControlMode, BodyControlTelemetry, ExtendedGlobalAccelerationTelemetry, ExtendedGlobalPositionTelemetry, ExtendedGlobalVelocityTelemetry, ExtendedLocalAccelerationTelemetry, ExtendedLocalVelocityTelemetry, ExtendedPivotTelemetry, GlobalAccelerationCommand, GlobalAccelerationTelemetry, GlobalPositionCommand, GlobalPositionTelemetry, GlobalVelocityCommand, GlobalVelocityTelemetry, LocalAccelerationCommand, LocalAccelerationTelemetry, LocalVelocityCommand, LocalVelocityTelemetry, ParameterCommand, PivotCommand}, is_basic_control_packet_safe};
 
 #[derive(Copy, Clone)]
 pub enum DataPacket {
@@ -14,6 +14,7 @@ pub enum ManeuverCommand {
     LocalVelocity(LocalVelocityCommand),
     GlobalAcceleration(GlobalAccelerationCommand),
     LocalAcceleration(LocalAccelerationCommand),
+    Pivot(PivotCommand),
 }
 
 #[derive(Copy, Clone)]
@@ -97,6 +98,18 @@ impl LocalAccelerationCommand {
     }
 }
 
+impl PivotCommand {
+    pub fn center(&self) -> Vector2<f32> {
+        Vector2::new(self.global_x_center, self.global_y_center)
+    }
+
+    pub fn from_center_and_theta(&mut self, center: Vector2<f32>, theta: f32) {
+        self.global_x_center = center.x;
+        self.global_y_center = center.y;
+        self.global_theta = theta;
+    }
+}
+
 impl BasicControl {
     pub fn get_maneuver_command(&self) -> ManeuverCommand {
         // union extraction is unsafe
@@ -108,6 +121,7 @@ impl BasicControl {
                 BodyControlMode::BCM_LOCAL_VELOCITY => ManeuverCommand::LocalVelocity(self.cmd.local_vel),
                 BodyControlMode::BCM_GLOBAL_ACCEL => ManeuverCommand::GlobalAcceleration(self.cmd.global_acc),
                 BodyControlMode::BCM_LOCAL_ACCEL => ManeuverCommand::LocalAcceleration(self.cmd.local_acc),
+                BodyControlMode::BCM_PIVOT => ManeuverCommand::Pivot(self.cmd.pivot),
                 _ => ManeuverCommand::Off,
             }
         }   
