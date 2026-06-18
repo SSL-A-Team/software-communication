@@ -9,8 +9,9 @@ typedef struct PivotCommand {
     float max_angular_vel;
     float max_angular_acc;
     float orbit_radius;
+    float heading_lag;
 } PivotCommand;
-assert_size(PivotCommand, 24);
+assert_size(PivotCommand, 28);
 
 typedef struct PivotTelemetry {
     uint32_t reserved;
@@ -20,4 +21,4 @@ assert_size(PivotTelemetry, 4);
 typedef struct ExtendedPivotTelemetry {
     PivotCommand cmd_echo;
 } ExtendedPivotTelemetry;
-assert_size(ExtendedPivotTelemetry, 24);
+assert_size(ExtendedPivotTelemetry, 28);
