@@ -9,6 +9,7 @@ typedef union BodyControlManeuverExtendedTelemetry {
     ExtendedLocalVelocityTelemetry local_vel;
     ExtendedGlobalAccelerationTelemetry global_acc;
     ExtendedLocalAccelerationTelemetry local_acc;
+    ExtendedPivotTelemetry pivot;
 } BodyControlManeuverExtendedTelemetry __attribute__((aligned (4)));
 
 typedef struct BodyControlExtendedTelemetry {
