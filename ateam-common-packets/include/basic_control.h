@@ -50,12 +50,12 @@ typedef struct BasicControl {
     BodyControlMode body_control_mode;
     KickRequest kick_request;
     uint8_t play_song;
-    uint8_t reserved2[1];
+    DribblerCommand dribbler_mode;
     // 4 bytes
 
     // Dribbler and kicker commands
     float kick_vel; // m/s (also applies to chips)
-    float dribbler_speed; // rpm
+    float dribbler_setpoint;
     // 8 bytes
 
     // Body control command
