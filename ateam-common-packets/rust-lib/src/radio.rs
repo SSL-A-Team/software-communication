@@ -1,4 +1,4 @@
-use nalgebra::{Vector2, Vector3};
+use nalgebra::Vector3;
 use crate::{bindings::{BasicControl, BasicTelemetry, BodyControlExtendedTelemetry, BodyControlManeuverExtendedTelemetry, BodyControlMode, BodyControlTelemetry, ExtendedGlobalAccelerationTelemetry, ExtendedGlobalPositionTelemetry, ExtendedGlobalVelocityTelemetry, ExtendedLocalAccelerationTelemetry, ExtendedLocalVelocityTelemetry, ExtendedPivotTelemetry, GlobalAccelerationCommand, GlobalAccelerationTelemetry, GlobalPositionCommand, GlobalPositionTelemetry, GlobalVelocityCommand, GlobalVelocityTelemetry, LocalAccelerationCommand, LocalAccelerationTelemetry, LocalVelocityCommand, LocalVelocityTelemetry, ParameterCommand, PivotCommand}, is_basic_control_packet_safe};
 
 #[derive(Copy, Clone)]
@@ -15,6 +15,63 @@ pub enum ManeuverCommand {
     GlobalAcceleration(GlobalAccelerationCommand),
     LocalAcceleration(LocalAccelerationCommand),
     Pivot(PivotCommand),
+}
+
+impl Copy for ManeuverCommand {}
+
+impl Clone for ManeuverCommand {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+
+impl PartialEq for ManeuverCommand {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Self::Off, Self::Off) => true,
+            (Self::GlobalPosition(a), Self::GlobalPosition(b)) => {
+                a.global_x == b.global_x
+                    && a.global_y == b.global_y
+                    && a.global_theta == b.global_theta
+                    && a.max_linear_vel == b.max_linear_vel
+                    && a.max_angular_vel == b.max_angular_vel
+                    && a.max_linear_acc == b.max_linear_acc
+                    && a.max_angular_acc == b.max_angular_acc
+            }
+            (Self::GlobalVelocity(a), Self::GlobalVelocity(b)) => {
+                a.global_xd == b.global_xd
+                    && a.global_yd == b.global_yd
+                    && a.global_omega == b.global_omega
+                    && a.max_linear_acc == b.max_linear_acc
+                    && a.max_angular_acc == b.max_angular_acc
+            }
+            (Self::LocalVelocity(a), Self::LocalVelocity(b)) => {
+                a.local_xd == b.local_xd
+                    && a.local_yd == b.local_yd
+                    && a.local_omega == b.local_omega
+                    && a.max_linear_acc == b.max_linear_acc
+                    && a.max_angular_acc == b.max_angular_acc
+            }
+            (Self::GlobalAcceleration(a), Self::GlobalAcceleration(b)) => {
+                a.global_xdd == b.global_xdd
+                    && a.global_ydd == b.global_ydd
+                    && a.global_alpha == b.global_alpha
+            }
+            (Self::LocalAcceleration(a), Self::LocalAcceleration(b)) => {
+                a.local_xdd == b.local_xdd
+                    && a.local_ydd == b.local_ydd
+                    && a.local_alpha == b.local_alpha
+            }
+            (Self::Pivot(a), Self::Pivot(b)) => {
+                a.global_theta == b.global_theta
+                    && a.max_angular_vel == b.max_angular_vel
+                    && a.max_angular_acc == b.max_angular_acc
+                    && a.orbit_radius == b.orbit_radius
+                    && a.inset_angle == b.inset_angle
+            }
+            _ => false,
+        }
+    }
 }
 
 #[derive(Copy, Clone)]
@@ -95,18 +152,6 @@ impl LocalAccelerationCommand {
         self.local_xdd = v.x;
         self.local_ydd = v.y;
         self.local_alpha = v.z;
-    }
-}
-
-impl PivotCommand {
-    pub fn center(&self) -> Vector2<f32> {
-        Vector2::new(self.global_x_center, self.global_y_center)
-    }
-
-    pub fn from_center_and_theta(&mut self, center: Vector2<f32>, theta: f32) {
-        self.global_x_center = center.x;
-        self.global_y_center = center.y;
-        self.global_theta = theta;
     }
 }
 
