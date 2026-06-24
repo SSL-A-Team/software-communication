@@ -53,7 +53,9 @@ pub fn is_bcm_local_accel_safe(gpc: &LocalAccelerationCommand) -> bool {
 }
 
 pub fn is_bcm_pivot_safe(gpc: &PivotCommand) -> bool {
-    gpc.global_theta.is_finite() 
+    gpc.global_theta.is_finite()
+        && gpc.target_x.is_finite()
+        && gpc.target_y.is_finite()
         && gpc.max_angular_acc.is_finite()
         && gpc.max_angular_vel.is_finite()
         && gpc.orbit_radius.is_finite()
@@ -71,7 +73,7 @@ pub fn is_basic_control_packet_safe(basic_control: &BasicControl) -> bool {
         BodyControlMode::BCM_LOCAL_VELOCITY => is_bcm_local_vel_safe(unsafe { &basic_control.cmd.local_vel }),
         BodyControlMode::BCM_GLOBAL_ACCEL => is_bcm_global_accel_safe(unsafe { &basic_control.cmd.global_acc }),
         BodyControlMode::BCM_LOCAL_ACCEL => is_bcm_local_accel_safe(unsafe { &basic_control.cmd.local_acc }),
-        BodyControlMode::BCM_PIVOT => is_bcm_local_accel_safe(unsafe { &basic_control.cmd.local_acc }),
+        BodyControlMode::BCM_PIVOT => is_bcm_pivot_safe(unsafe { &basic_control.cmd.pivot }),
         _ => false
     };
 

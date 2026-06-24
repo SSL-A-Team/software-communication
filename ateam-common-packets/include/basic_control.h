@@ -30,7 +30,7 @@ typedef union BodyControlCommand {
         LocalAccelerationCommand local_acc;
         PivotCommand pivot;
 } BodyControlCommand __attribute__((aligned (4)));
-assert_size(BodyControlCommand, 28);
+assert_size(BodyControlCommand, 32);
 
 typedef struct BasicControl {
     // Bit field flags
@@ -63,6 +63,6 @@ typedef struct BasicControl {
 
     // Body control command
     BodyControlCommand cmd;
-    // 28 bytes
+    // 32 bytes
 } BasicControl;
-assert_size(BasicControl, 4 + 4 + 12 + 28 + 8);
+assert_size(BasicControl, 4 + 4 + 12 + 32 + 8);

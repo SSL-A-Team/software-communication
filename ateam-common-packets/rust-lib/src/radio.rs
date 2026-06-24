@@ -64,10 +64,15 @@ impl PartialEq for ManeuverCommand {
             }
             (Self::Pivot(a), Self::Pivot(b)) => {
                 a.global_theta == b.global_theta
+                    && a.target_x == b.target_x
+                    && a.target_y == b.target_y
                     && a.max_angular_vel == b.max_angular_vel
                     && a.max_angular_acc == b.max_angular_acc
                     && a.orbit_radius == b.orbit_radius
                     && a.inset_angle == b.inset_angle
+                    && a.target_mode == b.target_mode
+                    && a.direction == b.direction
+                    && a.compute_inset_angle == b.compute_inset_angle
             }
             _ => false,
         }
