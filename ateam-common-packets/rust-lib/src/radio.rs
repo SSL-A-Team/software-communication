@@ -1,5 +1,5 @@
 use nalgebra::Vector3;
-use crate::{bindings::{BasicControl, BasicTelemetry, BodyControlExtendedTelemetry, BodyControlManeuverExtendedTelemetry, BodyControlMode, BodyControlTelemetry, ExtendedGlobalAccelerationTelemetry, ExtendedGlobalPositionTelemetry, ExtendedGlobalVelocityTelemetry, ExtendedLocalAccelerationTelemetry, ExtendedLocalVelocityTelemetry, ExtendedPivotTelemetry, GlobalAccelerationCommand, GlobalAccelerationTelemetry, GlobalPositionCommand, GlobalPositionTelemetry, GlobalVelocityCommand, GlobalVelocityTelemetry, LocalAccelerationCommand, LocalAccelerationTelemetry, LocalVelocityCommand, LocalVelocityTelemetry, ParameterCommand, PivotCommand}, is_basic_control_packet_safe};
+use crate::{bindings::{BasicControl, BasicTelemetry, BodyControlExtendedTelemetry, BodyControlManeuverExtendedTelemetry, BodyControlMode, BodyControlTelemetry, ExtendedGlobalAccelerationTelemetry, ExtendedGlobalPositionTelemetry, ExtendedGlobalVelocityTelemetry, ExtendedHeadingPivotTelemetry, ExtendedLocalAccelerationTelemetry, ExtendedLocalVelocityTelemetry, ExtendedPointPivotTelemetry, GlobalAccelerationCommand, GlobalAccelerationTelemetry, GlobalPositionCommand, GlobalPositionTelemetry, GlobalVelocityCommand, GlobalVelocityTelemetry, HeadingPivotCommand, LocalAccelerationCommand, LocalAccelerationTelemetry, LocalVelocityCommand, LocalVelocityTelemetry, ParameterCommand, PointPivotCommand}, is_basic_control_packet_safe};
 
 #[derive(Copy, Clone)]
 pub enum DataPacket {
@@ -14,7 +14,8 @@ pub enum ManeuverCommand {
     LocalVelocity(LocalVelocityCommand),
     GlobalAcceleration(GlobalAccelerationCommand),
     LocalAcceleration(LocalAccelerationCommand),
-    Pivot(PivotCommand),
+    HeadingPivot(HeadingPivotCommand),
+    PointPivot(PointPivotCommand),
 }
 
 impl Copy for ManeuverCommand {}
@@ -62,12 +63,24 @@ impl PartialEq for ManeuverCommand {
                     && a.local_ydd == b.local_ydd
                     && a.local_alpha == b.local_alpha
             }
-            (Self::Pivot(a), Self::Pivot(b)) => {
+            (Self::HeadingPivot(a), Self::HeadingPivot(b)) => {
                 a.global_theta == b.global_theta
                     && a.max_angular_vel == b.max_angular_vel
                     && a.max_angular_acc == b.max_angular_acc
                     && a.orbit_radius == b.orbit_radius
                     && a.inset_angle == b.inset_angle
+                    && a.direction == b.direction
+                    && a.compute_inset_angle == b.compute_inset_angle
+            }
+            (Self::PointPivot(a), Self::PointPivot(b)) => {
+                a.target_x == b.target_x
+                    && a.target_y == b.target_y
+                    && a.max_angular_vel == b.max_angular_vel
+                    && a.max_angular_acc == b.max_angular_acc
+                    && a.orbit_radius == b.orbit_radius
+                    && a.inset_angle == b.inset_angle
+                    && a.direction == b.direction
+                    && a.compute_inset_angle == b.compute_inset_angle
             }
             _ => false,
         }
@@ -92,7 +105,8 @@ pub enum ManeuverExtendedTelemetry {
     LocalVelocity(ExtendedLocalVelocityTelemetry),
     GlobalAcceleration(ExtendedGlobalAccelerationTelemetry),
     LocalAcceleration(ExtendedLocalAccelerationTelemetry),
-    Pivot(ExtendedPivotTelemetry),
+    HeadingPivot(ExtendedHeadingPivotTelemetry),
+    PointPivot(ExtendedPointPivotTelemetry),
 }
 
 impl GlobalPositionCommand {
@@ -166,7 +180,8 @@ impl BasicControl {
                 BodyControlMode::BCM_LOCAL_VELOCITY => ManeuverCommand::LocalVelocity(self.cmd.local_vel),
                 BodyControlMode::BCM_GLOBAL_ACCEL => ManeuverCommand::GlobalAcceleration(self.cmd.global_acc),
                 BodyControlMode::BCM_LOCAL_ACCEL => ManeuverCommand::LocalAcceleration(self.cmd.local_acc),
-                BodyControlMode::BCM_PIVOT => ManeuverCommand::Pivot(self.cmd.pivot),
+                BodyControlMode::BCM_HEADING_PIVOT => ManeuverCommand::HeadingPivot(self.cmd.heading_pivot),
+                BodyControlMode::BCM_POINT_PIVOT => ManeuverCommand::PointPivot(self.cmd.point_pivot),
                 _ => ManeuverCommand::Off,
             }
         }   
@@ -229,9 +244,13 @@ impl BodyControlExtendedTelemetry {
                 self.body_control_mode = BodyControlMode::BCM_LOCAL_ACCEL;
                 self.maneuver = BodyControlManeuverExtendedTelemetry { local_acc: t };
             }
-            ManeuverExtendedTelemetry::Pivot(t) => {
-                self.body_control_mode = BodyControlMode::BCM_PIVOT;
-                self.maneuver = BodyControlManeuverExtendedTelemetry { pivot: t };
+            ManeuverExtendedTelemetry::HeadingPivot(t) => {
+                self.body_control_mode = BodyControlMode::BCM_HEADING_PIVOT;
+                self.maneuver = BodyControlManeuverExtendedTelemetry { heading_pivot: t };
+            }
+            ManeuverExtendedTelemetry::PointPivot(t) => {
+                self.body_control_mode = BodyControlMode::BCM_POINT_PIVOT;
+                self.maneuver = BodyControlManeuverExtendedTelemetry { point_pivot: t };
             }
         }
     }
