@@ -17,7 +17,8 @@ typedef enum BodyControlMode : uint8_t {
     BCM_LOCAL_VELOCITY = 3,
     BCM_GLOBAL_ACCEL = 4,
     BCM_LOCAL_ACCEL = 5,
-    BCM_PIVOT = 6
+    BCM_HEADING_PIVOT = 6,
+    BCM_POINT_PIVOT = 7
     // add additional maneuvers and modes here
 } BodyControlMode;
 assert_size(BodyControlMode, 1);
@@ -28,9 +29,10 @@ typedef union BodyControlCommand {
         LocalVelocityCommand local_vel;
         GlobalAccelerationCommand global_acc;
         LocalAccelerationCommand local_acc;
-        PivotCommand pivot;
+        HeadingPivotCommand heading_pivot;
+        PointPivotCommand point_pivot;
 } BodyControlCommand __attribute__((aligned (4)));
-assert_size(BodyControlCommand, 32);
+assert_size(BodyControlCommand, 28);
 
 typedef struct BasicControl {
     // Bit field flags
@@ -63,6 +65,6 @@ typedef struct BasicControl {
 
     // Body control command
     BodyControlCommand cmd;
-    // 32 bytes
+    // 28 bytes
 } BasicControl;
-assert_size(BasicControl, 4 + 4 + 12 + 32 + 8);
+assert_size(BasicControl, 4 + 4 + 12 + 28 + 8);

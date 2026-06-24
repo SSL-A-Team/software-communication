@@ -21,9 +21,9 @@ typedef struct ExtendedTelemetry {
     // 60 bytes each
 
     BodyControlExtendedTelemetry body_control_telemetry;
-    // 180 bytes
+    // 176 bytes
 
     KickerTelemetry kicker_status;
     // 64 bytes
 } ExtendedTelemetry;
-assert_size(ExtendedTelemetry, 8 + 28 + 4*60 + 180 + 64);
+assert_size(ExtendedTelemetry, 8 + 28 + 4*60 + 176 + 64);

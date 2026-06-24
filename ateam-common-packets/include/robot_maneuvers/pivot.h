@@ -2,17 +2,6 @@
 
 #include "../common.h"
 
-// Whether the pivot is parameterized by a target heading or a target point to
-// face after the orbit completes.
-typedef enum PivotTargetMode : uint8_t {
-    // Use global_theta as the final heading.
-    PIVOT_TARGET_HEADING = 0,
-    // Use (target_x, target_y) as a point to face after the pivot; the final
-    // heading is solved to account for translation during the orbit.
-    PIVOT_TARGET_POINT = 1,
-} PivotTargetMode;
-assert_size(PivotTargetMode, 1);
-
 // Whether the robot drives forward or backward around the orbit.
 typedef enum PivotDirection : uint8_t {
     // Velocity is acute with the heading (robot drives forward).
@@ -22,11 +11,26 @@ typedef enum PivotDirection : uint8_t {
 } PivotDirection;
 assert_size(PivotDirection, 1);
 
-typedef struct PivotCommand {
-    // Target heading (rad), used when target_mode == PIVOT_TARGET_HEADING.
-    float global_theta;
-    // Target point to face (m), used when target_mode == PIVOT_TARGET_POINT.
-    float target_x;
+// Pivot toward a target heading (BCM_HEADING_PIVOT).
+typedef struct HeadingPivotCommand {
+    float global_theta;       // target heading (rad)
+    float max_angular_vel;
+    float max_angular_acc;
+    float orbit_radius;
+    // Angle (rad) between the orbit tangent and the heading, measured toward the
+    // orbit center; absolute-valued. Ignored when compute_inset_angle != 0.
+    float inset_angle;
+    PivotDirection direction;
+    // Bool: when nonzero, inset_angle is ignored and the inset is derived from a
+    // linear model of the peak angular velocity (centrifugal lean).
+    uint8_t compute_inset_angle;
+    uint8_t reserved[2];
+} HeadingPivotCommand;
+assert_size(HeadingPivotCommand, 24);
+
+// Pivot until facing a target point, accounting for translation (BCM_POINT_PIVOT).
+typedef struct PointPivotCommand {
+    float target_x;           // point to face after the pivot (m)
     float target_y;
     float max_angular_vel;
     float max_angular_acc;
@@ -34,21 +38,30 @@ typedef struct PivotCommand {
     // Angle (rad) between the orbit tangent and the heading, measured toward the
     // orbit center; absolute-valued. Ignored when compute_inset_angle != 0.
     float inset_angle;
-    PivotTargetMode target_mode;
     PivotDirection direction;
     // Bool: when nonzero, inset_angle is ignored and the inset is derived from a
     // linear model of the peak angular velocity (centrifugal lean).
     uint8_t compute_inset_angle;
-    uint8_t reserved;
-} PivotCommand;
-assert_size(PivotCommand, 32);
+    uint8_t reserved[2];
+} PointPivotCommand;
+assert_size(PointPivotCommand, 28);
 
-typedef struct PivotTelemetry {
+typedef struct HeadingPivotTelemetry {
     uint32_t reserved;
-} PivotTelemetry;
-assert_size(PivotTelemetry, 4);
+} HeadingPivotTelemetry;
+assert_size(HeadingPivotTelemetry, 4);
 
-typedef struct ExtendedPivotTelemetry {
-    PivotCommand cmd_echo;
-} ExtendedPivotTelemetry;
-assert_size(ExtendedPivotTelemetry, 32);
+typedef struct PointPivotTelemetry {
+    uint32_t reserved;
+} PointPivotTelemetry;
+assert_size(PointPivotTelemetry, 4);
+
+typedef struct ExtendedHeadingPivotTelemetry {
+    HeadingPivotCommand cmd_echo;
+} ExtendedHeadingPivotTelemetry;
+assert_size(ExtendedHeadingPivotTelemetry, 24);
+
+typedef struct ExtendedPointPivotTelemetry {
+    PointPivotCommand cmd_echo;
+} ExtendedPointPivotTelemetry;
+assert_size(ExtendedPointPivotTelemetry, 28);

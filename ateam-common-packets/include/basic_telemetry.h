@@ -16,7 +16,8 @@ typedef union BodyControlTelemetry {
         LocalVelocityTelemetry local_vel;
         GlobalAccelerationTelemetry global_acc;
         LocalAccelerationTelemetry local_acc;
-        PivotTelemetry pivot;
+        HeadingPivotTelemetry heading_pivot;
+        PointPivotTelemetry point_pivot;
 } BodyControlTelemetry __attribute__((aligned (4)));
 assert_size(BodyControlTelemetry, 4);
 

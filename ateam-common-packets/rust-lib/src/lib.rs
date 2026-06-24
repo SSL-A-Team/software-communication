@@ -4,7 +4,7 @@
 #![allow(non_snake_case)]
 #![feature(const_cmp)]
 
-use crate::bindings::{BasicControl, BodyControlMode, ExtendedTelemetry, GlobalAccelerationCommand, GlobalPositionCommand, GlobalVelocityCommand, LocalAccelerationCommand, LocalVelocityCommand, PivotCommand, RadioHeader};
+use crate::bindings::{BasicControl, BodyControlMode, ExtendedTelemetry, GlobalAccelerationCommand, GlobalPositionCommand, GlobalVelocityCommand, HeadingPivotCommand, LocalAccelerationCommand, LocalVelocityCommand, PointPivotCommand, RadioHeader};
 
 pub mod bindings;
 pub mod radio;
@@ -52,9 +52,16 @@ pub fn is_bcm_local_accel_safe(gpc: &LocalAccelerationCommand) -> bool {
         && gpc.local_alpha.is_finite()
 }
 
-pub fn is_bcm_pivot_safe(gpc: &PivotCommand) -> bool {
+pub fn is_bcm_heading_pivot_safe(gpc: &HeadingPivotCommand) -> bool {
     gpc.global_theta.is_finite()
-        && gpc.target_x.is_finite()
+        && gpc.max_angular_acc.is_finite()
+        && gpc.max_angular_vel.is_finite()
+        && gpc.orbit_radius.is_finite()
+        && gpc.inset_angle.is_finite()
+}
+
+pub fn is_bcm_point_pivot_safe(gpc: &PointPivotCommand) -> bool {
+    gpc.target_x.is_finite()
         && gpc.target_y.is_finite()
         && gpc.max_angular_acc.is_finite()
         && gpc.max_angular_vel.is_finite()
@@ -73,7 +80,8 @@ pub fn is_basic_control_packet_safe(basic_control: &BasicControl) -> bool {
         BodyControlMode::BCM_LOCAL_VELOCITY => is_bcm_local_vel_safe(unsafe { &basic_control.cmd.local_vel }),
         BodyControlMode::BCM_GLOBAL_ACCEL => is_bcm_global_accel_safe(unsafe { &basic_control.cmd.global_acc }),
         BodyControlMode::BCM_LOCAL_ACCEL => is_bcm_local_accel_safe(unsafe { &basic_control.cmd.local_acc }),
-        BodyControlMode::BCM_PIVOT => is_bcm_pivot_safe(unsafe { &basic_control.cmd.pivot }),
+        BodyControlMode::BCM_HEADING_PIVOT => is_bcm_heading_pivot_safe(unsafe { &basic_control.cmd.heading_pivot }),
+        BodyControlMode::BCM_POINT_PIVOT => is_bcm_point_pivot_safe(unsafe { &basic_control.cmd.point_pivot }),
         _ => false
     };
 
