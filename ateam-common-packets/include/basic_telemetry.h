@@ -26,6 +26,7 @@ typedef struct BasicTelemetry {
     uint8_t control_data_sequence_number;
     BodyControlMode body_control_mode;
     uint8_t reserved1;
+    // 4 bytes
 
     uint32_t power_error : 1;
     uint32_t power_board_error : 1;
@@ -55,12 +56,19 @@ typedef struct BasicTelemetry {
     uint32_t kicker_available : 1;
     uint32_t controller_reset : 1;
     uint32_t _reserved : 5;
-    
+    // 4 bytes
+
     uint16_t battery_percent;
     uint16_t kicker_charge_percent;
+    // 4 bytes
 
-    // Body control command
+    // Body control mode telemetry
     BodyControlTelemetry control_telem;
     // 4 bytes
+
+    // Quantized KF state estimate (mirrors kf_body_pos/vel_estimate in BodyControlExtendedTelemetry)
+    int16_t kf_body_pos_estimate[3];  // [x (mm), y (mm), theta (mrad)], 1 LSB per unit
+    int16_t kf_body_vel_estimate[3];  // [vx (mm/s), vy (mm/s), omega (mrad/s)], 1 LSB per unit
+    // 12 bytes
 } BasicTelemetry;
-assert_size(BasicTelemetry, 16);
+assert_size(BasicTelemetry, 4 + 4 + 4 + 4 + 6 + 6);
