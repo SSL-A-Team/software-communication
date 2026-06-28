@@ -39,12 +39,13 @@ typedef struct BasicControl {
     uint32_t request_shutdown : 1;
     uint32_t reboot_robot : 1;
     uint32_t game_state_in_stop : 1;
+    uint32_t game_state_in_halt : 1;
     uint32_t emergency_stop : 1;
     uint32_t wheel_vel_control_enabled : 1;
     uint32_t wheel_torque_control_enabled : 1;
     uint32_t vision_update: 1;
     uint32_t reset_controller : 1;
-    uint32_t reserved1: 24;
+    uint32_t reserved1: 23;
     // 4 bytes
 
     // Vision update
