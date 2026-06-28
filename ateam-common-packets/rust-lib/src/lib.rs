@@ -75,6 +75,7 @@ pub fn is_basic_control_packet_safe(basic_control: &BasicControl) -> bool {
 
     let body_control_command_safe = match basic_control.body_control_mode {
         BodyControlMode::BCM_OFF => true,
+        BodyControlMode::BCM_ESTOP_BRAKE => true,
         BodyControlMode::BCM_GLOBAL_POSITION => is_bcm_global_position_safe(unsafe { &basic_control.cmd.global_pos }),
         BodyControlMode::BCM_GLOBAL_VELOCITY => is_bcm_global_vel_safe(unsafe { &basic_control.cmd.global_vel }),
         BodyControlMode::BCM_LOCAL_VELOCITY => is_bcm_local_vel_safe(unsafe { &basic_control.cmd.local_vel }),
