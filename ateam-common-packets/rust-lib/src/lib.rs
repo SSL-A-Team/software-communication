@@ -71,7 +71,7 @@ pub fn is_bcm_point_pivot_safe(gpc: &PointPivotCommand) -> bool {
 
 pub fn is_basic_control_packet_safe(basic_control: &BasicControl) -> bool {
     let vision_update_safe = basic_control.vision_position_update.iter().all(|vis| vis.is_finite());
-    let kicker_command_safe = basic_control.kick_vel.is_finite() && basic_control.dribbler_speed.is_finite();
+    let kicker_command_safe = basic_control.kick_vel.is_finite() && basic_control.dribbler_setpoint.is_finite();
 
     let body_control_command_safe = match basic_control.body_control_mode {
         BodyControlMode::BCM_OFF => true,
