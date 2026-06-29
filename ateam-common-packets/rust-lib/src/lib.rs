@@ -4,7 +4,7 @@
 #![allow(non_snake_case)]
 #![feature(const_cmp)]
 
-use crate::bindings::{BasicControl, BodyControlMode, ExtendedTelemetry, GlobalAccelerationCommand, GlobalPositionCommand, GlobalVelocityCommand, HeadingPivotCommand, LocalAccelerationCommand, LocalVelocityCommand, PointPivotCommand, RadioHeader};
+use crate::bindings::{BasicControl, BodyControlMode, ExtendedTelemetry, GlobalAccelerationCommand, GlobalPositionCommand, GlobalVelocityCommand, HeadingPivotCommand, HeadingLineCommand, LocalAccelerationCommand, LocalVelocityCommand, PointPivotCommand, PointLineCommand, RadioHeader};
 
 pub mod bindings;
 pub mod radio;
@@ -69,6 +69,39 @@ pub fn is_bcm_point_pivot_safe(gpc: &PointPivotCommand) -> bool {
         && gpc.inset_angle.is_finite()
 }
 
+pub fn is_bcm_heading_line_safe(c: &HeadingLineCommand) -> bool {
+    c.start_x.is_finite()
+        && c.start_y.is_finite()
+        && c.dir_x.is_finite()
+        && c.dir_y.is_finite()
+        && c.line_velocity.is_finite()
+        && c.global_theta.is_finite()
+        && c.max_vel_colinear.is_finite()
+        && c.max_vel_perp.is_finite()
+        && c.max_vel_angular.is_finite()
+        && c.max_accel_colinear.is_finite()
+        && c.max_accel_perp.is_finite()
+        && c.max_accel_angular.is_finite()
+        && c.colinear_start_thresh.is_finite()
+}
+
+pub fn is_bcm_point_line_safe(c: &PointLineCommand) -> bool {
+    c.start_x.is_finite()
+        && c.start_y.is_finite()
+        && c.dir_x.is_finite()
+        && c.dir_y.is_finite()
+        && c.line_velocity.is_finite()
+        && c.target_x.is_finite()
+        && c.target_y.is_finite()
+        && c.max_vel_colinear.is_finite()
+        && c.max_vel_perp.is_finite()
+        && c.max_vel_angular.is_finite()
+        && c.max_accel_colinear.is_finite()
+        && c.max_accel_perp.is_finite()
+        && c.max_accel_angular.is_finite()
+        && c.colinear_start_thresh.is_finite()
+}
+
 pub fn is_basic_control_packet_safe(basic_control: &BasicControl) -> bool {
     let vision_update_safe = basic_control.vision_position_update.iter().all(|vis| vis.is_finite());
     let kicker_command_safe = basic_control.kick_vel.is_finite() && basic_control.dribbler_setpoint.is_finite();
@@ -83,6 +116,8 @@ pub fn is_basic_control_packet_safe(basic_control: &BasicControl) -> bool {
         BodyControlMode::BCM_LOCAL_ACCEL => is_bcm_local_accel_safe(unsafe { &basic_control.cmd.local_acc }),
         BodyControlMode::BCM_HEADING_PIVOT => is_bcm_heading_pivot_safe(unsafe { &basic_control.cmd.heading_pivot }),
         BodyControlMode::BCM_POINT_PIVOT => is_bcm_point_pivot_safe(unsafe { &basic_control.cmd.point_pivot }),
+        BodyControlMode::BCM_HEADING_LINE => is_bcm_heading_line_safe(unsafe { &basic_control.cmd.heading_line }),
+        BodyControlMode::BCM_POINT_LINE => is_bcm_point_line_safe(unsafe { &basic_control.cmd.point_line }),
         _ => false
     };
 

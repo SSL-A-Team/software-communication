@@ -1,5 +1,5 @@
 use nalgebra::Vector3;
-use crate::{bindings::{BasicControl, BasicTelemetry, BodyControlExtendedTelemetry, BodyControlManeuverExtendedTelemetry, BodyControlMode, BodyControlTelemetry, ExtendedGlobalAccelerationTelemetry, ExtendedGlobalPositionTelemetry, ExtendedGlobalVelocityTelemetry, ExtendedHeadingPivotTelemetry, ExtendedLocalAccelerationTelemetry, ExtendedLocalVelocityTelemetry, ExtendedPointPivotTelemetry, GlobalAccelerationCommand, GlobalAccelerationTelemetry, GlobalPositionCommand, GlobalPositionTelemetry, GlobalVelocityCommand, GlobalVelocityTelemetry, HeadingPivotCommand, LocalAccelerationCommand, LocalAccelerationTelemetry, LocalVelocityCommand, LocalVelocityTelemetry, ParameterCommand, PointPivotCommand}, is_basic_control_packet_safe};
+use crate::{bindings::{BasicControl, BasicTelemetry, BodyControlExtendedTelemetry, BodyControlManeuverExtendedTelemetry, BodyControlMode, BodyControlTelemetry, ExtendedGlobalAccelerationTelemetry, ExtendedGlobalPositionTelemetry, ExtendedGlobalVelocityTelemetry, ExtendedHeadingPivotTelemetry, ExtendedHeadingLineTelemetry, ExtendedLocalAccelerationTelemetry, ExtendedLocalVelocityTelemetry, ExtendedPointPivotTelemetry, ExtendedPointLineTelemetry, GlobalAccelerationCommand, GlobalAccelerationTelemetry, GlobalPositionCommand, GlobalPositionTelemetry, GlobalVelocityCommand, GlobalVelocityTelemetry, HeadingPivotCommand, HeadingLineCommand, LocalAccelerationCommand, LocalAccelerationTelemetry, LocalVelocityCommand, LocalVelocityTelemetry, ParameterCommand, PointPivotCommand, PointLineCommand}, is_basic_control_packet_safe};
 
 #[derive(Copy, Clone)]
 pub enum DataPacket {
@@ -16,6 +16,8 @@ pub enum ManeuverCommand {
     LocalAcceleration(LocalAccelerationCommand),
     HeadingPivot(HeadingPivotCommand),
     PointPivot(PointPivotCommand),
+    HeadingLine(HeadingLineCommand),
+    PointLine(PointLineCommand),
 }
 
 impl Copy for ManeuverCommand {}
@@ -82,6 +84,37 @@ impl PartialEq for ManeuverCommand {
                     && a.direction == b.direction
                     && a.compute_inset_angle == b.compute_inset_angle
             }
+            (Self::HeadingLine(a), Self::HeadingLine(b)) => {
+                a.start_x == b.start_x
+                    && a.start_y == b.start_y
+                    && a.dir_x == b.dir_x
+                    && a.dir_y == b.dir_y
+                    && a.line_velocity == b.line_velocity
+                    && a.global_theta == b.global_theta
+                    && a.max_vel_colinear == b.max_vel_colinear
+                    && a.max_vel_perp == b.max_vel_perp
+                    && a.max_vel_angular == b.max_vel_angular
+                    && a.max_accel_colinear == b.max_accel_colinear
+                    && a.max_accel_perp == b.max_accel_perp
+                    && a.max_accel_angular == b.max_accel_angular
+                    && a.colinear_start_thresh == b.colinear_start_thresh
+            }
+            (Self::PointLine(a), Self::PointLine(b)) => {
+                a.start_x == b.start_x
+                    && a.start_y == b.start_y
+                    && a.dir_x == b.dir_x
+                    && a.dir_y == b.dir_y
+                    && a.line_velocity == b.line_velocity
+                    && a.target_x == b.target_x
+                    && a.target_y == b.target_y
+                    && a.max_vel_colinear == b.max_vel_colinear
+                    && a.max_vel_perp == b.max_vel_perp
+                    && a.max_vel_angular == b.max_vel_angular
+                    && a.max_accel_colinear == b.max_accel_colinear
+                    && a.max_accel_perp == b.max_accel_perp
+                    && a.max_accel_angular == b.max_accel_angular
+                    && a.colinear_start_thresh == b.colinear_start_thresh
+            }
             _ => false,
         }
     }
@@ -107,6 +140,8 @@ pub enum ManeuverExtendedTelemetry {
     LocalAcceleration(ExtendedLocalAccelerationTelemetry),
     HeadingPivot(ExtendedHeadingPivotTelemetry),
     PointPivot(ExtendedPointPivotTelemetry),
+    HeadingLine(ExtendedHeadingLineTelemetry),
+    PointLine(ExtendedPointLineTelemetry),
 }
 
 impl GlobalPositionCommand {
@@ -182,6 +217,8 @@ impl BasicControl {
                 BodyControlMode::BCM_LOCAL_ACCEL => ManeuverCommand::LocalAcceleration(self.cmd.local_acc),
                 BodyControlMode::BCM_HEADING_PIVOT => ManeuverCommand::HeadingPivot(self.cmd.heading_pivot),
                 BodyControlMode::BCM_POINT_PIVOT => ManeuverCommand::PointPivot(self.cmd.point_pivot),
+                BodyControlMode::BCM_HEADING_LINE => ManeuverCommand::HeadingLine(self.cmd.heading_line),
+                BodyControlMode::BCM_POINT_LINE => ManeuverCommand::PointLine(self.cmd.point_line),
                 _ => ManeuverCommand::Off,
             }
         }   
@@ -251,6 +288,14 @@ impl BodyControlExtendedTelemetry {
             ManeuverExtendedTelemetry::PointPivot(t) => {
                 self.body_control_mode = BodyControlMode::BCM_POINT_PIVOT;
                 self.maneuver = BodyControlManeuverExtendedTelemetry { point_pivot: t };
+            }
+            ManeuverExtendedTelemetry::HeadingLine(t) => {
+                self.body_control_mode = BodyControlMode::BCM_HEADING_LINE;
+                self.maneuver = BodyControlManeuverExtendedTelemetry { heading_line: t };
+            }
+            ManeuverExtendedTelemetry::PointLine(t) => {
+                self.body_control_mode = BodyControlMode::BCM_POINT_LINE;
+                self.maneuver = BodyControlManeuverExtendedTelemetry { point_line: t };
             }
         }
     }

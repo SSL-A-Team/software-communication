@@ -11,6 +11,8 @@ typedef union BodyControlManeuverExtendedTelemetry {
     ExtendedLocalAccelerationTelemetry local_acc;
     ExtendedHeadingPivotTelemetry heading_pivot;
     ExtendedPointPivotTelemetry point_pivot;
+    ExtendedHeadingLineTelemetry heading_line;
+    ExtendedPointLineTelemetry point_line;
 } BodyControlManeuverExtendedTelemetry __attribute__((aligned (4)));
 
 typedef struct BodyControlExtendedTelemetry {
@@ -35,4 +37,4 @@ typedef struct BodyControlExtendedTelemetry {
     float body_accel_u[3];  // body accel control outputs after control policy
     float body_accel_u_fric_comp[3];  // body accel control outputs after control policy with friction compensation added in
 } BodyControlExtendedTelemetry;
-assert_size(BodyControlExtendedTelemetry, 4 + 28 + 12*3*4);
+assert_size(BodyControlExtendedTelemetry, 4 + 56 + 12*3*4);
