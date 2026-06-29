@@ -9,6 +9,7 @@
 #include "robot_maneuvers/global_acceleration.h"
 #include "robot_maneuvers/local_acceleration.h"
 #include "robot_maneuvers/pivot.h"
+#include "robot_maneuvers/line.h"
 
 typedef enum BodyControlMode : uint8_t {
     BCM_OFF = 0,
@@ -19,7 +20,9 @@ typedef enum BodyControlMode : uint8_t {
     BCM_GLOBAL_ACCEL = 13,
     BCM_LOCAL_ACCEL = 14,
     BCM_HEADING_PIVOT = 20,
-    BCM_POINT_PIVOT = 21
+    BCM_POINT_PIVOT = 21,
+    BCM_HEADING_LINE = 30,
+    BCM_POINT_LINE = 31
     // add additional maneuvers and modes here
 } BodyControlMode;
 assert_size(BodyControlMode, 1);
@@ -32,8 +35,10 @@ typedef union BodyControlCommand {
         LocalAccelerationCommand local_acc;
         HeadingPivotCommand heading_pivot;
         PointPivotCommand point_pivot;
+        HeadingLineCommand heading_line;
+        PointLineCommand point_line;
 } BodyControlCommand __attribute__((aligned (4)));
-assert_size(BodyControlCommand, 28);
+assert_size(BodyControlCommand, 56);
 
 typedef struct BasicControl {
     // Bit field flags
@@ -67,6 +72,6 @@ typedef struct BasicControl {
 
     // Body control command
     BodyControlCommand cmd;
-    // 28 bytes
+    // 56 bytes
 } BasicControl;
-assert_size(BasicControl, 4 + 4 + 12 + 28 + 8);
+assert_size(BasicControl, 4 + 4 + 12 + 56 + 8);
