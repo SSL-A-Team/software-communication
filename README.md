@@ -24,7 +24,12 @@ make              # build Rust bindings
 
 ## Wireshark Dissector
 
-[`wireshark/ateam_radio.lua`](wireshark/ateam_radio.lua) decodes radio link traffic in Wireshark. Supports both the legacy C struct format and the new proto wire format, with auto-detection. Setup instructions are in the file header.
+[`wireshark/`](wireshark/README.md) — Lua dissector for the radio link. Decodes `CRC32 | varint(len) | RadioPacket` frames; delegates field decoding to Wireshark's built-in protobuf dissector using the `.proto` files in this repo.
+
+```sh
+make install-wireshark-plugin    # install to Wireshark personal plugins directory
+make uninstall-wireshark-plugin  # remove it
+```
 
 ## Sub-package READMEs
 
