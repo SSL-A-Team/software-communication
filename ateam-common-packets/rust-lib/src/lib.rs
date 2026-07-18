@@ -8,6 +8,8 @@ use crate::bindings::{BasicControl, BodyControlMode, ExtendedTelemetry, GlobalAc
 
 pub mod bindings;
 pub mod radio;
+pub mod proto_packets;
+pub mod translation;
 
 // TODO these are assuming the biggest packet doesn't change... const core::cmp::max is still unstable. We
 // can fix this on the next major rust version update.
@@ -106,6 +108,8 @@ pub fn is_basic_control_packet_safe(basic_control: &BasicControl) -> bool {
     let vision_update_safe = basic_control.vision_position_update.iter().all(|vis| vis.is_finite());
     let kicker_command_safe = basic_control.kick_vel.is_finite() && basic_control.dribbler_setpoint.is_finite();
 
+    // SAFETY: body_control_mode is the discriminant written alongside the union;
+    // each unsafe arm only reads the union field that matches the discriminant.
     let body_control_command_safe = match basic_control.body_control_mode {
         BodyControlMode::BCM_OFF => true,
         BodyControlMode::BCM_ESTOP_BRAKE => true,

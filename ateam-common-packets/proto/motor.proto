@@ -1,0 +1,65 @@
+syntax = "proto3";
+package ateam;
+
+import "ateam_options.proto";
+
+// Bitmask constants for CcmTelemetry.error_flags (16-bit bitfield in C).
+// Test a bit: (error_flags & CcmErrorFlag.X) != 0
+enum CcmErrorFlag {
+    CCM_ERR_NONE = 0;
+    CCM_ERR_MASTER_ERROR = 1;                  // bit 0
+    CCM_ERR_HALL_POWER = 2;                    // bit 1
+    CCM_ERR_HALL_DISCONNECTED = 4;             // bit 2
+    CCM_ERR_BLDC_TRANSITION = 8;               // bit 3
+    CCM_ERR_BLDC_COMMUTATION_WATCHDOG = 16;    // bit 4
+    CCM_ERR_ENC_DISCONNECTED = 32;             // bit 5
+    CCM_ERR_OVERCURRENT = 64;                  // bit 6
+    CCM_ERR_UNDERVOLTAGE = 128;                // bit 7
+    CCM_ERR_OVERVOLTAGE = 256;                 // bit 8
+    CCM_ERR_TORQUE_LIMITED = 512;              // bit 9
+    CCM_ERR_CONTROL_LOOP_TIME = 1024;          // bit 10
+    CCM_ERR_RESET_WATCHDOG_INDEPENDENT = 2048; // bit 11
+    CCM_ERR_RESET_WATCHDOG_WINDOW = 4096;      // bit 12
+    CCM_ERR_RESET_LOW_POWER = 8192;            // bit 13
+    CCM_ERR_RESET_SOFTWARE = 16384;            // bit 14
+    CCM_ERR_RESET_PIN = 32768;                 // bit 15
+}
+
+// Motor closed-loop control mode (maps to CcmMotionControlType in stspin_current.h).
+enum CcmMotionControlType {
+    CCM_MCT_MOTOR_OFF = 0;
+    CCM_MCT_DUTY_OPENLOOP = 1;
+    CCM_MCT_VOLTAGE_OPENLOOP = 2;
+    CCM_MCT_CURRENT = 3;
+    CCM_MCT_VELOCITY = 4;
+    CCM_MCT_VELOCITY_CURRENT = 5;
+}
+
+// Per-motor current ADC samples and closed-loop state.
+// Maps to CcmCurrentTelemetry in stspin_current.h (raw: always 48 bytes).
+message CcmCurrentTelemetry {
+    uint32 bus_voltage_mv = 1;
+    uint32 motor_voltage_cmd_mv = 2;
+    sint32 current_setpoint_ma = 3;
+    sint32 hall_vel_est_drads = 4;
+    // 20 ADC current samples (C: uint16_t[20], max_len enforced in build.rs).
+    repeated uint32 current_samples_ma = 5;
+}
+
+// Per-motor velocity closed-loop state.
+// Maps to CcmVelocityTelemetry in stspin_current.h (raw: always 8 bytes).
+message CcmVelocityTelemetry {
+    float vel_setpoint_rads = 1;
+    float wheel_vel_rads = 2;
+}
+
+// Full per-motor telemetry.
+// Maps to CcmTelemetry in stspin_current.h (raw: always 60 bytes).
+// error_flags is a bitmask — see CcmErrorFlag for bit definitions.
+message CcmTelemetry {
+    uint32 error_flags = 1 [(ateam.bitmask).flags_enum = "CcmErrorFlag"];
+    CcmMotionControlType motion_control_type = 2;
+    uint32 gain_stage_index = 3;
+    CcmCurrentTelemetry current_telem = 4;
+    CcmVelocityTelemetry velocity_telem = 5;
+}

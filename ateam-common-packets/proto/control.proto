@@ -1,0 +1,52 @@
+syntax = "proto3";
+package ateam;
+
+import "maneuvers.proto";
+
+// Robot command packet sent from AI software to robot over the radio link.
+// Maps to BasicControl in basic_control.h (raw: always 84 bytes).
+//
+// Body control mode is implied by the oneof arm that is set:
+//   no cmd arm, estop_brake = false  → BCM_OFF
+//   no cmd arm, estop_brake = true   → BCM_ESTOP_BRAKE
+//   global_pos set                   → BCM_GLOBAL_POSITION
+//   ... etc.
+message BasicControl {
+    // Maneuver command — fields 1-9 use 1-byte wire tags.
+    oneof cmd {
+        GlobalPositionCommand global_pos = 1;
+        GlobalVelocityCommand global_vel = 2;
+        LocalVelocityCommand local_vel = 3;
+        GlobalAccelerationCommand global_acc = 4;
+        LocalAccelerationCommand local_acc = 5;
+        HeadingPivotCommand heading_pivot = 6;
+        PointPivotCommand point_pivot = 7;
+        HeadingLineCommand heading_line = 8;
+        PointLineCommand point_line = 9;
+    }
+
+    // Frequently non-zero fields — fields 10-15 use 1-byte wire tags.
+    bool estop_brake = 10;
+    KickRequest kick_request = 11;
+    float kick_vel = 12;
+    DribblerMode dribbler_mode = 13;
+    float dribbler_setpoint = 14;
+
+    // Infrequent control flags — fields 16+ use 2-byte wire tags.
+    bool request_shutdown = 16;
+    bool reboot_robot = 17;
+    bool game_state_in_stop = 18;
+    bool game_state_in_halt = 19;
+    bool emergency_stop = 20;
+    bool wheel_vel_control_enabled = 21;
+    bool wheel_torque_control_enabled = 22;
+    bool reset_controller = 23;
+
+    // Vision pose update — valid only when vision_update_valid = true.
+    bool vision_update_valid = 24;
+    float vision_x = 25;
+    float vision_y = 26;
+    float vision_theta = 27;
+
+    uint32 play_song = 28;
+}

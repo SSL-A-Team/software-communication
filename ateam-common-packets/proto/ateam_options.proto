@@ -1,0 +1,23 @@
+syntax = "proto3";
+package ateam;
+
+import "google/protobuf/descriptor.proto";
+
+// Bitmask field annotation.
+// Attach to a uint32 field to declare it as a packed bitfield whose named
+// bits are defined by an enum in the same package.
+//
+// Example:
+//   uint32 status_flags = 4 [(ateam.bitmask).flags_enum = "MyStatusFlag"];
+//
+// The code generators (ROS2 .msg plugin, Python helper generator) use this
+// to produce typed bitfield accessors and inline the flag constants.
+// The annotation is compile-time metadata only — it has no wire encoding.
+message BitfieldOptions {
+    // Name of the enum (in the same package) whose values define the flag bits.
+    string flags_enum = 1;
+}
+
+extend google.protobuf.FieldOptions {
+    BitfieldOptions bitmask = 50000;
+}

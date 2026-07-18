@@ -1,0 +1,14 @@
+syntax = "proto3";
+package ateam_test;
+import "ateam_options.proto";
+
+enum TestFlag {
+    TEST_NONE = 0;
+    TEST_A = 1;
+    TEST_B = 2;
+}
+
+// int32 field (not uint32) with bitmask annotation — should error.
+message BadBitmaskType {
+    int32 error_flags = 1 [(ateam.bitmask).flags_enum = "TestFlag"];
+}

@@ -1,0 +1,8 @@
+syntax = "proto3";
+package ateam_test;
+import "ateam_options.proto";
+
+// uint32 field annotated with an enum name that doesn't exist — should error.
+message BadBitmaskEnum {
+    uint32 error_flags = 1 [(ateam.bitmask).flags_enum = "NonExistentEnum"];
+}

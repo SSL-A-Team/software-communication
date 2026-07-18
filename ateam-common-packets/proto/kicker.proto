@@ -1,0 +1,31 @@
+syntax = "proto3";
+package ateam;
+
+import "ateam_options.proto";
+import "motor.proto";
+
+// Bitmask constants for KickerTelemetry.status_flags (7-bit bitfield in C).
+// Test a bit: (status_flags & KickerStatusFlag.X) != 0
+enum KickerStatusFlag {
+    KICKER_STATUS_NONE = 0;
+    KICKER_STATUS_ERROR_DETECTED = 1;          // bit 0
+    KICKER_STATUS_DRIBBLER_ERROR = 2;          // bit 1
+    KICKER_STATUS_POWER_DOWN_REQUESTED = 4;    // bit 2
+    KICKER_STATUS_POWER_DOWN_COMPLETE = 8;     // bit 3
+    KICKER_STATUS_BALL_DETECTED = 16;          // bit 4
+    KICKER_STATUS_CHARGE_FULL = 32;            // bit 5
+    KICKER_STATUS_DRIBBLER_FW_LOADED = 64;     // bit 6
+}
+
+// Kicker board telemetry.
+// Maps to KickerTelemetry in kicker.h (raw: always 76 bytes).
+// status_flags is a bitmask — see KickerStatusFlag.
+message KickerTelemetry {
+    uint32 status_flags = 1 [(ateam.bitmask).flags_enum = "KickerStatusFlag"];
+    uint32 charge_pct = 2;
+    float rail_voltage = 3;
+    float battery_voltage = 4;
+    // 4-byte firmware hash; fixed32 preserves all bit patterns without varint distortion.
+    fixed32 kicker_image_hash = 5;
+    CcmTelemetry dribbler_motor = 6;
+}

@@ -206,7 +206,8 @@ impl LocalAccelerationCommand {
 
 impl BasicControl {
     pub fn get_maneuver_command(&self) -> ManeuverCommand {
-        // union extraction is unsafe
+        // SAFETY: body_control_mode is the discriminant written alongside the union;
+        // we only access the arm that matches the discriminant value.
         unsafe {
             match self.body_control_mode {
                 BodyControlMode::BCM_OFF => ManeuverCommand::Off,

@@ -1,3 +1,9 @@
-# nix aritfacts
+# nix artifacts
 result
 result/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/

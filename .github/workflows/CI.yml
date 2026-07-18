@@ -25,3 +25,15 @@ jobs:
         shell: bash
         run: |
           nix develop -c make bindgen-packets-test
+      - name: Test Proto Plugin
+        shell: bash
+        run: |
+          nix develop -c make proto-plugin-test
+      - name: Test Proto C++ Conversion Plugin
+        shell: bash
+        run: |
+          nix develop -c make proto-cpp-plugin-test
+      - name: Test SSL League Proto Compatibility
+        shell: bash
+        run: |
+          nix develop -c make ssl-proto-test

@@ -1,0 +1,48 @@
+syntax = "proto3";
+package ateam;
+
+import "control.proto";
+import "diagnostics.proto";
+import "discovery.proto";
+import "robot_parameters.proto";
+import "telemetry.proto";
+
+// Top-level radio packet.
+//
+// The proto wire tag of the set oneof arm replaces the legacy CommandCode byte.
+// Field numbers intentionally match the old CC_* values so migration docs
+// can cross-reference directly (CC_CONTROL=61 → field 61 here, etc.).
+//
+// Wire framing: CRC32 || varint(len) || RadioPacket bytes.
+// CRC and length are transport-layer concerns; they are NOT proto fields.
+//
+// Omitted CC_* values (intentional):
+//   CC_ACK=1, CC_NACK=2, CC_GOODBYE=3 — transport-layer signals with no
+//   payload; handled by the framing layer, not the proto schema.
+message RadioPacket {
+    // Field numbers 1–3 are permanently reserved: they matched CC_ACK, CC_NACK,
+    // and CC_GOODBYE in the old C enum, which are transport-layer signals with no
+    // payload and are handled by the framing layer rather than the proto schema.
+    reserved 1, 2, 3;
+
+    oneof payload {
+        // Session management (bidirectional)
+        Keepalive         keepalive         = 4;   // CC_KEEPALIVE
+
+        // Discovery (CC_HELLO_REQ=21, CC_HELLO_RESP=22)
+        HelloRequest      hello_request     = 21;
+        HelloResponse     hello_response    = 22;
+
+        // Robot → software telemetry
+        BasicTelemetry    telemetry         = 41;  // CC_TELEMETRY
+        ExtendedTelemetry extended_telemetry = 42; // CC_CONTROL_DEBUG_TELEMETRY
+        ParameterCommand  parameter_command = 43;  // CC_ROBOT_PARAMETER_COMMAND
+        ErrorTelemetry    error_telemetry   = 44;  // CC_ERROR_TELEMETRY
+
+        // Software → robot
+        BasicControl      control           = 61;  // CC_CONTROL
+    }
+}
+
+// No-payload heartbeat. Sent periodically to keep the radio link alive.
+message Keepalive {}
