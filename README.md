@@ -7,6 +7,7 @@ Shared artifacts across the firmware/software boundary: packet definitions, prot
 ```
 ateam-common-packets/   Robot↔AI communication packet definitions (C headers, protos, Rust bindings)
 ssl-league-protobufs/   SSL league proto definitions (game controller, vision, simulation)
+wireshark/              Wireshark Lua dissector for the radio link
 flake.nix               Nix dev environment (protoc, Python, arm-none-eabi-gcc for bindgen)
 Makefile                Top-level build/test targets
 ```
@@ -20,6 +21,10 @@ nix develop       # enter dev shell (protoc, Python 3, arm-none-eabi-gcc, cargo)
 make test         # run all test suites
 make              # build Rust bindings
 ```
+
+## Wireshark Dissector
+
+[`wireshark/ateam_radio.lua`](wireshark/ateam_radio.lua) decodes radio link traffic in Wireshark. Supports both the legacy C struct format and the new proto wire format, with auto-detection. Setup instructions are in the file header.
 
 ## Sub-package READMEs
 
