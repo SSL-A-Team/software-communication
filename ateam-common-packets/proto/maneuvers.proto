@@ -1,0 +1,148 @@
+syntax = "proto3";
+package ateam;
+
+// Dribbler operating mode (maps to DribblerCommand in kicker.h).
+enum DribblerMode {
+    DM_DISABLE = 0;
+    DM_HARD_RECEIVE = 1;
+    DM_SOFT_RECEIVE = 2;
+    DM_DRIBBLE = 3;
+    DM_VELOCITY = 4;
+    DM_CURRENT = 5;
+}
+
+// Kick action requested by the AI.
+enum KickRequest {
+    KR_ARM = 0;
+    KR_DISABLE = 1;
+    KR_KICK_NOW = 2;
+    KR_KICK_TOUCH = 3;
+    KR_KICK_CAPTURED = 4;
+    KR_CHIP_NOW = 5;
+    KR_CHIP_TOUCH = 6;
+    KR_CHIP_CAPTURED = 7;
+}
+
+// Body controller operating mode (maps to BodyControlMode in basic_control.h).
+// Non-contiguous values match the C enum exactly so translations are a direct cast.
+enum BodyControlMode {
+    BCM_OFF = 0;
+    BCM_ESTOP_BRAKE = 1;
+    BCM_GLOBAL_POSITION = 10;
+    BCM_GLOBAL_VELOCITY = 11;
+    BCM_LOCAL_VELOCITY = 12;
+    BCM_GLOBAL_ACCEL = 13;
+    BCM_LOCAL_ACCEL = 14;
+    BCM_HEADING_PIVOT = 20;
+    BCM_POINT_PIVOT = 21;
+    BCM_HEADING_LINE = 30;
+    BCM_POINT_LINE = 31;
+}
+
+// ----- Maneuver command messages -----
+
+message GlobalPositionCommand {
+    float global_x = 1;
+    float global_y = 2;
+    float global_theta = 3;
+    float max_linear_vel = 4;
+    float max_angular_vel = 5;
+    float max_linear_acc = 6;
+    float max_angular_acc = 7;
+}
+
+message GlobalVelocityCommand {
+    float global_xd = 1;
+    float global_yd = 2;
+    float global_omega = 3;
+    float max_linear_acc = 4;
+    float max_angular_acc = 5;
+}
+
+message LocalVelocityCommand {
+    float local_xd = 1;
+    float local_yd = 2;
+    float local_omega = 3;
+    float max_linear_acc = 4;
+    float max_angular_acc = 5;
+}
+
+message GlobalAccelerationCommand {
+    float global_xdd = 1;
+    float global_ydd = 2;
+    float global_alpha = 3;
+}
+
+message LocalAccelerationCommand {
+    float local_xdd = 1;
+    float local_ydd = 2;
+    float local_alpha = 3;
+}
+
+message HeadingPivotCommand {
+    float global_theta = 1;
+    float max_angular_vel = 2;
+    float max_angular_acc = 3;
+    float orbit_radius = 4;
+    float inset_angle = 5;
+    // 0 = forward, 1 = backward (maps to PivotDirection enum in pivot.h).
+    uint32 direction = 6;
+    bool compute_inset_angle = 7;
+}
+
+message PointPivotCommand {
+    float target_x = 1;
+    float target_y = 2;
+    float max_angular_vel = 3;
+    float max_angular_acc = 4;
+    float orbit_radius = 5;
+    float inset_angle = 6;
+    uint32 direction = 7;
+    bool compute_inset_angle = 8;
+}
+
+message HeadingLineCommand {
+    float start_x = 1;
+    float start_y = 2;
+    float dir_x = 3;
+    float dir_y = 4;
+    float line_velocity = 5;
+    float global_theta = 6;
+    float max_vel_colinear = 7;
+    float max_vel_perp = 8;
+    float max_vel_angular = 9;
+    float max_accel_colinear = 10;
+    float max_accel_perp = 11;
+    float max_accel_angular = 12;
+    float colinear_start_thresh = 13;
+}
+
+message PointLineCommand {
+    float start_x = 1;
+    float start_y = 2;
+    float dir_x = 3;
+    float dir_y = 4;
+    float line_velocity = 5;
+    float target_x = 6;
+    float target_y = 7;
+    float max_vel_colinear = 8;
+    float max_vel_perp = 9;
+    float max_vel_angular = 10;
+    float max_accel_colinear = 11;
+    float max_accel_perp = 12;
+    float max_accel_angular = 13;
+    float colinear_start_thresh = 14;
+}
+
+// ----- Maneuver telemetry messages -----
+// Maps to BodyControlTelemetry union in basic_telemetry.h.
+// All variants are currently reserved (no payload bytes defined in C); fields
+// will be added here as the firmware populates them.
+
+message GlobalPositionTelemetry {}
+message GlobalVelocityTelemetry {}
+message LocalVelocityTelemetry {}
+message GlobalAccelerationTelemetry {}
+message LocalAccelerationTelemetry {}
+message HeadingPivotTelemetry {}
+message PointPivotTelemetry {}

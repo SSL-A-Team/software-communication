@@ -1,0 +1,77 @@
+#pragma once
+
+#include "../common.h"
+#include "../wire/kicker.h"
+
+#include "robot_maneuvers/global_position.h"
+#include "robot_maneuvers/global_velocity.h"
+#include "robot_maneuvers/local_velocity.h"
+#include "robot_maneuvers/global_acceleration.h"
+#include "robot_maneuvers/local_acceleration.h"
+#include "robot_maneuvers/pivot.h"
+#include "robot_maneuvers/line.h"
+
+typedef enum BodyControlMode : uint8_t {
+    BCM_OFF = 0,
+    BCM_ESTOP_BRAKE = 1,
+    BCM_GLOBAL_POSITION = 10,
+    BCM_GLOBAL_VELOCITY = 11,
+    BCM_LOCAL_VELOCITY = 12,
+    BCM_GLOBAL_ACCEL = 13,
+    BCM_LOCAL_ACCEL = 14,
+    BCM_HEADING_PIVOT = 20,
+    BCM_POINT_PIVOT = 21,
+    BCM_HEADING_LINE = 30,
+    BCM_POINT_LINE = 31
+    // add additional maneuvers and modes here
+} BodyControlMode;
+assert_size(BodyControlMode, 1);
+
+typedef union BodyControlCommand {
+        GlobalPositionCommand global_pos;
+        GlobalVelocityCommand global_vel;
+        LocalVelocityCommand local_vel;
+        GlobalAccelerationCommand global_acc;
+        LocalAccelerationCommand local_acc;
+        HeadingPivotCommand heading_pivot;
+        PointPivotCommand point_pivot;
+        HeadingLineCommand heading_line;
+        PointLineCommand point_line;
+} BodyControlCommand __attribute__((aligned (4)));
+assert_size(BodyControlCommand, 56);
+
+typedef struct BasicControl {
+    // Bit field flags
+    uint32_t request_shutdown : 1;
+    uint32_t reboot_robot : 1;
+    uint32_t game_state_in_stop : 1;
+    uint32_t game_state_in_halt : 1;
+    uint32_t emergency_stop : 1;
+    uint32_t wheel_vel_control_enabled : 1;
+    uint32_t wheel_torque_control_enabled : 1;
+    uint32_t vision_update: 1;
+    uint32_t reset_controller : 1;
+    uint32_t reserved1: 23;
+    // 4 bytes
+
+    // Vision update
+    float vision_position_update[3];
+    // 12 bytes
+
+    // Control mode and ancillary data
+    BodyControlMode body_control_mode;
+    KickRequest kick_request;
+    uint8_t play_song;
+    DribblerCommand dribbler_mode;
+    // 4 bytes
+
+    // Dribbler and kicker commands
+    float kick_vel; // m/s (also applies to chips)
+    float dribbler_setpoint;
+    // 8 bytes
+
+    // Body control command
+    BodyControlCommand cmd;
+    // 56 bytes
+} BasicControl;
+assert_size(BasicControl, 4 + 4 + 12 + 56 + 8);

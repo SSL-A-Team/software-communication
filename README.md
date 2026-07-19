@@ -1,15 +1,36 @@
-# Software Common Respository ![Build Status Badge](https://github.com/SSL-A-Team/common/actions/workflows/CI.yml/badge.svg)
+# Software Common Repository ![Build Status Badge](https://github.com/SSL-A-Team/common/actions/workflows/CI.yml/badge.svg)
 
-Contains software artifacts shared across the firmware/software boundary.
+Shared artifacts across the firmware/software boundary: packet definitions, proto schemas, and generated bindings.
 
-Sub folders contain relevant sub README files.
- - `ateam-common-packets/` - all packet definitions used in Robot\<-\>AI communications.
- - `radio-protocol/` - the top level radio communication spec (bot discovery, coms, etc)
+## Repository Structure
 
-# Development Setup
+```
+ateam-common-packets/   Robot↔AI communication packet definitions (C headers, protos, Rust bindings)
+ssl-league-protobufs/   SSL league proto definitions (game controller, vision, simulation)
+wireshark/              Wireshark Lua dissector for the radio link
+flake.nix               Nix dev environment (protoc, Python, arm-none-eabi-gcc for bindgen)
+Makefile                Top-level build/test targets
+```
 
-These artifacts are generally included in other projects that produce actual
-build artifacts. As such, there is no default setup. A nix flake is included
-to independently support bindgen if desired. Nix setup is described in
-the [firmware repository readme](https://github.com/SSL-A-Team/firmware/blob/main/README.md).
+## Development Setup
 
+A Nix flake provides all required tools. See the [firmware repository README](https://github.com/SSL-A-Team/firmware/blob/main/README.md) for Nix setup instructions.
+
+```sh
+nix develop       # enter dev shell (protoc, Python 3, arm-none-eabi-gcc, cargo)
+make test         # run all test suites
+make              # build Rust bindings
+```
+
+## Wireshark Dissector
+
+[`wireshark/`](wireshark/README.md) — Lua dissector for the radio link. Decodes `CRC32 | varint(len) | RadioPacket` frames; delegates field decoding to Wireshark's built-in protobuf dissector using the `.proto` files in this repo.
+
+```sh
+make install-wireshark-plugin    # install to Wireshark personal plugins directory
+make uninstall-wireshark-plugin  # remove it
+```
+
+## Sub-package READMEs
+
+- [`ateam-common-packets/README.md`](ateam-common-packets/README.md) — C headers, proto schemas, ROS2 msg generation, Rust bindings

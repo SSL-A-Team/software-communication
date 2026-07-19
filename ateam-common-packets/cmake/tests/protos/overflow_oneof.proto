@@ -1,0 +1,11 @@
+syntax = "proto3";
+package ateam_test;
+
+// Oneof with a field number exceeding uint8 range (256) — must fail at configure
+// time with a clear error naming the message, oneof, field, and the limit.
+message OverflowOneof {
+    oneof choice {
+        uint32 a = 1;
+        uint32 b = 256;
+    }
+}

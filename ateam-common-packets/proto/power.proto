@@ -1,0 +1,58 @@
+syntax = "proto3";
+package ateam;
+
+import "ateam_options.proto";
+
+// Bitmask constants for PowerTelemetry.status_flags (6-bit bitfield in C).
+// Test a bit: (status_flags & PowerStatusFlag.X) != 0
+enum PowerStatusFlag {
+    POWER_STATUS_NONE = 0;
+    POWER_STATUS_OK = 1;                       // bit 0: power_ok
+    POWER_STATUS_RAIL_3V3_OK = 2;              // bit 1
+    POWER_STATUS_RAIL_5V0_OK = 4;              // bit 2
+    POWER_STATUS_RAIL_12V0_OK = 8;             // bit 3
+    POWER_STATUS_HIGH_CURRENT_ALLOWED = 16;    // bit 4
+    POWER_STATUS_SHUTDOWN_REQUESTED = 32;      // bit 5
+}
+
+// Bitmask constants for BatteryInfo.status_flags (7-bit bitfield in C).
+// Test a bit: (status_flags & BatteryStatusFlag.X) != 0
+enum BatteryStatusFlag {
+    BATTERY_STATUS_NONE = 0;
+    BATTERY_STATUS_OK = 1;                     // bit 0
+    BATTERY_STATUS_BALANCE_CONNECTED = 2;      // bit 1
+    BATTERY_STATUS_LOW = 4;                    // bit 2
+    BATTERY_STATUS_CRITICAL = 8;               // bit 3
+    BATTERY_STATUS_CELL_LOW = 16;              // bit 4
+    BATTERY_STATUS_CELL_CRITICAL = 32;         // bit 5
+    BATTERY_STATUS_CELL_IMBALANCE_WARN = 64;   // bit 6
+}
+
+// 6S battery cell and pack telemetry.
+// Maps to BatteryInfo in power.h (raw: always 24 bytes).
+// status_flags is a bitmask — see BatteryStatusFlag.
+message BatteryInfo {
+    uint32 status_flags = 1 [(ateam.bitmask).flags_enum = "BatteryStatusFlag"];
+    uint32 battery_mv = 2;
+    uint32 cell1_mv = 3;
+    uint32 cell2_mv = 4;
+    uint32 cell3_mv = 5;
+    uint32 cell4_mv = 6;
+    uint32 cell5_mv = 7;
+    uint32 cell6_mv = 8;
+    uint32 battery_pct = 9;
+    uint32 cell1_pct = 10;
+    uint32 cell2_pct = 11;
+    uint32 cell3_pct = 12;
+    uint32 cell4_pct = 13;
+    uint32 cell5_pct = 14;
+    uint32 cell6_pct = 15;
+}
+
+// Power board telemetry.
+// Maps to PowerTelemetry in power.h (raw: always 28 bytes).
+// status_flags is a bitmask — see PowerStatusFlag.
+message PowerTelemetry {
+    uint32 status_flags = 1 [(ateam.bitmask).flags_enum = "PowerStatusFlag"];
+    BatteryInfo battery_info = 2;
+}

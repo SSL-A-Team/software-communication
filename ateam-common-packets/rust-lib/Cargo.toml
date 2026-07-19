@@ -12,6 +12,9 @@ path = "src/lib.rs"
 [build-dependencies]
 bindgen = "0.60.1"
 which = "4.4.0"
+micropb-gen = "0.6"
 
 [dependencies]
 nalgebra = { version = "0.34.0", default-features = false, features = ["libm", "macros"] }
+micropb = { version = "0.6", default-features = false, features = ["encode", "decode", "container-heapless-0-9"] }
+heapless = "0.9"

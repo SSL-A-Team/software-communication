@@ -1,0 +1,15 @@
+syntax = "proto3";
+package ateam_test;
+
+// Nested message and enum inside a message — both should error at configure time.
+message OuterMessage {
+    message InnerMessage {
+        uint32 value = 1;
+    }
+    enum InnerEnum {
+        INNER_NONE = 0;
+        INNER_A = 1;
+    }
+    uint32 x = 1;
+    InnerMessage inner = 2;
+}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+package ateam_test;
+
+// Non-sequential oneof field numbers — constants must use field numbers verbatim,
+// not sequential indices. Reordering arms in this file must not change the constants.
+message SparseOneof {
+    oneof choice {
+        uint32 a = 1;
+        uint32 b = 10;
+        uint32 c = 20;
+    }
+}

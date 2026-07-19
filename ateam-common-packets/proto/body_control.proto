@@ -1,0 +1,78 @@
+syntax = "proto3";
+package ateam;
+
+import "maneuvers.proto";
+
+// Body controller extended telemetry.
+// Maps to BodyControlExtendedTelemetry in body_control.h (raw: always 204 bytes).
+message BodyControlExtendedTelemetry {
+    BodyControlMode body_control_mode = 1;
+    bool vision_update = 2;
+
+    // Echo of the active maneuver command (fields 3-11 → 1-byte tags).
+    // Matches BodyControlManeuverExtendedTelemetry union in body_control.h.
+    oneof maneuver_echo {
+        GlobalPositionCommand global_pos = 3;
+        GlobalVelocityCommand global_vel = 4;
+        LocalVelocityCommand local_vel = 5;
+        GlobalAccelerationCommand global_acc = 6;
+        LocalAccelerationCommand local_acc = 7;
+        HeadingPivotCommand heading_pivot = 8;
+        PointPivotCommand point_pivot = 9;
+        HeadingLineCommand heading_line = 10;
+        PointLineCommand point_line = 11;
+    }
+
+    // IMU data — imu_gyro[3] and imu_accel[3] from body_control.h.
+    // Fields 12-15 → 1-byte tags; 16-17 → 2-byte tags.
+    float imu_gyro_x = 12;
+    float imu_gyro_y = 13;
+    float imu_gyro_z = 14;
+    float imu_accel_x = 15;
+    float imu_accel_y = 16;
+    float imu_accel_z = 17;
+
+    // Vision pose estimate — vision_pose[3].
+    float vision_pose_x = 18;
+    float vision_pose_y = 19;
+    float vision_pose_theta = 20;
+
+    // Trajectory setpoints — body_traj_pos[3] and body_traj_vel[3].
+    float traj_pos_x = 21;
+    float traj_pos_y = 22;
+    float traj_pos_theta = 23;
+    float traj_vel_x = 24;
+    float traj_vel_y = 25;
+    float traj_vel_omega = 26;
+
+    // Kalman filter predictions — kf_body_pos_prediction[3] and kf_body_vel_prediction[3].
+    float kf_pred_pos_x = 27;
+    float kf_pred_pos_y = 28;
+    float kf_pred_pos_theta = 29;
+    float kf_pred_vel_x = 30;
+    float kf_pred_vel_y = 31;
+    float kf_pred_vel_omega = 32;
+
+    // Kalman filter estimates — kf_body_pos_estimate[3] and kf_body_vel_estimate[3].
+    float kf_est_pos_x = 33;
+    float kf_est_pos_y = 34;
+    float kf_est_pos_theta = 35;
+    float kf_est_vel_x = 36;
+    float kf_est_vel_y = 37;
+    float kf_est_vel_omega = 38;
+
+    // Body velocity control outputs — body_vel_u[3].
+    float body_vel_u_x = 39;
+    float body_vel_u_y = 40;
+    float body_vel_u_omega = 41;
+
+    // Body acceleration control outputs — body_accel_u[3].
+    float body_accel_u_x = 42;
+    float body_accel_u_y = 43;
+    float body_accel_u_omega = 44;
+
+    // Friction-compensated acceleration — body_accel_u_fric_comp[3].
+    float body_accel_u_fric_x = 45;
+    float body_accel_u_fric_y = 46;
+    float body_accel_u_fric_omega = 47;
+}

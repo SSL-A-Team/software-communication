@@ -1,0 +1,32 @@
+syntax = "proto3";
+package ateam;
+
+enum TeamColor {
+    TC_YELLOW = 0;
+    TC_BLUE = 1;
+}
+
+// Sent by the AI software to identify and connect to a robot.
+// Git hashes provide exact version identification at handshake time,
+// replacing the need for a version field in individual packets.
+// Maps to HelloRequest in discovery.h (raw: always 16 bytes).
+message HelloRequest {
+    uint32 robot_id = 1;
+    TeamColor color = 2;
+    bool coms_repo_dirty = 3;
+    bool controls_repo_dirty = 4;
+    bool firmware_repo_dirty = 5;
+    // 4-byte git hashes; fixed32 preserves all bit patterns without varint distortion.
+    fixed32 coms_hash = 6;
+    fixed32 controls_hash = 7;
+    fixed32 firmware_hash = 8;
+}
+
+// Sent by the robot in response to a HelloRequest.
+// Maps to HelloResponse in discovery.h (raw: always 6 bytes).
+message HelloResponse {
+    // Robot's IPv4 address, packed as 4 bytes big-endian.
+    fixed32 ipv4 = 1;
+    // UDP port. Valid range: 1–65535 (uint16 in C); values above 65535 are invalid.
+    uint32 port = 2;
+}

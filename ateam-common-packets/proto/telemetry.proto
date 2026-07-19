@@ -1,0 +1,90 @@
+syntax = "proto3";
+package ateam;
+
+import "ateam_options.proto";
+import "maneuvers.proto";
+import "motor.proto";
+import "power.proto";
+import "kicker.proto";
+import "body_control.proto";
+
+// Bitmask constants for BasicTelemetry.status_flags (27-bit bitfield in C).
+// Test a bit: (status_flags & BasicTelemetryFlag.X) != 0
+// Note: bits 24-25 are availability flags (not errors) but share the same bitfield.
+enum BasicTelemetryFlag {
+    BTEL_FLAG_NONE = 0;
+    BTEL_FLAG_POWER_ERROR = 1;                 // bit 0
+    BTEL_FLAG_POWER_BOARD_ERROR = 2;           // bit 1
+    BTEL_FLAG_BATTERY_ERROR = 4;               // bit 2
+    BTEL_FLAG_BATTERY_LOW = 8;                 // bit 3
+    BTEL_FLAG_BATTERY_CRIT = 16;              // bit 4
+    BTEL_FLAG_SHUTDOWN_PENDING = 32;          // bit 5
+    BTEL_FLAG_TIPPED_ERROR = 64;              // bit 6
+    BTEL_FLAG_BREAKBEAM_ERROR = 128;          // bit 7
+    BTEL_FLAG_BREAKBEAM_BALL_DETECTED = 256;  // bit 8
+    BTEL_FLAG_ACCEL_0_ERROR = 512;            // bit 9
+    BTEL_FLAG_ACCEL_1_ERROR = 1024;           // bit 10
+    BTEL_FLAG_GYRO_0_ERROR = 2048;            // bit 11
+    BTEL_FLAG_GYRO_1_ERROR = 4096;           // bit 12
+    BTEL_FLAG_MOTOR_FL_GENERAL = 8192;        // bit 13
+    BTEL_FLAG_MOTOR_FL_HALL = 16384;         // bit 14
+    BTEL_FLAG_MOTOR_BL_GENERAL = 32768;      // bit 15
+    BTEL_FLAG_MOTOR_BL_HALL = 65536;        // bit 16
+    BTEL_FLAG_MOTOR_BR_GENERAL = 131072;    // bit 17
+    BTEL_FLAG_MOTOR_BR_HALL = 262144;      // bit 18
+    BTEL_FLAG_MOTOR_FR_GENERAL = 524288;   // bit 19
+    BTEL_FLAG_MOTOR_FR_HALL = 1048576;    // bit 20
+    BTEL_FLAG_MOTOR_DRIB_GENERAL = 2097152; // bit 21
+    BTEL_FLAG_MOTOR_DRIB_HALL = 4194304;  // bit 22
+    BTEL_FLAG_KICKER_BOARD_ERROR = 8388608; // bit 23
+    BTEL_FLAG_CHIPPER_AVAILABLE = 16777216; // bit 24
+    BTEL_FLAG_KICKER_AVAILABLE = 33554432;  // bit 25
+    BTEL_FLAG_CONTROLLER_RESET = 67108864;  // bit 26
+}
+
+// Robot status packet sent from robot to AI software over the radio link.
+// Maps to BasicTelemetry in basic_telemetry.h (raw: always 28 bytes).
+// status_flags is a bitmask — see BasicTelemetryFlag for bit definitions.
+message BasicTelemetry {
+    uint32 tx_seq_num = 1;
+    uint32 ctrl_seq_num = 2;
+    BodyControlMode body_control_mode = 3;
+    // 27-bit error/status bitfield; zero when all clear (common case → not encoded).
+    uint32 status_flags = 4 [(ateam.bitmask).flags_enum = "BasicTelemetryFlag"];
+    uint32 battery_percent = 5;
+    uint32 kicker_charge_percent = 6;
+    // Quantized KF state (sint32 for efficient zigzag encoding of small signed values).
+    sint32 kf_pos_x = 7;      // mm,     1 LSB = 1 mm
+    sint32 kf_pos_y = 8;      // mm
+    sint32 kf_pos_theta = 9;  // mrad,   1 LSB = 1 mrad
+    sint32 kf_vel_x = 10;     // mm/s,   1 LSB = 1 mm/s
+    sint32 kf_vel_y = 11;     // mm/s
+    sint32 kf_vel_omega = 12; // mrad/s, 1 LSB = 1 mrad/s
+    // Mode-specific telemetry payload (maps to BodyControlTelemetry union in basic_telemetry.h).
+    // Which arm is set is redundant with body_control_mode (field 3); both are present to
+    // match the C struct layout exactly.
+    oneof control_telem {
+        GlobalPositionTelemetry    global_pos     = 13;
+        GlobalVelocityTelemetry    global_vel     = 14;
+        LocalVelocityTelemetry     local_vel      = 15;
+        GlobalAccelerationTelemetry global_acc    = 16;
+        LocalAccelerationTelemetry  local_acc     = 17;
+        HeadingPivotTelemetry       heading_pivot = 18;
+        PointPivotTelemetry         point_pivot   = 19;
+    }
+}
+
+// Full extended telemetry packet sent from robot to AI software.
+// Maps to ExtendedTelemetry in extended_telemetry.h (raw: always 556 bytes).
+message ExtendedTelemetry {
+    // 64-bit timestamp split to avoid uint64 on no_std targets.
+    uint32 timestamp_us_lo = 1;
+    uint32 timestamp_us_hi = 2;
+    PowerTelemetry power_status = 3;
+    CcmTelemetry front_left_motor = 4;
+    CcmTelemetry back_left_motor = 5;
+    CcmTelemetry back_right_motor = 6;
+    CcmTelemetry front_right_motor = 7;
+    BodyControlExtendedTelemetry body_control_telem = 8;
+    KickerTelemetry kicker_status = 9;
+}

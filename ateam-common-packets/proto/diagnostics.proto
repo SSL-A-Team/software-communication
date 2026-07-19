@@ -1,0 +1,10 @@
+syntax = "proto3";
+package ateam;
+
+// Error report sent from robot to AI software over the radio link.
+// Maps to ErrorTelemetry in error_telemetry.h (raw: always 64 bytes).
+// error_message is a null-terminated C string of at most 60 bytes.
+message ErrorTelemetry {
+    uint32 timestamp = 1;
+    string error_message = 2;
+}

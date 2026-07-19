@@ -7,6 +7,8 @@ use bindgen::EnumVariation;
 extern crate which;
 use which::which;
 
+extern crate micropb_gen;
+
 fn is_arm_none_eabi_sysroot_valid(
     sysroot: impl AsRef<Path> + std::convert::AsRef<std::ffi::OsStr>,
 ) -> bool {
@@ -98,7 +100,7 @@ fn main() {
     let bindings = create_configured_builder()
         // The input header we would like to generate
         // bindings for.
-        .header("../include/radio.h")
+        .header("../include/radio/radio.h")
         .derive_default(true)
         .generate()
         // Unwrap the Result and panic on failure.
@@ -122,4 +124,46 @@ fn main() {
     robot_metadata_bindings
         .write_to_file(Path::new(&out_dir).join("metadata_bindings.rs"))
         .expect("Couldn't write robot metadata bindings!");
+
+    // Proto compilation via micropb-gen.
+    println!("cargo:rerun-if-changed=../proto/");
+    let manifest_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
+    let proto_dir = manifest_dir.join("../proto");
+    let proto_out = manifest_dir.join("src/proto_packets_gen.rs");
+
+    let mut gen = micropb_gen::Generator::new();
+    gen.add_protoc_arg(format!("-I{}", proto_dir.to_str().expect("non-UTF8 proto dir")));
+    // Use heapless containers for repeated fields (current_samples_ma in CcmCurrentTelemetry).
+    gen.use_container_heapless();
+    // Package prefix required in path since files use `package ateam;`.
+    gen.configure(
+        ".ateam.CcmCurrentTelemetry.current_samples_ma",
+        micropb_gen::Config::new().max_len(20u32),
+    );
+    gen.configure(
+        ".ateam.ErrorTelemetry.error_message",
+        micropb_gen::Config::new().max_bytes(60u32),
+    );
+    // ParameterCommand.data: up to 6 floats (VEC6 is the largest parameter format).
+    gen.configure(
+        ".ateam.ParameterCommand.data",
+        micropb_gen::Config::new().max_len(6u32),
+    );
+    gen.compile_protos(
+        &[
+            proto_dir.join("maneuvers.proto"),
+            proto_dir.join("motor.proto"),
+            proto_dir.join("power.proto"),
+            proto_dir.join("kicker.proto"),
+            proto_dir.join("body_control.proto"),
+            proto_dir.join("control.proto"),
+            proto_dir.join("telemetry.proto"),
+            proto_dir.join("discovery.proto"),
+            proto_dir.join("diagnostics.proto"),
+            proto_dir.join("robot_parameters.proto"),
+            proto_dir.join("radio.proto"),
+        ],
+        proto_out,
+    )
+    .expect("micropb-gen failed to compile proto");
 }

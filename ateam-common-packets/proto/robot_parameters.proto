@@ -1,0 +1,52 @@
+syntax = "proto3";
+package ateam;
+
+// Read/write protocol for runtime-tunable robot parameters (CC_ROBOT_PARAMETER_COMMAND=43).
+// Commands flow software→robot; responses flow robot→software on the same channel.
+//
+// Protocol:
+//   READ:  command_code=PCC_READ,  parameter_name=X,     data empty
+//   WRITE: command_code=PCC_WRITE, parameter_name=X,     data=<values>
+//   ACK:   command_code=PCC_ACK,   parameter_name=echo,  data=<current values>
+//   NACK:  command_code=PCC_NACK_*, parameter_name=echo, data empty
+//
+// Maps to ParameterCommand in robot_parameters.h (raw: always 28 bytes).
+// The C struct's ParameterDataFormat field is omitted — data element count is
+// determined by the parameter name (see ParameterName comments).
+message ParameterCommand {
+    ParameterCommandCode command_code = 1;
+    ParameterName parameter_name = 2;
+    // float values for WRITE and ACK; empty for READ and NACK.
+    // Count is implied by parameter_name (1–6 floats; see ParameterName below).
+    repeated float data = 3;
+}
+
+// Command/response discriminant.
+// Maps to ParameterCommandCode in robot_parameters.h.
+enum ParameterCommandCode {
+    PCC_READ = 0;
+    PCC_WRITE = 1;
+    PCC_ACK = 2;
+    PCC_NACK_INVALID_NAME = 3;
+    PCC_NACK_INVALID_TYPE_FOR_NAME = 4;
+}
+
+// Identifies which tunable parameter is being addressed.
+// Comment on each value lists the expected data elements in order.
+// Maps to ParameterName in robot_parameters.h.
+enum ParameterName {
+    PN_KF_PROCESS_STD       = 0;  // [POS_LINEAR, POS_ANGULAR, VEL_LINEAR, VEL_ANGULAR]
+    PN_KF_MEASUREMENT_STD   = 1;  // [VISION_STD_LINEAR, VISION_STD_ANGULAR, ENCODER_STD_ANGULAR, GYRO_STD_ANGULAR]
+    PN_KF_MAX_STATE         = 2;  // [KF_MAX_POS_LINEAR, KF_MAX_POS_ANGULAR, KF_MAX_VEL_LINEAR, KF_MAX_VEL_ANGULAR]
+    PN_PHYS_WHEEL           = 3;  // [WHEEL_ANGLE_ALPHA, WHEEL_ANGLE_BETA, WHEEL_DISTANCE, WHEEL_RADIUS]
+    PN_PHYS_INERTIA         = 4;  // [BODY_MASS, BODY_MOMENT_Z]
+    PN_PHYS_MOTOR_MODEL     = 5;  // [MOTOR_TORQUE_CONSTANT, MOTOR_EFFICIENCY_FACTOR]
+    PN_PHYS_FRICTION_MODEL  = 6;  // [COULOMB_LINEAR_X, COULOMB_LINEAR_Y, COULOMB_ANGULAR, VISCOUS_LINEAR_X, VISCOUS_LINEAR_Y, VISCOUS_ANGULAR]
+    PN_FRICTION_COMP_GATING = 7;  // [LINEAR_VEL_THRESHOLD, LINEAR_ACCEL_THRESHOLD, ANGULAR_VEL_THRESHOLD, ANGULAR_ACCEL_THRESHOLD]
+    PN_POSE_CONTROL_GAIN    = 8;  // [FEEDFORWARD_GAIN, FEEDBACK_GAIN]
+    PN_TRAJ_RECOMPUTE_ERROR = 9;  // [ERROR_POS_LINEAR, ERROR_POS_ANGULAR, ERROR_VEL_LINEAR, ERROR_VEL_ANGULAR]
+    PN_POSE_FB_PIDII_LINEAR  = 10; // [P, I, D, I_MIN, I_MAX]
+    PN_POSE_FB_PIDII_ANGULAR = 11; // [P, I, D, I_MIN, I_MAX]
+    PN_TWIST_FB_PIDII_LINEAR  = 12; // [P, I, D, I_MIN, I_MAX]
+    PN_TWIST_FB_PIDII_ANGULAR = 13; // [P, I, D, I_MIN, I_MAX]
+}
