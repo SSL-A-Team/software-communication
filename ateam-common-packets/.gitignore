@@ -1,0 +1,5 @@
+# Rust build artifacts (covers rust-lib/, macros/, tools/codegen/)
+**/target/
+
+# C headers generated at build time by tools/codegen
+generated/

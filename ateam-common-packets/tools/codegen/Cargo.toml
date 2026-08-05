@@ -1,0 +1,12 @@
+[package]
+name = "ateam-packets-codegen"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "codegen"
+path = "src/main.rs"
+
+[dependencies]
+syn = { version = "3.0", features = ["full", "visit"] }
+walkdir = "2"
