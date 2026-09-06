@@ -56,7 +56,12 @@ typedef struct BasicControl {
 
     // Vision update
     float vision_position_update[3];
-    // 12 bytes
+    // Absolute time-of-capture of the vision measurement above, in microseconds
+    // since the Unix epoch. Split into two 32-bit words to keep 4-byte alignment.
+    // Only valid when vision_update == 1.
+    uint32_t vision_capture_us_lo;
+    uint32_t vision_capture_us_hi;
+    // 20 bytes
 
     // Control mode and ancillary data
     BodyControlMode body_control_mode;
@@ -74,4 +79,4 @@ typedef struct BasicControl {
     BodyControlCommand cmd;
     // 56 bytes
 } BasicControl;
-assert_size(BasicControl, 4 + 4 + 12 + 56 + 8);
+assert_size(BasicControl, 4 + 4 + 12 + 8 + 56 + 8);
