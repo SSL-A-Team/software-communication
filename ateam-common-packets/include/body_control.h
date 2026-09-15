@@ -18,8 +18,12 @@ typedef union BodyControlManeuverExtendedTelemetry {
 typedef struct BodyControlExtendedTelemetry {
     BodyControlMode body_control_mode;
     uint8_t vision_update: 1;
-    uint8_t _reserved1: 7;
+    uint8_t vision_old: 1;
+    uint8_t _reserved1: 6;
     uint8_t _reserved2[2];
+    // 4 bytes
+
+    uint32_t vision_meas_age_us;
     // 4 bytes
 
     BodyControlManeuverExtendedTelemetry maneuver; 
@@ -37,4 +41,4 @@ typedef struct BodyControlExtendedTelemetry {
     float body_accel_u[3];  // body accel control outputs after control policy
     float body_accel_u_fric_comp[3];  // body accel control outputs after control policy with friction compensation added in
 } BodyControlExtendedTelemetry;
-assert_size(BodyControlExtendedTelemetry, 4 + 56 + 12*3*4);
+assert_size(BodyControlExtendedTelemetry, 4 + 4 + 56 + 12*3*4);
