@@ -23,7 +23,7 @@ typedef struct BodyControlExtendedTelemetry {
     uint8_t _reserved2[2];
     // 4 bytes
 
-    uint32_t vision_meas_age_us;
+    uint32_t vision_insert_age_us;
     // 4 bytes
 
     BodyControlManeuverExtendedTelemetry maneuver; 
