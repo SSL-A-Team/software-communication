@@ -50,6 +50,8 @@ typedef enum ParameterName : uint8_t {
     TWIST_FB_PIDII_LINEAR = 12,
     /// [P, I, D, I_MIN, I_MAX]
     TWIST_FB_PIDII_ANGULAR = 13,
+    /// [SEED_SAMPLES] consistent vision samples needed to (re)seed the vision filter
+    VISION_SEED_SAMPLES = 14,
 } ParameterName;
 assert_size(ParameterName, 1);
 
