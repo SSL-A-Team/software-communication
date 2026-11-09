@@ -52,8 +52,6 @@ typedef enum ParameterName : uint8_t {
     TWIST_FB_PIDII_ANGULAR = 13,
     /// [SEED_SAMPLES] consistent vision samples needed to (re)seed the vision filter
     VISION_SEED_SAMPLES = 14,
-    /// [FEEDFORWARD_GAIN, FEEDBACK_GAIN] trajectory tracking velocity path
-    TRACKING_VEL_GAIN = 15,
 } ParameterName;
 assert_size(ParameterName, 1);
 

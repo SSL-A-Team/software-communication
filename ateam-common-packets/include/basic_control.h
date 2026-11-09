@@ -51,11 +51,12 @@ typedef struct BasicControl {
     uint32_t game_state_in_stop : 1;
     uint32_t game_state_in_halt : 1;
     uint32_t emergency_stop : 1;
+    // Wheel torque (current) control is always on; this selects whether the
+    // wheel velocity loop also runs on the commanded body velocity.
     uint32_t wheel_vel_control_enabled : 1;
-    uint32_t wheel_torque_control_enabled : 1;
     uint32_t vision_update: 1;
     uint32_t reset_controller : 1;
-    uint32_t reserved1: 23;
+    uint32_t reserved1: 24;
     // 4 bytes
 
     // Vision update
