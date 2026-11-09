@@ -9,6 +9,8 @@ typedef union BodyControlManeuverExtendedTelemetry {
     ExtendedLocalVelocityTelemetry local_vel;
     ExtendedGlobalAccelerationTelemetry global_acc;
     ExtendedLocalAccelerationTelemetry local_acc;
+    ExtendedGlobalAccelerationTelemetry global_acc_open_loop;
+    ExtendedLocalAccelerationTelemetry local_acc_open_loop;
     ExtendedHeadingPivotTelemetry heading_pivot;
     ExtendedPointPivotTelemetry point_pivot;
     ExtendedHeadingLineTelemetry heading_line;

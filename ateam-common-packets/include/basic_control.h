@@ -19,6 +19,8 @@ typedef enum BodyControlMode : uint8_t {
     BCM_LOCAL_VELOCITY = 12,
     BCM_GLOBAL_ACCEL = 13,
     BCM_LOCAL_ACCEL = 14,
+    BCM_GLOBAL_ACCEL_OPEN_LOOP = 15,
+    BCM_LOCAL_ACCEL_OPEN_LOOP = 16,
     BCM_HEADING_PIVOT = 20,
     BCM_POINT_PIVOT = 21,
     BCM_HEADING_LINE = 30,
@@ -33,6 +35,8 @@ typedef union BodyControlCommand {
         LocalVelocityCommand local_vel;
         GlobalAccelerationCommand global_acc;
         LocalAccelerationCommand local_acc;
+        GlobalAccelerationCommand global_acc_open_loop;
+        LocalAccelerationCommand local_acc_open_loop;
         HeadingPivotCommand heading_pivot;
         PointPivotCommand point_pivot;
         HeadingLineCommand heading_line;

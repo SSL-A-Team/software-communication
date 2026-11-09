@@ -14,6 +14,8 @@ pub enum ManeuverCommand {
     LocalVelocity(LocalVelocityCommand),
     GlobalAcceleration(GlobalAccelerationCommand),
     LocalAcceleration(LocalAccelerationCommand),
+    GlobalAccelerationOpenLoop(GlobalAccelerationCommand),
+    LocalAccelerationOpenLoop(LocalAccelerationCommand),
     HeadingPivot(HeadingPivotCommand),
     PointPivot(PointPivotCommand),
     HeadingLine(HeadingLineCommand),
@@ -55,12 +57,14 @@ impl PartialEq for ManeuverCommand {
                     && a.max_linear_acc == b.max_linear_acc
                     && a.max_angular_acc == b.max_angular_acc
             }
-            (Self::GlobalAcceleration(a), Self::GlobalAcceleration(b)) => {
+            (Self::GlobalAcceleration(a), Self::GlobalAcceleration(b))
+            | (Self::GlobalAccelerationOpenLoop(a), Self::GlobalAccelerationOpenLoop(b)) => {
                 a.global_xdd == b.global_xdd
                     && a.global_ydd == b.global_ydd
                     && a.global_alpha == b.global_alpha
             }
-            (Self::LocalAcceleration(a), Self::LocalAcceleration(b)) => {
+            (Self::LocalAcceleration(a), Self::LocalAcceleration(b))
+            | (Self::LocalAccelerationOpenLoop(a), Self::LocalAccelerationOpenLoop(b)) => {
                 a.local_xdd == b.local_xdd
                     && a.local_ydd == b.local_ydd
                     && a.local_alpha == b.local_alpha
@@ -138,6 +142,8 @@ pub enum ManeuverExtendedTelemetry {
     LocalVelocity(ExtendedLocalVelocityTelemetry),
     GlobalAcceleration(ExtendedGlobalAccelerationTelemetry),
     LocalAcceleration(ExtendedLocalAccelerationTelemetry),
+    GlobalAccelerationOpenLoop(ExtendedGlobalAccelerationTelemetry),
+    LocalAccelerationOpenLoop(ExtendedLocalAccelerationTelemetry),
     HeadingPivot(ExtendedHeadingPivotTelemetry),
     PointPivot(ExtendedPointPivotTelemetry),
     HeadingLine(ExtendedHeadingLineTelemetry),
@@ -215,6 +221,8 @@ impl BasicControl {
                 BodyControlMode::BCM_LOCAL_VELOCITY => ManeuverCommand::LocalVelocity(self.cmd.local_vel),
                 BodyControlMode::BCM_GLOBAL_ACCEL => ManeuverCommand::GlobalAcceleration(self.cmd.global_acc),
                 BodyControlMode::BCM_LOCAL_ACCEL => ManeuverCommand::LocalAcceleration(self.cmd.local_acc),
+                BodyControlMode::BCM_GLOBAL_ACCEL_OPEN_LOOP => ManeuverCommand::GlobalAccelerationOpenLoop(self.cmd.global_acc_open_loop),
+                BodyControlMode::BCM_LOCAL_ACCEL_OPEN_LOOP => ManeuverCommand::LocalAccelerationOpenLoop(self.cmd.local_acc_open_loop),
                 BodyControlMode::BCM_HEADING_PIVOT => ManeuverCommand::HeadingPivot(self.cmd.heading_pivot),
                 BodyControlMode::BCM_POINT_PIVOT => ManeuverCommand::PointPivot(self.cmd.point_pivot),
                 BodyControlMode::BCM_HEADING_LINE => ManeuverCommand::HeadingLine(self.cmd.heading_line),
@@ -280,6 +288,14 @@ impl BodyControlExtendedTelemetry {
             ManeuverExtendedTelemetry::LocalAcceleration(t) => {
                 self.body_control_mode = BodyControlMode::BCM_LOCAL_ACCEL;
                 self.maneuver = BodyControlManeuverExtendedTelemetry { local_acc: t };
+            }
+            ManeuverExtendedTelemetry::GlobalAccelerationOpenLoop(t) => {
+                self.body_control_mode = BodyControlMode::BCM_GLOBAL_ACCEL_OPEN_LOOP;
+                self.maneuver = BodyControlManeuverExtendedTelemetry { global_acc_open_loop: t };
+            }
+            ManeuverExtendedTelemetry::LocalAccelerationOpenLoop(t) => {
+                self.body_control_mode = BodyControlMode::BCM_LOCAL_ACCEL_OPEN_LOOP;
+                self.maneuver = BodyControlManeuverExtendedTelemetry { local_acc_open_loop: t };
             }
             ManeuverExtendedTelemetry::HeadingPivot(t) => {
                 self.body_control_mode = BodyControlMode::BCM_HEADING_PIVOT;
