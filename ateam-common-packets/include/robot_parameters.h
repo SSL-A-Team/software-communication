@@ -36,12 +36,12 @@ typedef enum ParameterName : uint8_t {
     PHYS_MOTOR_MODEL = 5,
     /// [COULOMB_LINEAR_X, COULOMB_LINEAR_Y, COULOMB_ANGULAR, VISCOUS_LINEAR_X, VISCOUS_LINEAR_Y, VISCOUS_ANGULAR]
     PHYS_FRICTION_MODEL = 6,
-    /// [LINEAR_VEL_THRESHOLD, LINEAR_ACCEL_THRESHOLD, ANGULAR_VEL_THRESHOLD, ANGULAR_ACCEL_THRESHOLD]
-    FRICTION_COMP_GATING = 7,
-    /// [FEEDFORWARD_GAIN, FEEDBACK_GAIN]
-    POSE_CONTROL_GAIN = 8,
-    /// [ERROR_POS_LINEAR, ERROR_POS_ANGULAR, ERROR_VEL_LINEAR, ERROR_VEL_ANGULAR] thresholds for when to recompute the trajectory
-    TRAJ_RECOMPUTE_ERROR = 9,
+    /// [LINEAR_VEL_THRESHOLD, ANGULAR_VEL_THRESHOLD] commanded speeds below which friction compensation is off
+    FRICTION_COMP_VEL_THRESHOLD = 7,
+    /// [FEEDFORWARD_GAIN, FEEDBACK_GAIN] trajectory tracking accel (torque) path
+    TRACKING_ACCEL_GAIN = 8,
+    /// [ERROR_POS_LINEAR, ERROR_POS_ANGULAR, ERROR_VEL_LINEAR, ERROR_VEL_ANGULAR] trajectory tracking divergence thresholds
+    TRACKING_DIVERGENCE_THRESHOLD = 9,
     /// [P, I, D, I_MIN, I_MAX]
     POSE_FB_PIDII_LINEAR = 10,
     /// [P, I, D, I_MIN, I_MAX]
@@ -52,6 +52,8 @@ typedef enum ParameterName : uint8_t {
     TWIST_FB_PIDII_ANGULAR = 13,
     /// [SEED_SAMPLES] consistent vision samples needed to (re)seed the vision filter
     VISION_SEED_SAMPLES = 14,
+    /// [FEEDFORWARD_GAIN, FEEDBACK_GAIN] trajectory tracking velocity path
+    TRACKING_VEL_GAIN = 15,
 } ParameterName;
 assert_size(ParameterName, 1);
 
