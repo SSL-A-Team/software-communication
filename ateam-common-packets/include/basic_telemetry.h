@@ -68,7 +68,7 @@ typedef struct BasicTelemetry {
 
     // Quantized KF state estimate (mirrors kf_body_pos/vel_estimate in BodyControlExtendedTelemetry)
     int16_t kf_body_pos_estimate[3];  // [x (mm), y (mm), theta (mrad)], 1 LSB per unit
-    int16_t kf_body_vel_estimate[3];  // [vx (mm/s), vy (mm/s), omega (mrad/s)], 1 LSB per unit
+    int16_t body_vel_estimate[3];  // robot local frame [vx (mm/s), vy (mm/s), omega (mrad/s)], 1 LSB per unit
     // 12 bytes
 } BasicTelemetry;
 assert_size(BasicTelemetry, 4 + 4 + 4 + 4 + 6 + 6);

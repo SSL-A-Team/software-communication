@@ -31,14 +31,14 @@ typedef struct BodyControlExtendedTelemetry {
     BodyControlManeuverExtendedTelemetry maneuver; 
 
     float imu_gyro[3];  // rad/s
-    float imu_accel[3];  // m/s^2
+    float imu_accel[3];  // m/s^2, robot local frame
     float vision_pose[3];  // vision system pose measurement
     float body_traj_pos[3];  // computed trajectory position setpoint
     float body_traj_vel[3];  // computed trajectory velocity setpoint
     float kf_body_pos_prediction[3];  // Kalman Filter body position prediction
-    float kf_body_vel_prediction[3];  // Kalman Filter body velocity prediction
+    float kf_body_vel_prediction[3];  // Kalman Filter body velocity prediction, robot local frame [vx, vy, omega]
     float kf_body_pos_estimate[3];  // Kalman Filter body position estimate
-    float kf_body_vel_estimate[3];  // Kalman Filter body velocity estimate
+    float kf_body_vel_estimate[3];  // Kalman Filter body velocity estimate, robot local frame [vx, vy, omega]
     float body_vel_u[3];  // body velocity control outputs after control policy
     float body_accel_u[3];  // body accel control outputs after control policy
     float body_accel_u_fric_comp[3];  // body accel control outputs after control policy with friction compensation added in
