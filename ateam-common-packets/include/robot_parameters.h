@@ -58,6 +58,8 @@ typedef enum ParameterName : uint8_t {
     TRACKING_FF_ACCEL_CUTOFF_HZ = 16,
     /// [ERROR_LINEAR, ERROR_ANGULAR] trajectory-vs-estimate pose error above which breakaway friction comp is applied toward the target while the commanded speed is below FRICTION_COMP_VEL_THRESHOLD (disabled if <= 0)
     FRICTION_COMP_HOLD_ERR_THRESHOLD = 17,
+    /// [LOOKAHEAD_S] trajectory velocity lookahead for the tracking body velocity (wheel velocity) output
+    TRACKING_VEL_LOOKAHEAD_S = 18,
 } ParameterName;
 assert_size(ParameterName, 1);
 
