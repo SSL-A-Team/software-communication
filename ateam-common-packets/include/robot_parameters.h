@@ -56,6 +56,8 @@ typedef enum ParameterName : uint8_t {
     PHYS_STRIBECK_MODEL = 15,
     /// [CUTOFF_LINEAR_HZ, CUTOFF_ANGULAR_HZ] first-order low-pass on the trajectory tracking feedforward accel (disabled if <= 0)
     TRACKING_FF_ACCEL_CUTOFF_HZ = 16,
+    /// [ERROR_LINEAR, ERROR_ANGULAR] trajectory-vs-estimate pose error above which breakaway friction comp is applied toward the target while the commanded speed is below FRICTION_COMP_VEL_THRESHOLD (disabled if <= 0)
+    FRICTION_COMP_HOLD_ERR_THRESHOLD = 17,
 } ParameterName;
 assert_size(ParameterName, 1);
 
