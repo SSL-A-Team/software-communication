@@ -52,6 +52,8 @@ typedef enum ParameterName : uint8_t {
     TWIST_FB_PIDII_ANGULAR = 13,
     /// [SEED_SAMPLES] consistent vision samples needed to (re)seed the vision filter
     VISION_SEED_SAMPLES = 14,
+    /// [STATIC_LINEAR, STATIC_ANGULAR, STRIBECK_VEL_LINEAR, STRIBECK_VEL_ANGULAR]; static friction at zero speed decaying to coulomb over the Stribeck velocity (disabled if vel <= 0 or static <= coulomb)
+    PHYS_STRIBECK_MODEL = 15,
 } ParameterName;
 assert_size(ParameterName, 1);
 
