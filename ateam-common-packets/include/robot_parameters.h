@@ -34,7 +34,7 @@ typedef enum ParameterName : uint8_t {
     PHYS_INERTIA = 4,
     /// [MOTOR_TORQUE_CONSTANT, MOTOR_EFFICIENCY_FACTOR]
     PHYS_MOTOR_MODEL = 5,
-    /// [COULOMB_LINEAR_X, COULOMB_LINEAR_Y, COULOMB_ANGULAR, VISCOUS_LINEAR_X, VISCOUS_LINEAR_Y, VISCOUS_ANGULAR]
+    /// [COULOMB_LINEAR, COULOMB_ANGULAR, VISCOUS_LINEAR, VISCOUS_ANGULAR]; linear terms are for motion along local +x and scaled by a wheel-geometry direction factor otherwise
     PHYS_FRICTION_MODEL = 6,
     /// [LINEAR_VEL_THRESHOLD, ANGULAR_VEL_THRESHOLD] commanded speeds below which friction compensation is off
     FRICTION_COMP_VEL_THRESHOLD = 7,
