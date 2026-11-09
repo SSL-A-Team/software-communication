@@ -54,6 +54,8 @@ typedef enum ParameterName : uint8_t {
     VISION_SEED_SAMPLES = 14,
     /// [STATIC_LINEAR, STATIC_ANGULAR, STRIBECK_VEL_LINEAR, STRIBECK_VEL_ANGULAR]; static friction at zero speed decaying to coulomb over the Stribeck velocity (disabled if vel <= 0 or static <= coulomb)
     PHYS_STRIBECK_MODEL = 15,
+    /// [CUTOFF_LINEAR_HZ, CUTOFF_ANGULAR_HZ] first-order low-pass on the trajectory tracking feedforward accel (disabled if <= 0)
+    TRACKING_FF_ACCEL_CUTOFF_HZ = 16,
 } ParameterName;
 assert_size(ParameterName, 1);
 
