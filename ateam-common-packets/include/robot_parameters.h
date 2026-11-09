@@ -60,6 +60,8 @@ typedef enum ParameterName : uint8_t {
     FRICTION_COMP_HOLD_ERR_THRESHOLD = 17,
     /// [LOOKAHEAD_S] trajectory velocity lookahead for the tracking body velocity (wheel velocity) output
     TRACKING_VEL_LOOKAHEAD_S = 18,
+    /// [HOLD_VEL_LOOP_OFF, KV_LINEAR, KV_ANGULAR] wheel velocity loop off while the tracking trajectory holds (if != 0); pose feedback gains added to the wheel velocity setpoint (0 disables)
+    TRACKING_WHEEL_VEL_FB = 19,
 } ParameterName;
 assert_size(ParameterName, 1);
 
