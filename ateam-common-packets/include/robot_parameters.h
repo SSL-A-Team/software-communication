@@ -39,20 +39,21 @@ typedef enum ParameterName : uint8_t {
     /// motion and scaled by a wheel-geometry direction factor otherwise
     PHYS_FRICTION_MODEL = 6,
     // 7 retired (was FRICTION_COMP_VEL_THRESHOLD)
-    /// [FEEDFORWARD_GAIN, FEEDBACK_GAIN] trajectory tracking accel (torque) path
-    TRACKING_ACCEL_GAIN = 8,
+    // 8 retired (was TRACKING_ACCEL_GAIN)
     /// [ERROR_POS_LINEAR, ERROR_POS_ANGULAR, ERROR_VEL_LINEAR, ERROR_VEL_ANGULAR] trajectory tracking divergence thresholds
     TRACKING_DIVERGENCE_THRESHOLD = 9,
-    /// [P, I, D, I_MIN, I_MAX]
-    POSE_FB_PIDII_LINEAR = 10,
-    /// [P, I, D, I_MIN, I_MAX]
-    POSE_FB_PIDII_ANGULAR = 11,
-    /// [P, I, D, I_MIN, I_MAX]
-    TWIST_FB_PIDII_LINEAR = 12,
-    /// [P, I, D, I_MIN, I_MAX]
-    TWIST_FB_PIDII_ANGULAR = 13,
+    // 10-13 retired (were POSE_FB_PIDII_*, TWIST_FB_PIDII_*)
     /// [SEED_SAMPLES] consistent vision samples needed to (re)seed the vision filter
     VISION_SEED_SAMPLES = 14,
+    /// [K (1/s), MAX (m/s), ANTI_JITTER (m)] XY position P feedback into the velocity setpoint
+    POSE_FB_XY = 15,
+    /// [POS_K (1/s), POS_MAX (rad/s), ANTI_JITTER (rad), VEL_K] angular position + velocity P feedback into the velocity setpoint
+    POSE_FB_W = 16,
+    /// [KP (mA/(rad/s)), KI (mA/rad), ANTI_JITTER (rad/s), MAX_CURRENT (A)] wheel velocity loop on the
+    /// motor controllers; MAX_CURRENT caps the total (feed-forward + loop) wheel current
+    WHEEL_VEL_FB = 17,
+    /// [MAX_CURRENT (A)] feed-forward wheel current limit; the body accel output is scaled to stay under it
+    WHEEL_FF_CURRENT_LIMIT = 18,
 } ParameterName;
 assert_size(ParameterName, 1);
 

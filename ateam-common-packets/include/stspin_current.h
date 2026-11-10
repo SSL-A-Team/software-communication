@@ -13,6 +13,12 @@ typedef enum CcmParameter {
     CCM_PARAM_CURRENT_PI_CONTROLLER_GAIN_I = 1,
     CCM_PARAM_CURRENT_PI_CONTROLLER_ERR_ILIM = 2,
     CCM_PARAM_CURRENT_PI_CONTROLLER_ANTIJITTER = 3,
+    // wheel velocity loop (CCM_MCT_VELOCITY_CURRENT), f32, write only
+    CCM_PARAM_VEL_CONTROLLER_GAIN_P = 4,  // mA / (rad/s)
+    CCM_PARAM_VEL_CONTROLLER_GAIN_I = 5,  // mA / rad
+    CCM_PARAM_VEL_CONTROLLER_ANTIJITTER = 6,  // rad/s
+    // total commanded current limit in CURRENT / VELOCITY_CURRENT modes, f32 mA, write only
+    CCM_PARAM_MOTION_CURRENT_LIMIT = 7,
     CCM_PARAM_FIRMWARE_IMAGE_HASH = 100,
 } __attribute__((packed)) CcmParameter;
 assert_size(CcmParameter, 1);
