@@ -32,12 +32,13 @@ typedef enum ParameterName : uint8_t {
     PHYS_WHEEL = 3,
     /// [BODY_MASS, BODY_MOMENT_Z]
     PHYS_INERTIA = 4,
-    /// [MOTOR_TORQUE_CONSTANT, MOTOR_EFFICIENCY_FACTOR]
+    /// [MOTOR_TORQUE_CONSTANT]
     PHYS_MOTOR_MODEL = 5,
-    /// [COULOMB_LINEAR, COULOMB_ANGULAR, VISCOUS_LINEAR, VISCOUS_ANGULAR]; linear terms are for motion along local +x and scaled by a wheel-geometry direction factor otherwise
+    /// [COULOMB_XY, VISCOUS_XY, COULOMB_W, VISCOUS_W, EFFICIENCY_XY, EFFICIENCY_W]
+    /// TIGERs Mannheim friction/output model; linear terms are for sideways (local y)
+    /// motion and scaled by a wheel-geometry direction factor otherwise
     PHYS_FRICTION_MODEL = 6,
-    /// [LINEAR_VEL_THRESHOLD, ANGULAR_VEL_THRESHOLD] commanded speeds below which friction compensation is off
-    FRICTION_COMP_VEL_THRESHOLD = 7,
+    // 7 retired (was FRICTION_COMP_VEL_THRESHOLD)
     /// [FEEDFORWARD_GAIN, FEEDBACK_GAIN] trajectory tracking accel (torque) path
     TRACKING_ACCEL_GAIN = 8,
     /// [ERROR_POS_LINEAR, ERROR_POS_ANGULAR, ERROR_VEL_LINEAR, ERROR_VEL_ANGULAR] trajectory tracking divergence thresholds
