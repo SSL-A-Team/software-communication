@@ -54,6 +54,9 @@ typedef enum ParameterName : uint8_t {
     WHEEL_VEL_FB = 17,
     /// [MAX_CURRENT (A)] feed-forward wheel current limit; the body accel output is scaled to stay under it
     WHEEL_FF_CURRENT_LIMIT = 18,
+    /// [K ((rad/s)/A)] wheel slip feed-forward: each wheel's velocity setpoint is raised by
+    /// K * its feed-forward current, since the wheel surface outruns the ground under load
+    WHEEL_SLIP_COMP = 19,
 } ParameterName;
 assert_size(ParameterName, 1);
 
