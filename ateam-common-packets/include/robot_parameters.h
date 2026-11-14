@@ -58,13 +58,9 @@ typedef enum ParameterName : uint8_t {
     /// K * its feed-forward current, since the wheel surface outruns the ground under load
     WHEEL_SLIP_COMP = 19,
     /// [MIN_LATENCY (ms)] minimum vision latency, camera exposure -> robot; sets the
-    /// robot/vision clock skew estimate (per field setup, see calibration/vision_latency.py)
+    /// robot/vision clock skew estimate. Per field setup: the radio bridge sends its
+    /// vision.min_latency_ms parameter (see controls/analysis/calibration/README.md)
     VISION_MIN_LATENCY = 20,
-    /// [ACTION] read: 1 if a stored per-robot/per-setup config was applied at boot, else 0.
-    /// Write 1: save the live PHYS_FRICTION_MODEL, PHYS_INERTIA, WHEEL_SLIP_COMP,
-    /// VISION_MIN_LATENCY and KF_MEASUREMENT_STD (vision) to flash; write 2: clear it.
-    /// Writes need the motors off and reboot the robot (flash is only written at boot).
-    PERSIST_CONFIG = 21,
 } ParameterName;
 assert_size(ParameterName, 1);
 
