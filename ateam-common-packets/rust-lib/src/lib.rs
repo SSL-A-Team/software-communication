@@ -114,6 +114,8 @@ pub fn is_basic_control_packet_safe(basic_control: &BasicControl) -> bool {
         BodyControlMode::BCM_LOCAL_VELOCITY => is_bcm_local_vel_safe(unsafe { &basic_control.cmd.local_vel }),
         BodyControlMode::BCM_GLOBAL_ACCEL => is_bcm_global_accel_safe(unsafe { &basic_control.cmd.global_acc }),
         BodyControlMode::BCM_LOCAL_ACCEL => is_bcm_local_accel_safe(unsafe { &basic_control.cmd.local_acc }),
+        BodyControlMode::BCM_GLOBAL_ACCEL_OPEN_LOOP => is_bcm_global_accel_safe(unsafe { &basic_control.cmd.global_acc_open_loop }),
+        BodyControlMode::BCM_LOCAL_ACCEL_OPEN_LOOP => is_bcm_local_accel_safe(unsafe { &basic_control.cmd.local_acc_open_loop }),
         BodyControlMode::BCM_HEADING_PIVOT => is_bcm_heading_pivot_safe(unsafe { &basic_control.cmd.heading_pivot }),
         BodyControlMode::BCM_POINT_PIVOT => is_bcm_point_pivot_safe(unsafe { &basic_control.cmd.point_pivot }),
         BodyControlMode::BCM_HEADING_LINE => is_bcm_heading_line_safe(unsafe { &basic_control.cmd.heading_line }),

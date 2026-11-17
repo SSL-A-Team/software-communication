@@ -19,6 +19,8 @@ typedef enum BodyControlMode : uint8_t {
     BCM_LOCAL_VELOCITY = 12,
     BCM_GLOBAL_ACCEL = 13,
     BCM_LOCAL_ACCEL = 14,
+    BCM_GLOBAL_ACCEL_OPEN_LOOP = 15,
+    BCM_LOCAL_ACCEL_OPEN_LOOP = 16,
     BCM_HEADING_PIVOT = 20,
     BCM_POINT_PIVOT = 21,
     BCM_HEADING_LINE = 30,
@@ -33,6 +35,8 @@ typedef union BodyControlCommand {
         LocalVelocityCommand local_vel;
         GlobalAccelerationCommand global_acc;
         LocalAccelerationCommand local_acc;
+        GlobalAccelerationCommand global_acc_open_loop;
+        LocalAccelerationCommand local_acc_open_loop;
         HeadingPivotCommand heading_pivot;
         PointPivotCommand point_pivot;
         HeadingLineCommand heading_line;
@@ -47,16 +51,20 @@ typedef struct BasicControl {
     uint32_t game_state_in_stop : 1;
     uint32_t game_state_in_halt : 1;
     uint32_t emergency_stop : 1;
-    uint32_t wheel_vel_control_enabled : 1;
-    uint32_t wheel_torque_control_enabled : 1;
+    uint32_t wheel_vel_control_enabled : 1;  // Used to turn on/off the wheel level velocity P control, electrical current is always on
     uint32_t vision_update: 1;
     uint32_t reset_controller : 1;
-    uint32_t reserved1: 23;
+    uint32_t reserved1: 24;
     // 4 bytes
 
     // Vision update
     float vision_position_update[3];
-    // 12 bytes
+    // Absolute time-of-capture of the vision measurement above, in microseconds
+    // since the Unix epoch. Split into two 32-bit words to keep 4-byte alignment.
+    // Only valid when vision_update == 1.
+    uint32_t vision_capture_us_lo;
+    uint32_t vision_capture_us_hi;
+    // 20 bytes
 
     // Control mode and ancillary data
     BodyControlMode body_control_mode;
@@ -74,4 +82,4 @@ typedef struct BasicControl {
     BodyControlCommand cmd;
     // 56 bytes
 } BasicControl;
-assert_size(BasicControl, 4 + 4 + 12 + 56 + 8);
+assert_size(BasicControl, 4 + 4 + 12 + 8 + 56 + 8);
