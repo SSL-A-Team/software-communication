@@ -2,7 +2,7 @@
 #![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
-#![feature(const_cmp)]
+#![cfg_attr(feature = "embedded", feature(const_cmp))]
 
 use crate::bindings::{BasicControl, BodyControlMode, ExtendedTelemetry, GlobalAccelerationCommand, GlobalPositionCommand, GlobalVelocityCommand, HeadingPivotCommand, HeadingLineCommand, LocalAccelerationCommand, LocalVelocityCommand, PointPivotCommand, PointLineCommand, RadioHeader};
 
