@@ -9,6 +9,10 @@ repository = "https://github.com/SSL-A-Team/common"
 bench = false
 path = "src/lib.rs"
 
+[features]
+default = ["embedded"]
+embedded = []
+
 [build-dependencies]
 bindgen = "0.60.1"
 which = "4.4.0"

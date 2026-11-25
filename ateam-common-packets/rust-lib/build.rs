@@ -68,19 +68,30 @@ fn find_gcc_arm_embedded_sysroot() -> PathBuf {
     );
 }
 
-fn create_configured_builder() -> bindgen::Builder {
-    let mut sysroot = find_gcc_arm_embedded_sysroot();
-    sysroot.push("arm-none-eabi/include/");
+fn is_embedded_feature_enabled() -> bool {
+    env::var_os("CARGO_FEATURE_EMBEDDED").is_some()
+}
 
-    let bindings = bindgen::Builder::default()
-        // Tell bindgen to use core instead of std
-        // this will target embedded, so we don't have std
+fn create_configured_builder() -> bindgen::Builder {
+    let mut bindings = bindgen::Builder::default()
+        // Use core instead of std so the bindings work in no_std (embedded)
+        // contexts. core is also available on std targets, so this is safe for desktop.
         .use_core()
-        .ctypes_prefix("::core::ffi")
-        // tell clang where to include system definitions
-        .clang_arg("-target")
-        .clang_arg(std::env::var("TARGET").unwrap())
-        .clang_arg(format!("-I{}", sysroot.to_str().unwrap()))
+        .ctypes_prefix("::core::ffi");
+
+    if is_embedded_feature_enabled() {
+        let mut sysroot = find_gcc_arm_embedded_sysroot();
+        sysroot.push("arm-none-eabi/include/");
+
+        bindings = bindings
+            // tell clang to target the embedded triple and where to
+            // include the cross toolchain's system definitions
+            .clang_arg("-target")
+            .clang_arg(env::var("TARGET").unwrap())
+            .clang_arg(format!("-I{}", sysroot.to_str().unwrap()));
+    }
+
+    bindings = bindings
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
