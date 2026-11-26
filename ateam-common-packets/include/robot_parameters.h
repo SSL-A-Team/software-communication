@@ -22,34 +22,43 @@ typedef enum ParameterDataFormat : uint8_t {
 assert_size(ParameterDataFormat, 1);
 
 typedef enum ParameterName : uint8_t {
-    /// [POS_LINEAR, POS_ANGULAR, VEL_LINEAR, VEL_ANGULAR]
-    KF_PROCESS_STD = 0,
-    /// [VISION_STD_LINEAR, VISION_STD_ANGULAR, ENCODER_STD_ANGULAR, GYRO_STD_ANGULAR]
-    KF_MEASUREMENT_STD = 1,
-    /// [KF_MAX_POS_LINEAR, KF_MAX_POS_ANGULAR, KF_MAX_VEL_LINEAR, KF_MAX_VEL_ANGULAR]
-    KF_MAX_STATE = 2,
+    /// [POS_LINEAR, POS_ANGULAR, VEL_LINEAR]
+    EKF_PROCESS_STD = 0,
+    /// [VISION_STD_LINEAR, VISION_STD_ANGULAR]
+    EKF_MEASUREMENT_STD = 1,
     /// [WHEEL_ANGLE_ALPHA, WHEEL_ANGLE_BETA, WHEEL_DISTANCE, WHEEL_RADIUS]
-    PHYS_WHEEL = 3,
+    /// Wheel alpha is the angle between robot +y axis and segment from robot origin to FL wheel
+    /// Wheel beta is the angle between robot +y axis and segemnt from robot origin to BL wheel
+    /// Wheel distance is the radial distance from robot origin to the wheels
+    PHYS_WHEEL = 2,
     /// [BODY_MASS, BODY_MOMENT_Z]
-    PHYS_INERTIA = 4,
-    /// [MOTOR_TORQUE_CONSTANT, MOTOR_EFFICIENCY_FACTOR]
-    PHYS_MOTOR_MODEL = 5,
-    /// [COULOMB_LINEAR_X, COULOMB_LINEAR_Y, COULOMB_ANGULAR, VISCOUS_LINEAR_X, VISCOUS_LINEAR_Y, VISCOUS_ANGULAR]
-    PHYS_FRICTION_MODEL = 6,
-    /// [LINEAR_VEL_THRESHOLD, LINEAR_ACCEL_THRESHOLD, ANGULAR_VEL_THRESHOLD, ANGULAR_ACCEL_THRESHOLD]
-    FRICTION_COMP_GATING = 7,
-    /// [FEEDFORWARD_GAIN, FEEDBACK_GAIN]
-    POSE_CONTROL_GAIN = 8,
-    /// [ERROR_POS_LINEAR, ERROR_POS_ANGULAR, ERROR_VEL_LINEAR, ERROR_VEL_ANGULAR] thresholds for when to recompute the trajectory
-    TRAJ_RECOMPUTE_ERROR = 9,
-    /// [P, I, D, I_MIN, I_MAX]
-    POSE_FB_PIDII_LINEAR = 10,
-    /// [P, I, D, I_MIN, I_MAX]
-    POSE_FB_PIDII_ANGULAR = 11,
-    /// [P, I, D, I_MIN, I_MAX]
-    TWIST_FB_PIDII_LINEAR = 12,
-    /// [P, I, D, I_MIN, I_MAX]
-    TWIST_FB_PIDII_ANGULAR = 13,
+    /// Body moment z is the angular moment of inertia around the robot's z axis
+    PHYS_INERTIA = 3,
+    /// [MOTOR_TORQUE_CONSTANT]
+    PHYS_MOTOR_TORQUE_CONSTANT = 4,
+    /// [COULOMB_LINEAR, COULOMB_ANGULAR, VISCOUS_LINEAR, VISCOUS_ANGULAR, EFFICIENCY_LINEAR, EFFICIENCY_ANGULAR]
+    /// Linear terms are for sideways (local y) motion and scaled by a wheel-geometry direction factor otherwise
+    PHYS_FRICTION_MODEL = 5,
+    /// [K (1/s), MAX (m/s), ANTI_JITTER (m)]
+    // XY position P feedback into the velocity setpoint
+    FB_POS_LINEAR = 6,
+    /// [POS_K (1/s), POS_MAX (rad/s), ANTI_JITTER (rad), VEL_K]
+    // Angular position + velocity P feedback into the velocity setpoint
+    FB_POS_ANGULAR = 7,
+    /// [KP (mA/(rad/s)), KI (mA/rad), ANTI_JITTER (rad/s), MAX_CURRENT (A)]
+    // Wheel velocity loop on the motor controllers. MAX_CURRENT caps the total (feed-forward + loop) wheel current
+    FB_WHEEL_VEL = 8,
+    /// [MAX_CURRENT (A)]
+    // Feed-forward wheel current limit. The body accel output is scaled to stay under it
+    FF_WHEEL_CURRENT_LIMIT = 9,
+    /// [K ((rad/s)/A)]
+    // Wheel slip feed-forward. Each wheel's velocity setpoint is raised by K * its feed-forward current, since the wheel surface outruns the ground under load
+    FF_WHEEL_SLIP_COMP = 10,
+    /// [ERROR_POS_LINEAR, ERROR_POS_ANGULAR, ERROR_VEL_LINEAR, ERROR_VEL_ANGULAR]
+    ERROR_TRACKING_DIVERGENCE_THRESHOLD = 11,
+    /// [SEED_SAMPLES]
+    // Consistent vision samples needed to (re)seed the vision filter
+    VISION_SEED_SAMPLES = 12,
 } ParameterName;
 assert_size(ParameterName, 1);
 
