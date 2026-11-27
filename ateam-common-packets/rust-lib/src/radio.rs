@@ -72,7 +72,6 @@ impl PartialEq for ManeuverCommand {
                     && a.orbit_radius == b.orbit_radius
                     && a.inset_angle == b.inset_angle
                     && a.direction == b.direction
-                    && a.compute_inset_angle == b.compute_inset_angle
             }
             (Self::PointPivot(a), Self::PointPivot(b)) => {
                 a.target_x == b.target_x
@@ -82,7 +81,6 @@ impl PartialEq for ManeuverCommand {
                     && a.orbit_radius == b.orbit_radius
                     && a.inset_angle == b.inset_angle
                     && a.direction == b.direction
-                    && a.compute_inset_angle == b.compute_inset_angle
             }
             (Self::HeadingLine(a), Self::HeadingLine(b)) => {
                 a.start_x == b.start_x

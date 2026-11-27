@@ -18,13 +18,10 @@ typedef struct HeadingPivotCommand {
     float max_angular_acc;
     float orbit_radius;
     // Angle (rad) between the orbit tangent and the heading, measured toward the
-    // orbit center; absolute-valued. Ignored when compute_inset_angle != 0.
+    // orbit center; absolute-valued.
     float inset_angle;
     PivotDirection direction;
-    // Bool: when nonzero, inset_angle is ignored and the inset is derived from a
-    // linear model of the peak angular velocity (centrifugal lean).
-    uint8_t compute_inset_angle;
-    uint8_t reserved[2];
+    uint8_t reserved[3];
 } HeadingPivotCommand;
 assert_size(HeadingPivotCommand, 24);
 
@@ -36,13 +33,10 @@ typedef struct PointPivotCommand {
     float max_angular_acc;
     float orbit_radius;
     // Angle (rad) between the orbit tangent and the heading, measured toward the
-    // orbit center; absolute-valued. Ignored when compute_inset_angle != 0.
+    // orbit center; absolute-valued.
     float inset_angle;
     PivotDirection direction;
-    // Bool: when nonzero, inset_angle is ignored and the inset is derived from a
-    // linear model of the peak angular velocity (centrifugal lean).
-    uint8_t compute_inset_angle;
-    uint8_t reserved[2];
+    uint8_t reserved[3];
 } PointPivotCommand;
 assert_size(PointPivotCommand, 28);
 
