@@ -112,8 +112,11 @@ fn main() {
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate robot metadata bindings");
 
-    // Write the bindings to the lib source dir
-    let out_dir = "src";
+    // Write the bindings to OUT_DIR (included by src/lib.rs). Writing into the
+    // shared source dir made every dependent crate with its own target dir
+    // (e.g. kicker-board and control-board) see the other's regenerated
+    // bindings as a source change and rebuild.
+    let out_dir = env::var("OUT_DIR").unwrap();
 
     bindings
         .write_to_file(Path::new(&out_dir).join("bindings.rs"))

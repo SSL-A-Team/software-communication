@@ -6,7 +6,9 @@
 
 use crate::bindings::{BasicControl, BodyControlMode, ExtendedTelemetry, GlobalAccelerationCommand, GlobalPositionCommand, GlobalVelocityCommand, HeadingPivotCommand, HeadingLineCommand, LocalAccelerationCommand, LocalVelocityCommand, PointPivotCommand, PointLineCommand, RadioHeader};
 
-pub mod bindings;
+pub mod bindings {
+    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+}
 pub mod radio;
 
 // TODO these are assuming the biggest packet doesn't change... const core::cmp::max is still unstable. We
